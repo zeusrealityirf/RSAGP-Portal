@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><base target="_top"><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RSAGP · Government Careers</title>
+<style>
+:root{--dark:#073d2b;--deep:#092e24;--green:#007a4d;--gold:#e9ad28;--red:#db3d36;--blue:#002395;--cream:#f6f8f4;--ink:#183a2c;--muted:#6d8174;--line:#dce6dc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Verdana,Arial,sans-serif;font-size:14px;background:#f1f5f0;color:var(--ink);line-height:1.58}[hidden]{display:none!important}
+button,input,textarea,select{font:inherit}a{color:inherit}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}
+.flagline{height:7px;background:linear-gradient(90deg,#de3831 0 23%,#fff 23% 27%,#007a4d 27% 63%,#ffb81c 63% 78%,#002395 78%)}
+header{background:var(--deep);color:#fff;padding:14px clamp(16px,4vw,44px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-width:0}.brand img{width:51px;height:56px;object-fit:contain;background:#fff;padding:3px;border-radius:11px}.brand strong{display:block;font-size:15px;line-height:1.3}.brand small{display:block;font-size:10px;letter-spacing:1px;color:#c2d9ca}
+.hlinks{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px}.hlinks a{text-decoration:none;border:1px solid #ffffff44;padding:9px 12px;border-radius:9px}.hlinks a:hover{background:#ffffff18}
+.wrap{max-width:1150px;margin:0 auto;padding:0 22px 70px}.hero{margin:26px 0 26px;border-radius:23px;background:linear-gradient(125deg,#073b2b,#104d34 58%,#19453e);color:white;display:grid;grid-template-columns:1fr 250px;align-items:center;gap:20px;padding:38px 42px;box-shadow:0 18px 35px #092e241e;overflow:hidden}.eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#f5cd73;font-weight:800}.hero h1{font-family:Georgia,serif;font-size:clamp(31px,4.3vw,48px);font-weight:500;margin:12px 0;line-height:1.12}.hero p{margin:0;max-width:720px;color:#dcebe0;font-size:13px}.hero img{width:100%;aspect-ratio:3/2;object-fit:contain;border-radius:12px;box-shadow:0 10px 26px #0005}.hero .badge{display:inline-block;margin-top:17px;border:1px solid #e2bd6480;padding:6px 9px;border-radius:5px;font-size:10px;color:#f4d68e}
+.section-top{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:28px 0 16px}.section-top h2{font-family:Georgia,serif;font-weight:500;font-size:27px;margin:0}.section-top p{margin:5px 0 0;color:var(--muted);font-size:12px}.subtitle{font-size:10px;letter-spacing:1.7px;text-transform:uppercase;font-weight:800;color:var(--green)}
+.jobs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.job{border:1px solid var(--line);border-top:4px solid var(--green);border-radius:15px;padding:20px;background:#fff;display:flex;flex-direction:column;box-shadow:0 5px 16px #1736280b}.job:nth-child(3n+2){border-top-color:var(--gold)}.job:nth-child(3n){border-top-color:var(--red)}.job .number{font-size:10px;font-weight:800;letter-spacing:2px;color:#7f9284}.job h3{font-size:17px;line-height:1.32;margin:12px 0 9px}.job p{margin:0 0 19px;color:#678070;font-size:12px;flex:1}.job footer{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.btn{border:1px solid transparent;padding:11px 17px;min-height:44px;font-weight:800;font-size:12px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}.btn-primary{background:var(--green);color:white}.btn-primary:hover{background:#006341}.btn-light{background:#ecf4ee;color:#185038;border-color:#dce7dd}.btn-light:hover{background:#dceee1}.btn-white{color:var(--dark);background:#fff}.btn-red{color:#a7332d;background:#fbe8e5;border-color:#e8d4d1}.btn-sm{font-size:11px;min-height:36px;padding:8px 11px}.btn:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #ffbf3e;outline-offset:2px}
+.status{display:inline-block;border-radius:20px;background:#edf2ed;color:#476957;font-size:10px;font-weight:800;padding:5px 9px;white-space:nowrap}.status.active{background:#e9f4eb;color:#146039}.status.progress{background:#fff5d8;color:#846015}.status.declined{background:#ffe6e3;color:#ac4038}
+.panel{background:#fff;border:1px solid var(--line);border-radius:19px;padding:25px;box-shadow:0 7px 20px #112c2010;margin-top:20px;min-width:0}.panel h2{font:500 25px Georgia,serif;margin:0 0 8px}.panel>p{font-size:12px;color:var(--muted);margin-top:0}.signed-in{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.signed-in img{height:45px;width:45px;border-radius:13px;background:#f4f7f3}.signed-in small{color:var(--muted);font-size:11px}.signed-in strong{display:block;overflow-wrap:anywhere}.signed-in .spacer{flex:1}
+.login-panel{display:flex;align-items:center;justify-content:space-between;gap:24px;border:1px solid #d3dfd3;border-left:5px solid var(--gold);border-radius:14px;background:#fffefb;padding:20px 24px}.login-panel h2{font-size:19px;margin:0 0 5px}.login-panel p{font-size:12px;color:#738375;margin:0}.error{color:#b52a28;font-weight:700;font-size:12px}.notice{border:1px solid #dbe9dd;background:#edf6f0;color:#315b44;padding:12px 15px;border-radius:10px;font-size:12px;margin:13px 0}.notice.warn{background:#fff7e7;border-color:#ebd7a9;color:#765518}
+.application-head{display:flex;justify-content:space-between;gap:14px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:15px;margin-bottom:18px}.application-head p{font-size:12px;color:var(--muted);margin:5px 0}.step{font-size:10px;color:#788d80;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+.form-field{display:grid;gap:6px;margin:16px 0}.form-field label{font-size:12px;font-weight:800;color:#284e3b}.form-field input,.form-field textarea{border-radius:10px;border:1px solid #d0dcd1;padding:12px;background:#fbfcfa;color:var(--ink);width:100%;font-size:16px}.form-field textarea{min-height:102px;resize:vertical;font-size:14px;line-height:1.6}.helper{font-size:11px;color:#708577}.question{padding:14px 0;border-top:1px solid #e8eee8}.question strong{display:block;font-size:12px;margin-bottom:7px;line-height:1.55}.qnum{color:#aa842e;font-size:11px;font-weight:800;margin-right:8px}.form-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.application-list{display:grid;gap:10px}.application-item{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.application-item h3{font-size:13px;margin:0 0 5px}.application-item small{font-size:11px;color:var(--muted)}.application-item p{font-size:11px;margin:6px 0 0;color:#687d70}.application-item .right{text-align:right;display:grid;gap:6px;justify-items:end}
+.empty{padding:21px;background:#f6f8f4;border-radius:12px;text-align:center;font-size:12px;color:var(--muted)}.foot{color:#6b8174;font-size:10px;border-top:1px solid #dce5dc;margin-top:38px;padding:22px 5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.foot b{color:#336047}
+@media(max-width:900px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr 200px;padding:30px}.hlinks{font-size:10px}}
+@media(max-width:660px){header{align-items:start}.brand img{width:42px;height:47px}.brand strong{font-size:12px}.brand small{font-size:9px}.hlinks{justify-content:flex-end;gap:6px}.hlinks a{padding:6px 8px}.hero{grid-template-columns:1fr;padding:26px 23px}.hero img{max-width:200px;justify-self:start}.wrap{padding:0 13px 55px}.jobs{grid-template-columns:1fr}.panel{padding:18px 15px}.login-panel{display:block}.login-panel .btn{margin-top:14px;width:100%}.application-head{display:block}.application-head .btn{margin-top:10px}.application-item{align-items:start}.application-item .right{min-width:100px}.section-top h2{font-size:24px}}
+@media(max-width:370px){header{display:block}.hlinks{margin-top:10px;justify-content:start}.application-item{display:block}.application-item .right{justify-items:start;text-align:left;margin-top:10px}}
+
+/* ---------- 2026 CIVICOS UI REFRESH ---------- */
+/* RSAGP CivicOS · Government Careers · Lucide icon language */
+:root{--dark:#182e38;--deep:#112a33;--green:#0d7456;--gold:#ddae4d;--red:#d34b44;--blue:#002395;--cream:#f5f7f7;--ink:#19353d;--muted:#70838a;--line:#dfe7e5}
+body{font-family:Verdana,Geneva,Arial,sans-serif;background:#f5f7f7;color:#1c363c;font-size:12px;line-height:1.75}
+:focus-visible{outline:3px solid #ddb964;outline-offset:2px}
+.flagline{height:5px;background:linear-gradient(90deg,#de3831 0 20%,#fff 20% 25%,#007a4d 25% 66%,#ffb81c 66% 79%,#002395 79%)}
+header{background:#132e37;padding:13px clamp(20px,4vw,50px);min-height:76px;box-shadow:0 6px 25px #13383d1f}
+.brand img{height:43px;width:43px;border-radius:12px;background:#fff;border:1px solid #e2cf9b}
+.brand strong{font-size:13px;line-height:1.35;color:#fff}.brand small{font-size:9px;color:#bdcfcc;letter-spacing:.06em}
+.hlinks{gap:8px}.hlinks a{display:inline-flex;align-items:center;padding:9px 13px;background:#ffffff0b;border:1px solid #ffffff30;border-radius:10px;font-size:10px;color:#f1f3ef;font-weight:700}
+.hlinks a:hover{background:#ffffff21}
+.wrap{max-width:1260px;padding:0 24px 70px}
+.hero{grid-template-columns:minmax(0,1fr) minmax(200px,310px);background:linear-gradient(116deg,#152f3b,#17434a 66%,#137457);border:0;border-radius:23px;margin:26px 0 26px;padding:42px 47px;gap:30px;box-shadow:0 21px 48px #18373b23}
+.careers-hero-copy{min-width:0}
+.career-crest{display:inline-flex;align-items:center;gap:9px;padding:7px 11px;border-radius:100px;border:1px solid #ffffff43;background:#ffffff15;color:#f6d486;font-size:9px;letter-spacing:.12em;font-weight:750;margin:0 0 10px}
+.hero h1{font:750 clamp(30px,3.8vw,48px)/1.13 Verdana,Geneva,Arial,sans-serif;letter-spacing:-.065em;margin:10px 0 14px;color:#fff}
+.hero p{font-size:12px;line-height:1.9;max-width:620px;color:#d4e4e2}
+.hero img{width:100%;max-width:310px;aspect-ratio:3/2;object-fit:cover;border-radius:17px;border:4px solid #ffffff52;box-shadow:0 17px 37px #0004}
+.hero .eyebrow{display:block;margin-top:12px;color:#eac67c;letter-spacing:.08em;font-size:9px}
+.badge{font-size:9px;border:1px solid #ffffff45;color:#e1eeda;border-radius:100px;background:#ffffff10;padding:6px 10px;letter-spacing:.04em}
+.section-top{margin:29px 0 17px;align-items:center}
+.section-top .subtitle{font-size:9px;letter-spacing:.13em;color:#b18440;font-weight:800}
+.section-top h2{font:750 26px Verdana,Geneva,Arial,sans-serif;letter-spacing:-.045em;color:#203840;margin:6px 0}
+.section-top p{font-size:11px;color:#70848b}
+.vacancies-label{display:inline-flex;align-items:center;gap:7px;color:#477a67;background:#e7f3ec;border:1px solid #d7e7df;border-radius:100px;padding:8px 11px;font-size:10px;font-weight:700}
+.career-filters{display:flex;align-items:center;gap:18px;justify-content:space-between;background:#fff;border:1px solid #e1e8e5;border-radius:13px;padding:10px 15px;margin:0 0 15px;box-shadow:0 4px 13px #152f3608}
+.career-filters label{display:flex;align-items:center;gap:9px;flex:1;min-width:0;color:#67847a}
+.career-filters input{border:0;min-height:32px;width:100%;outline:none;background:transparent;color:#1b333d;font-size:12px}
+.career-filters input:focus{outline:0}
+.career-filters>span{white-space:nowrap;color:#7e8c8e;font-size:10px;font-weight:750}
+.jobs{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.job{background:#fff;border:1px solid #e0e7e4;border-radius:17px;padding:22px 22px 20px;box-shadow:0 9px 26px #203d490b;border-top:1px solid #e0e7e4;transition:transform .16s,box-shadow .16s;position:relative;overflow:hidden}
+.job:before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#dca947,#0c8060)}
+.job:hover{transform:translateY(-3px);box-shadow:0 14px 36px #1d454419}
+.job-icon{width:46px;height:46px;border-radius:13px;background:#e9f5ee;color:#0c795b;display:grid;place-items:center;margin:4px 0 18px}
+.job:nth-child(2n) .job-icon{background:#fff3dc;color:#a3792f}.job:nth-child(3n) .job-icon{background:#edf3fc;color:#315c94}
+.job .number{font-size:9px;color:#9a8557;letter-spacing:.12em;font-weight:800}
+.job h3{font:750 16px/1.42 Verdana,Geneva,Arial,sans-serif;letter-spacing:-.03em;color:#1d343d;margin:10px 0 10px}
+.job p{font-size:11px;color:#728489;line-height:1.8;min-height:68px}
+.job footer{margin-top:auto;border-top:1px solid #ebf0ec;padding-top:14px;gap:10px}
+.btn{min-height:42px;border-radius:11px;font:750 11px Verdana,Geneva,Arial,sans-serif;padding:11px 15px;gap:8px;box-shadow:none;transition:background .15s}
+.btn svg{flex:none}
+.btn-primary{background:#0e7254;color:#fff;border:1px solid #0e7254}
+.btn-primary:hover{background:#0c6048}
+.btn-light{background:#f2f5f3;color:#285b4b;border:1px solid #dce6e1}
+.btn-red{background:#fff1f0;color:#a8433b;border-color:#f0d9d5}
+.status{border-radius:7px;font-size:9px;padding:7px 9px;background:#edf2f1;color:#55706c}
+.status.progress{background:#fff3da;color:#846329}.status.active{background:#e5f5ec;color:#206147}.status.declined{background:#fff0ec;color:#a7413c}
+.panel{border-radius:18px;background:#fff;border:1px solid #dfe8e4;padding:27px;box-shadow:0 11px 33px #152d370a;margin-top:19px}
+.panel h2{font:750 19px Verdana,Geneva,Arial,sans-serif;letter-spacing:-.025em;color:#213b40}
+.login-panel{background:#f6f9f7;border:1px solid #dfebe3;border-radius:14px;border-left:0;padding:21px 23px}
+.security-icon{width:45px;height:45px;border-radius:12px;display:grid;place-items:center;background:#e5f3e9;color:#0e7356;margin-bottom:13px}
+.login-panel p{font-size:11px;color:#70858a}
+.signed-in{background:#f2f7f4;border-radius:13px;padding:12px}
+.signed-in img{border-radius:12px}
+.application-head{padding-bottom:19px;margin-bottom:22px;border-bottom-color:#e7ede8}
+.application-head h2{font-size:21px}
+.application-head .step{display:inline-flex;align-items:center;gap:7px;color:#987d46;font-weight:800;letter-spacing:.07em}
+.notice{background:#f3f7f5;border:1px solid #dce9e1;border-radius:11px;color:#5f7773;font-size:11px;padding:13px 16px}
+.form-field label{font-size:11px;color:#2e5752}
+.form-field input,.form-field textarea{border-radius:11px;background:#fff;border:1px solid #dae6df;font-size:13px;line-height:1.7;padding:13px 15px}
+.form-field textarea:focus,.form-field input:focus{outline:2px solid #e1c17e;outline-offset:1px}
+.question{background:#fcfdfc;border:1px solid #e4eae6;border-radius:14px;padding:19px}
+.qnum{background:#edf4ef;color:#157257;border-radius:7px}
+.form-actions{gap:9px}
+.application-item{border-radius:12px;border-color:#e2eae6;background:#fbfcfb;padding:17px}
+.application-item h3{font-size:12px;color:#264b47}
+.foot{color:#7e8f92;border-top:1px solid #e0e8e4}
+@media(max-width:950px){.jobs{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:minmax(0,1fr) 220px;padding:32px}}
+@media(max-width:680px){
+ header{padding:13px 15px}.brand img{width:40px;height:40px}.brand strong{font-size:11px}.hlinks a{font-size:9px;padding:7px 9px}
+ .wrap{padding:0 13px 55px}.hero{grid-template-columns:1fr;padding:27px 22px;border-radius:18px;margin:16px 0 24px;gap:16px}
+ .hero h1{font-size:clamp(26px,7.5vw,36px)}.hero p{font-size:11px}.hero img{max-width:300px;width:100%;border-radius:13px}
+ .section-top{margin:25px 0 12px}.section-top h2{font-size:22px}.vacancies-label{display:none}
+ .career-filters{padding:8px 10px;gap:8px}.career-filters input{font-size:11px}.career-filters>span{font-size:9px}
+ .jobs{grid-template-columns:1fr;gap:12px}.job{padding:19px}.job p{min-height:0}.job h3{font-size:15px}
+ .panel{padding:20px 17px;border-radius:15px}.login-panel{display:grid;gap:14px;padding:16px}
+ .application-head{flex-wrap:wrap}.form-field input,.form-field textarea{font-size:16px}
+}
+@media(max-width:380px){.wrap{padding:0 11px}.panel{padding:17px 14px}.hero{padding:23px 17px}.career-filters>span{display:none}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* Server-rendered vacancy cards and sign-in are visible before JS starts. */
+.careers-load-note{font-size:11px;color:#718389;margin:12px 2px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.careers-load-note button{min-height:32px}
+
+</style></head>
+<body>
+<div class="flagline"></div>
+<header>
+  <a class="brand" id="cabinetLinkTop" href="#"><img src="<?!= coatSrc ?>" alt="South African coat of arms"><span><strong>Republic of South Africa</strong><small>RSAGP · GOVERNMENT CAREERS</small></span></a>
+  <div class="hlinks"><a id="cabinetLink" href="#">Cabinet Portal</a><a id="citizenLink" href="#">Citizenship Desk</a></div>
+</header>
+<main class="wrap">
+<section class="hero"><div class="careers-hero-copy"><div class="career-crest"><svg class="lucide lucide-landmark" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 2 3 8v2h18V8L12 2Z"/></svg> GOVERNMENT RECRUITMENT DESK</div><span class="eyebrow">Lem's South Africa · Roblox Nation</span><h1>Serve your nation.<br>Join the Cabinet.</h1><p>Explore available government portfolios. Tell us how you would lead, build a stronger Roblox community, and help citizens enjoy their experience.</p><span class="badge">DISCORD-VERIFIED GOVERNMENT APPLICATIONS</span></div><img src="<?!= flagSrc ?>" alt="South African national flag"></section>
+<div class="section-top"><div><span class="subtitle">OPEN OPPORTUNITIES</span><h2>Find your portfolio</h2><p>Select a ministry and submit an application with your Discord account.</p></div><span class="vacancies-label"><svg class="lucide lucide-badge-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 2.2 15 4l3.5-.2.3 3.5L21 10l-2 3 .2 3.5-3.5.3L13 19l-3 2-3-2-3.5-.2-.3-3.5L1 13l2-3-.2-3.5L6.3 6 9 3Z"/></svg> Recruitment register</span></div><div class="career-filters"><label for="jobSearch"><svg class="lucide lucide-list-filter" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M7 12h10m-7 5h4"/></svg><input type="search" id="jobSearch" placeholder="Search ministries and portfolios" autocomplete="off"></label><span id="positionCount"><?!= careersCount ?></span></div>
+<div class="jobs" id="jobs"><?!= careersMarkup ?></div>
+<div id="careersLoadMessage" class="careers-load-note" role="status">Vacancies are displayed above. If application buttons do not respond, refresh this page. <button type="button" id="careersRetry" class="btn btn-light btn-sm">Reload page</button></div>
+<section class="panel" id="identityPanel" aria-live="polite"><div class="login-panel" id="loginPanel"><div><div class="security-icon"><svg class="lucide lucide-fingerprint" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a9 9 0 0 0-9 9c0 2-.5 4-.9 5M12 6a5 5 0 0 0-5 5c0 3-.4 6-1.4 8M17 9a5 5 0 0 1 0 4c-.4 1.2-.5 4-.8 7M12 10a1 1 0 0 0-1 1c0 4-.5 7-1.2 10M14 14c0 3-.4 6-.8 8"/></svg></div><h2>Sign in before you apply</h2><p>Connect Discord to attach applications to your own account. Your Roblox username will be checked when you submit.</p><p class="error" id="loginError"></p></div><a class="btn btn-primary" id="loginButton" href="<?!= careersLoginHref ?>" target="_top"><svg class="lucide lucide-log-in" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4m4-4 5-5-5-5m5 5H9"/></svg> Continue with Discord</a></div><div class="signed-in" id="accountPanel" hidden><img id="discordAvatar" alt="Discord avatar"><div><strong id="accountName">Applicant</strong><small id="accountId"></small></div><span class="spacer"></span><button id="signOut" class="btn btn-light btn-sm" type="button">Sign out</button></div></section>
+<section class="panel" id="formPanel" hidden><div class="application-head"><div><span class="step"><svg class="lucide lucide-clipboard-pen" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6v3H9zM7 5H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9m5-14V7a2 2 0 0 0-2-2h-2M8 12h6M8 16h4m6-5 3 3-6 6h-3v-3z"/></svg> Government Careers · Application form</span><h2 id="formTitle">Selected portfolio</h2><p id="formSummary"></p></div><button type="button" class="btn btn-light btn-sm" id="closeForm">Choose another</button></div><div class="notice">You do not need experience as a real-world minister. Keep your answers about Roblox, teamwork and your plans for the community.</div><form id="careerForm"><div class="form-field"><label for="robloxUsername">Roblox username *</label><input id="robloxUsername" name="robloxUsername" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" placeholder="Your Roblox username" autocomplete="nickname" required><span class="helper">This is used to find your player profile; Discord remains the account used to submit.</span></div><div id="questionFields"></div><p id="formError" class="error" role="alert"></p><div class="form-actions"><button class="btn btn-primary" id="submitApplication" type="submit"><svg class="lucide lucide-send" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg> Submit application</button><button class="btn btn-light" type="button" id="cancelForm">Cancel</button></div></form></section>
+<section class="panel" id="myApplications" hidden><div class="section-top" style="margin:0 0 14px"><div><span class="subtitle">Your application register</span><h2>My applications</h2></div><button type="button" class="btn btn-light btn-sm" id="refreshApplications"><svg class="lucide lucide-arrow-right" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg> Refresh status</button></div><div id="applicationList" class="application-list"><div class="empty">Loading applications…</div></div></section>
+<footer class="foot"><span><b>RSAGP · Lem's South Africa</b> · Roblox Nation</span><span>Application decisions do not automatically grant Cabinet access.</span></footer>
+</main>
+<script>
+// This small independent error listener runs even when the main application script
+// fails to parse. Users should never be left looking at a blank vacancy panel.
+window.addEventListener('error',function(e){
+  var el=document.getElementById('careersLoadMessage');
+  if(el){el.hidden=false;el.innerHTML='The interactive form did not start. The vacancy list above is still available. Refresh the page or ask an administrator to check the deployment. <button type="button" class="btn btn-light btn-sm" onclick="location.reload()">Try again</button>';}
+});
+</script>
+<script>
+/* Embedded Lucide icon paths. Self-contained so Apps Script pages do not fetch JS CDNs. */
+const RSAGP_LUCIDE_PATHS={"landmark":"<path d=\"M3 10h18M5 10V20M9 10V20M15 10V20M19 10V20M3 20h18M12 2 3 8v2h18V8L12 2Z\"/>","home":"<path d=\"m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z\"/>","file-check":"<path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z\"/><path d=\"M14 2v6h6m-12 8 2 2 4-4\"/>","file-plus":"<path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z\"/><path d=\"M14 2v6h6M12 13v6m-3-3h6\"/>","clipboard-check":"<rect x=\"7\" y=\"4\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M7 8H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8m-3-17V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2m3 12 2 2 4-4\"/>","arrow-right":"<path d=\"M5 12h14m-7-7 7 7-7 7\"/>","arrow-left":"<path d=\"M19 12H5m7 7-7-7 7-7\"/>","chevron-right":"<path d=\"m9 18 6-6-6-6\"/>","chevron-down":"<path d=\"m6 9 6 6 6-6\"/>","circle-check":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m8 12 3 3 5-6\"/>","circle-help":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M9.5 9a2.5 2.5 0 1 1 4.3 1.7c-.95.95-1.8 1.25-1.8 3.3M12 17h.01\"/>","badge-check":"<path d=\"m9 12 2 2 4-4\"/><path d=\"M12 2.2 15 4l3.5-.2.3 3.5L21 10l-2 3 .2 3.5-3.5.3L13 19l-3 2-3-2-3.5-.2-.3-3.5L1 13l2-3-.2-3.5L6.3 6 9 3Z\"/>","fingerprint":"<path d=\"M12 2a9 9 0 0 0-9 9c0 2-.5 4-.9 5M12 6a5 5 0 0 0-5 5c0 3-.4 6-1.4 8M17 9a5 5 0 0 1 0 4c-.4 1.2-.5 4-.8 7M12 10a1 1 0 0 0-1 1c0 4-.5 7-1.2 10M14 14c0 3-.4 6-.8 8\"/>","contact-round":"<path d=\"M3 3h18v18H3z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/><path d=\"M6 19v-2a6 6 0 0 1 12 0v2\"/>","scroll-text":"<path d=\"M8 21h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H6v14a4 4 0 0 0 4 4H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2M10 8h8m-8 4h8m-8 4h6\"/>","folder-open":"<path d=\"M2 7V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v1M2 19l3-9h18l-3 9H2Z\"/>","handshake":"<path d=\"M2 12 7 7l3 2 4-3 8 7-4 6-4-2-3 3-3-2-4-3-2-3Z\"/><path d=\"m9 10 3-2m4 5-3-2\"/>","building-2":"<path d=\"M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M2 22h20M10 6h4M10 10h4M10 14h4M10 18h4\"/>","briefcase-business":"<rect x=\"2\" y=\"7\" width=\"20\" height=\"14\" rx=\"2\"/><path d=\"M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M2 12a20 20 0 0 0 20 0M10 13v2h4v-2\"/>","user-round-check":"<circle cx=\"10\" cy=\"8\" r=\"4\"/><path d=\"M3 21v-2a7 7 0 0 1 12 0m2-6 2 2 3-3\"/>","list-filter":"<path d=\"M4 7h16M7 12h10m-7 5h4\"/>","shield-check":"<path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z\"/><path d=\"m9 12 2 2 4-4\"/>","check-check":"<path d=\"m18 6-7 7-3-3M22 10l-7 7-3-3M3 12l4 4\"/>","settings-2":"<path d=\"M4 21v-7m0-4V3m8 18v-9m0-4V3m8 18v-5m0-4V3M1 14h6m2-6h6m2 8h6\"/>","book-open-check":"<path d=\"M12 7v14m0-14a8 8 0 0 0-9-2v14a8 8 0 0 1 9 2m0-14a8 8 0 0 1 9-2v14a8 8 0 0 0-9 2m3-10 2 2 3-3\"/>","clipboard-list":"<rect x=\"5\" y=\"4\" width=\"14\" height=\"18\" rx=\"2\"/><path d=\"M9 4V2h6v2M9 10h6m-6 4h6m-6 4h3\"/>","mail":"<rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"m22 7-10 7L2 7\"/>","log-in":"<path d=\"M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4m4-4 5-5-5-5m5 5H9\"/>","award":"<circle cx=\"12\" cy=\"8\" r=\"6\"/><path d=\"m8.2 13-1.1 9L12 19l4.9 3-1.1-9\"/>","file-down":"<path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z\"/><path d=\"M14 2v6h6m-8 4v7m-3-3 3 3 3-3\"/>","chart-no-axes-column":"<path d=\"M3 20v-7h4v7M10 20V4h4v16M17 20v-11h4v11\"/>","globe-2":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20\"/>","user-round":"<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 22a8 8 0 0 1 16 0\"/>","calendar-check":"<rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M8 2v4m8-4v4M3 10h18m-12 6 2 2 4-4\"/>","book-open":"<path d=\"M12 7v14m0-14A8 8 0 0 0 3 5v14a8 8 0 0 1 9 2m0-14a8 8 0 0 1 9-2v14a8 8 0 0 0-9 2\"/>","send":"<path d=\"m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13\"/>","clipboard-pen":"<path d=\"M9 3h6v3H9zM7 5H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9m5-14V7a2 2 0 0 0-2-2h-2M8 12h6M8 16h4m6-5 3 3-6 6h-3v-3z\"/>","arrow-up-right":"<path d=\"M7 17 17 7M8 7h9v9\"/>","sparkles":"<path d=\"m12 3 1.7 5.3L19 10l-5.3 1.7L12 17l-1.7-5.3L5 10l5.3-1.7ZM20 18l.7 1.3L22 20l-1.3.7L20 22l-.7-1.3L18 20l1.3-.7Z\"/>","circle-alert":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4m0 4h.01\"/>"};
+function rsagpIcon(name,size=20){const path=RSAGP_LUCIDE_PATHS[name]||RSAGP_LUCIDE_PATHS['landmark'];return `<svg class="lucide lucide-${name}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${path}</svg>`;}
+
+const BOOT=<?!= bootstrapJson ?>;
+let JOBS=<?!= careersJson ?>;
+if(!Array.isArray(JOBS))JOBS=[];
+const $=id=>document.getElementById(id);
+const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let session=BOOT.session||'', selected=null, me=null, myApplications=[];
+function getSaved(){try{return sessionStorage.getItem('rsagpCareersSession')||'';}catch(e){return '';}}
+function saveSession(value){try{if(value)sessionStorage.setItem('rsagpCareersSession',value);else sessionStorage.removeItem('rsagpCareersSession');}catch(e){}}
+if(!session)session=getSaved();else saveSession(session);
+function call(name,...args){return new Promise((resolve,reject)=>{
+ if(!window.google?.script?.run)return reject(new Error('Please open the deployed RSAGP Apps Script web app.'));
+ google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e?.message||String(e))))[name](...args);
+});}
+function pendingFor(id){return myApplications.find(x=>x.positionId===id&&!['Declined','Withdrawn'].includes(x.status));}
+function label(status){const cls=['Accepted'].includes(status)?'active':['Submitted','Under review','Shortlisted'].includes(status)?'progress':['Declined'].includes(status)?'declined':'';return '<span class="status '+cls+'">'+escapeHtml(status)+'</span>';}
+function jobsRender(){
+ const countNode=$('positionCount');if(countNode)countNode.textContent=JOBS.length+' available position'+(JOBS.length===1?'':'s');
+ $('jobs').innerHTML=JOBS.length?JOBS.map((p,i)=>{
+ const existing=pendingFor(p.id);
+ return '<article class="job"><div class="job-icon">'+rsagpIcon(['shield-check','chart-no-axes-column','contact-round','shield-check','landmark','globe-2'][i%6],23)+'</div><span class="number">PORTFOLIO '+String(i+1).padStart(2,'0')+'</span><h3>'+escapeHtml(p.title)+'</h3><p>'+escapeHtml(p.summary)+'</p><footer>'+(existing?label(existing.status):'<span class="status">Open for applications</span>')+'<button type="button" class="btn btn-primary btn-sm" data-apply="'+escapeHtml(p.id)+'" '+(existing?'disabled':'')+'>'+(existing?'Applied':'Apply now '+rsagpIcon('arrow-right',16))+'</button></footer></article>';
+ }).join(''):'<div class="empty" style="grid-column:1/-1">There are no open ministerial vacancies at the moment. Please check again later.</div>';
+ document.querySelectorAll('[data-apply]').forEach(button=>button.onclick=()=>pickJob(button.dataset.apply));
+}
+function renderApplications(){
+ $('myApplications').hidden=!me;
+ $('applicationList').innerHTML=myApplications.length?myApplications.map(item=>'<article class="application-item"><div><h3>'+escapeHtml(item.position)+'</h3><small>Reference '+escapeHtml(item.id)+' · Submitted '+escapeHtml(String(item.submitted||'').slice(0,10))+'</small>'+(item.reviewNote?'<p><b>Reviewer note:</b> '+escapeHtml(item.reviewNote)+'</p>':'')+'</div><div class="right">'+label(item.status)+(['Submitted','Under review','Shortlisted'].includes(item.status)?'<button class="btn btn-red btn-sm" type="button" data-withdraw="'+escapeHtml(item.id)+'">Withdraw</button>':'')+'</div></article>').join(''):'<div class="empty">You have no applications yet. Choose a portfolio above to begin.</div>';
+ document.querySelectorAll('[data-withdraw]').forEach(b=>b.onclick=async()=>{
+  if(!confirm('Withdraw this application?'))return;b.disabled=true;
+  try{await call('withdrawJobApplication',session,b.dataset.withdraw);await reloadHome();}catch(e){alert(e.message);}finally{b.disabled=false;}
+ });
+}
+function accountRender(){ $('loginPanel').hidden=!!me;$('accountPanel').hidden=!me;
+ if(me){$('accountName').textContent=me.username;$('accountId').textContent='Discord ID: '+me.id;
+   $('discordAvatar').src=me.avatar||'https://cdn.discordapp.com/embed/avatars/0.png';}
+ $('loginError').textContent=BOOT.error||'';
+ jobsRender();renderApplications();
+}
+function pickJob(id){
+ selected=JOBS.find(x=>x.id===id);if(!selected)return;
+ if(pendingFor(id)){return alert('You already have an active application for this position.');}
+ try{sessionStorage.setItem('rsagpCareersChosen',id);}catch(e){}
+ $('formTitle').textContent=selected.title;$('formSummary').textContent=selected.summary;
+ $('questionFields').innerHTML=selected.questions.map((q,i)=>'<div class="question"><label class="form-field" for="q_'+i+'"><strong><span class="qnum">'+String(i+1).padStart(2,'0')+'</span>'+escapeHtml(q)+'</strong><textarea id="q_'+i+'" name="q_'+i+'" minlength="18" maxlength="1100" rows="4" required placeholder="Write a few sentences about what you would do…"></textarea></label></div>').join('');
+ $('formPanel').hidden=false;$('formError').textContent='';$('formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+ if(!me){$('formError').textContent='Sign in with Discord before sending your application.';}
+}
+async function reloadHome(){const d=await call('careersHome',session);me=d.identity;myApplications=d.applications||[];JOBS=d.positions||[];if(selected&&!JOBS.some(x=>x.id===selected.id)){$('formPanel').hidden=true;selected=null;}accountRender();}
+async function init(){
+ $('cabinetLinkTop').href=BOOT.cabinetUrl||'#';$('cabinetLink').href=BOOT.cabinetUrl||'#';$('citizenLink').href=BOOT.citizenshipUrl||'#';
+ $('loginButton').href=BOOT.loginUrl||'#';
+ jobsRender();
+ if(!session){accountRender();if(!BOOT.loginUrl)try{$('loginButton').href=await call('beginLogin','careers');}catch(e){$('loginError').textContent=e.message;}return;}
+ try{await reloadHome();const saved=sessionStorage.getItem('rsagpCareersChosen');if(saved&&!pendingFor(saved))pickJob(saved);}catch(e){session='';saveSession('');me=null;BOOT.error=e.message;accountRender();try{$('loginButton').href=await call('beginLogin','careers');}catch(_){} }
+}
+$('careerForm').onsubmit=async e=>{
+ e.preventDefault();if(!session||!me){$('formError').textContent='Please sign in with Discord first.';return;}
+ if(!selected)return;const btn=$('submitApplication');btn.disabled=true;$('formError').textContent='';
+ const payload={positionId:selected.id,robloxUsername:$('robloxUsername').value.trim(),answers:selected.questions.map((_,i)=>$('q_'+i).value.trim())};
+ try{const res=await call('submitJobApplication',session,payload);$('formPanel').hidden=true;selected=null;try{sessionStorage.removeItem('rsagpCareersChosen');}catch(_){}await reloadHome();$('myApplications').scrollIntoView({behavior:'smooth'});alert('Application submitted. Reference: '+res.id);}
+ catch(err){$('formError').textContent=err.message;}finally{btn.disabled=false;}
+};
+$('closeForm').onclick=$('cancelForm').onclick=()=>{$('formPanel').hidden=true;selected=null;};
+$('refreshApplications').onclick=async()=>{try{await reloadHome();}catch(e){alert(e.message);}};
+$('signOut').onclick=async()=>{const previous=session;session='';saveSession('');me=null;myApplications=[];$('formPanel').hidden=true;accountRender();try{await call('signOut',previous);}catch(e){}try{$('loginButton').href=await call('beginLogin','careers');}catch(e){}};
+$('careersRetry').onclick=()=>location.reload();
+$('jobSearch').addEventListener('input',function(){const q=this.value.trim().toLowerCase();document.querySelectorAll('#jobs .job').forEach(card=>{card.hidden=!card.textContent.toLowerCase().includes(q);});});
+init();
+</script></body></html>

@@ -1,0 +1,14 @@
+name = "rsagp-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+# Public GitHub Pages *origin* (scheme + host, without repository path).
+# For example https://YOURUSERNAME.github.io (NOT /YOUR-REPOSITORY).
+SITE_ORIGIN = "https://YOURUSERNAME.github.io"
+# For local testing only, remove or adjust after setup:
+LOCAL_DEV_ORIGIN = "http://localhost:8080"
+
+# Add the GAS_WEB_APP_URL secret via:
+#   npx wrangler secret put GAS_WEB_APP_URL
+# Don't put a secret, Discord client secret or session token in this TOML file.

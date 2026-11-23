@@ -1,0 +1,427 @@
+<!DOCTYPE html><html lang="en"><head><base target="_top"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RSAGP | Citizenship Services · Roblox Nation</title><style>
+:root{--green:#007a4d;--green-800:#063d2d;--green-900:#042a20;--gold:#ffb81c;--gold-deep:#c98a12;--red:#de3831;--blue:#002395;--ink:#143225;--muted:#637a6d;--line:#dde7dc;--paper:#f3f6f0;--serif:"Georgia","Times New Roman",serif}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);line-height:1.58;font-family:"Inter","Segoe UI",Arial,sans-serif;
+  background:radial-gradient(1100px 480px at 85% -10%,#eaf4ec 0,rgba(234,244,236,0) 60%),#f1f5ef}
+button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:wait}
+[hidden]{display:none!important}
+a{color:inherit}
+.flag{height:10px;background:linear-gradient(90deg,var(--red) 0 22%,#fff 22% 26%,var(--green) 26% 64%,var(--gold) 64% 78%,var(--blue) 78%)}
+.bar{background:linear-gradient(160deg,var(--green-800),var(--green-900));min-height:78px;
+  padding:16px max(calc((100vw - 1120px)/2),24px);display:flex;justify-content:space-between;align-items:center;gap:20px;color:#fff;position:relative;overflow:hidden}
+.bar:after{content:'';position:absolute;right:-40px;top:-30px;width:260px;height:160px;opacity:.14;pointer-events:none;
+  background:linear-gradient(135deg,var(--gold) 0 48%,transparent 48%),linear-gradient(45deg,var(--blue) 0 50%,var(--red) 50%);
+  -webkit-mask:linear-gradient(135deg,#000 0 55%,transparent 72%);mask:linear-gradient(135deg,#000 0 55%,transparent 72%)}
+.bar>*{position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:13px}
+.brand-mark{width:54px;height:54px;background:linear-gradient(#fff,#f4f8f3);border:1px solid rgba(255,184,28,.55);border-radius:15px;display:grid;place-items:center;overflow:hidden;padding:5px;box-shadow:inset 0 0 0 3px rgba(0,122,77,.1)}
+.brand-mark img{width:100%;height:100%;object-fit:contain}
+.brand b{display:block;font-size:18px;letter-spacing:-.03em}
+.brand small{font-size:9px;color:#b8dccb;letter-spacing:2px}
+.bar a{color:#ffe09b;font-size:12px;text-decoration:none;font-weight:700}
+.bar a:hover{color:#fff}
+.wrap{max-width:1120px;margin:34px auto 80px;padding:0 22px}
+/* Citizen desk: actual SA flag image with its correct 3:2 dimensions. */
+.hero{min-height:240px;border-radius:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,360px);
+  align-items:center;gap:24px;background:linear-gradient(115deg,var(--green-900),var(--green-800) 60%,#0b4e70 112%);
+  padding:36px 44px;color:#fff;position:relative;overflow:hidden}
+.hero:before{content:'';position:absolute;inset:0;background:radial-gradient(440px 230px at 96% 50%,rgba(0,35,149,.12),transparent 80%);z-index:0}
+.hero>*{position:relative;z-index:1}
+.hero-copy{min-width:0}
+.hero-flag-frame{display:flex;align-items:center;justify-content:center;min-width:0}
+.hero-flag{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:contain;
+  border-radius:14px;box-shadow:0 16px 34px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.16)}
+.eyebrow{font-size:10px;letter-spacing:3px;color:var(--gold);font-weight:800}
+.hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(31px,4vw,49px);line-height:1.08;letter-spacing:-.04em;margin:14px 0}
+.hero p{max-width:600px;color:#d2e6da;font-size:13px}
+.grid{display:grid;grid-template-columns:1.4fr .8fr;gap:19px;margin-top:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 16px 38px rgba(13,56,37,.07);min-width:0;position:relative;overflow:hidden}
+.card h2{margin:0 0 10px;font-size:20px;color:#17382a;letter-spacing:-.02em}
+.card p{font-size:13px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:11px;padding:12px 18px;font-weight:750;min-height:46px;font-size:12px;text-decoration:none;transition:background .18s,transform .18s,box-shadow .18s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 8px 18px rgba(0,122,77,.22)}
+.btn-primary:hover{background:var(--green-800)}
+.btn-gold{background:var(--gold);color:#5f4406;box-shadow:0 8px 18px rgba(255,184,28,.28)}
+.btn-gold:hover{background:#f0a900}
+.btn-ghost{border-color:#cde3d3;background:#f2f8f2;color:#1f5a3e}
+.btn-ghost:hover{background:#e7f1e7}
+.button-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:19px}
+.field{margin:17px 0}
+.field label{display:block;color:#2c6043;font-size:12px;font-weight:800;margin-bottom:6px}
+.field input{border:1px solid #cbdccc;border-radius:10px;background:#fff;padding:12px 14px;width:100%;outline:0;transition:border-color .15s,box-shadow .15s}
+.field input:focus{border-color:var(--green);box-shadow:0 0 0 3px #c9e8d9}
+.question{margin:15px 0;padding:19px 20px;background:#f7faf5;border:1px solid #e2ebe1;border-radius:14px;transition:border-color .15s}
+.question:hover{border-color:#cfe2d1}
+.question b{font-size:13px;color:#1d4733}
+.question label{display:flex;align-items:center;gap:11px;margin-top:11px;font-size:12px;color:#39594a;cursor:pointer}
+.question input{accent-color:var(--green);width:17px;height:17px}
+.pill{display:inline-block;border-radius:7px;background:var(--gold);color:#5f4406;padding:5px 11px;font-size:10px;font-weight:800;letter-spacing:.04em}
+.pill.good{background:#dff1e5;color:#1a7048}
+.pill.bad{background:#fde6e3;color:#a53f36}
+.notice{border-radius:12px;padding:13px 17px;background:#f4f9f3;border-left:4px solid var(--gold);font-size:12px;margin:12px 0;color:#39564a}
+.notice b{color:#1c4733}
+.fine{color:#6f867a;font-size:11px}
+.fine b{color:#4a6a57}
+.status{border-top:1px solid #e9f0e7;margin-top:25px;padding-top:20px}
+.loading{opacity:.7}
+.error{color:#b02828!important}
+.side-flag{height:7px;border-radius:9px;background:linear-gradient(90deg,var(--red) 0 22%,var(--gold) 22% 42%,var(--green) 42% 78%,var(--blue) 78%);margin:16px 0}
+.citizen-banner{font-size:10px;letter-spacing:1.6px;font-weight:800;color:var(--gold-deep);margin-bottom:10px;text-transform:uppercase}
+.avatar{width:40px;height:40px;object-fit:cover;border:2px solid rgba(255,184,28,.7);border-radius:12px}
+.profile{display:flex;gap:10px;align-items:center;font-size:12px;color:#355340}
+.profile b{color:#17382a}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;padding:28px 24px}.hero-flag-frame{justify-content:flex-start}.hero-flag{width:100%;max-width:360px}.bar{padding:13px 22px}.bar a{max-width:150px;text-align:right}}
+/* RSAGP Citizen Desk — thumb-friendly 2026 UI */
+:where(button,a,input):focus-visible{outline:3px solid #ffb81c;outline-offset:3px}
+:where(button,a){touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{background:#eff4ee}
+.wrap{margin:26px auto 70px}
+.hero{border-radius:23px;background:linear-gradient(120deg,#063c2b,#073d30 70%,#0b4f3b);min-height:214px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(28px,4vw,45px);line-height:1.13}
+.hero p{font-size:14px;line-height:1.65}
+.hero-flag{width:100%;max-width:330px}
+.card{border-radius:20px;box-shadow:0 16px 35px #123e2010}
+.card h2{font-size:22px}
+.bar{min-height:80px}
+.btn{font-size:13px;min-height:46px;border-radius:12px}
+.field label{font-size:13px}
+.field input{min-height:50px;font-size:16px;border-radius:12px}
+.field small{display:block;color:#6c8173;font-size:12px;margin-top:6px;line-height:1.5}
+.player-check{margin:3px 0 18px}
+.player-check .btn{min-height:42px}
+.exam-progress{background:#f3f8f2;padding:15px;border:1px solid #deebe0;border-radius:14px;margin:22px 0 15px}
+.progress-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;color:#164e32}
+.progress-heading span:last-child{font-weight:650;color:#687f6c}
+.progress-track{height:8px;background:#d5e6d8;border-radius:100px;overflow:hidden;margin-top:11px}
+.progress-track>span{display:block;background:linear-gradient(90deg,#007a4d,#e4ac1c);height:100%;width:0;transition:width .2s}
+.question{margin:14px 0 18px;padding:0!important;background:transparent!important;border:0!important}
+.question b{display:block;font-size:clamp(17px,2.5vw,21px);line-height:1.4;color:#173729;margin:0 0 16px}
+.question label{display:flex!important;gap:14px;align-items:center;border:1px solid #d6e4d7;border-radius:13px;
+  padding:15px 16px;min-height:57px;margin:9px 0!important;background:#fff;color:#254435!important;font-size:14px!important;line-height:1.45;
+  transition:background .15s,border-color .15s;cursor:pointer}
+.question label:has(input:checked){border-color:#007a4d;background:#eaf7ed;box-shadow:inset 0 0 0 1px #007a4d}
+.question input{width:20px!important;height:20px!important;flex:none;accent-color:#007a4d}
+.exam-actions{display:flex;gap:10px;align-items:center;padding-top:14px;border-top:1px solid #e3ece3}
+.exam-actions .btn{flex:1;min-height:51px;font-size:14px}
+#feedback:not(:empty){background:#eaf6ed;color:#205d3d;padding:13px 15px;border:1px solid #cee2d0;border-radius:12px;margin:13px 0;font-size:13px}
+#feedback.error:not(:empty){background:#fff0ed;color:#a13933;border-color:#ffd2cc}
+.loading-state{display:flex;align-items:center;gap:16px;min-height:104px;color:#235037}
+.loading-state strong,.loading-state small{display:block}
+.loading-state strong{font-size:15px}.loading-state small{font-size:12px;color:#71927c}
+.loading-spinner{width:29px;height:29px;border:3px solid #d9e8da;border-top-color:#007a4d;border-radius:100%;animation:spin .7s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.file-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 0}
+.file-actions a{min-height:50px;text-align:center;font-weight:750;line-height:1.3}
+.file-actions a.btn-ghost{background:#f2f8f2}
+@media(max-width:850px){
+  html{scroll-behavior:smooth;scroll-padding-top:105px}
+  .bar{min-height:68px;padding:12px 16px;gap:10px;position:sticky;top:0;z-index:20;background:#063b2e}
+  .brand{gap:10px;min-width:0}.brand-mark{width:43px;height:43px;border-radius:11px;flex:none}
+  .brand b{font-size:13px;line-height:1.2}.brand small{font-size:8px;letter-spacing:1px;line-height:1.3}
+  .bar .brand>.avatar{display:none}
+  .bar a{font-size:11px;max-width:88px;text-align:right;line-height:1.4}
+  .wrap{margin:14px auto 30px;padding:0 12px}
+  .hero{display:grid;grid-template-columns:minmax(0,1fr) 125px;gap:14px;padding:20px;min-height:unset;border-radius:19px}
+  .hero h1{font-size:clamp(22px,6vw,32px);margin:8px 0}.hero p{font-size:12px;line-height:1.48;margin:5px 0}
+  .hero .eyebrow{letter-spacing:1.5px;font-size:9px}
+  .hero-flag{width:100%;max-width:120px;border-radius:9px}
+  .grid{grid-template-columns:minmax(0,1fr);gap:13px;margin-top:13px}
+  .card{padding:18px;border-radius:18px}
+  .card h2{font-size:20px}
+  .card p{font-size:13px}
+  .question b{font-size:18px}
+  .question label{padding:14px 13px;min-height:60px;font-size:14px!important}
+  .button-row{gap:9px}
+  .button-row .btn{width:100%}
+  .exam-actions{position:sticky;bottom:0;z-index:10;background:#fff;box-shadow:0 -8px 18px #fff9;margin:12px -18px -18px;padding:12px 18px calc(13px + env(safe-area-inset-bottom));border-radius:0 0 18px 18px}
+  .exam-actions .btn{min-height:50px}
+}
+@media(max-width:480px){
+  .hero{grid-template-columns:1fr 100px;padding:17px 16px;gap:10px}
+  .hero h1{font-size:23px}.hero-flag{max-width:100px}
+  .hero p{font-size:11px}
+  .bar .brand b{font-size:12px}
+  .card{padding:16px}
+  .exam-progress{padding:13px}
+  .exam-actions{margin:12px -16px -16px;padding:12px 16px calc(13px + env(safe-area-inset-bottom))}
+  .file-actions{grid-template-columns:1fr}
+}
+@media(max-width:350px){.hero{display:block}.hero-flag-frame{display:none}.bar .brand small{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+/* RSAGP Citizen Services — Government registration experience */
+:root{--ink:#1e392b;--muted:#60786a;--line:#dce6d8;--paper:#f4f2ec;--gold:#caa35e;--gold-deep:#99752f}
+body{background:#f3f1e9;color:#1d382a;font-family:Verdana,"Segoe UI",Arial,sans-serif}
+.flag{height:5px}
+.bar{background:#082f25;box-shadow:0 6px 18px #0e36221a;min-height:82px}
+.bar:after{opacity:.06}
+.brand-mark{border-radius:6px;background:#fff}
+.brand b{font:600 19px Georgia,serif;letter-spacing:.015em}
+.brand small{color:#d3c28e;letter-spacing:.12em}
+.wrap{max-width:1160px}
+.hero{background:linear-gradient(118deg,#082f25,#0b4434 90%);border-radius:11px;box-shadow:0 14px 36px #0b3e261c;min-height:250px;border:1px solid #1b5b42}
+.hero .eyebrow{color:#e5c989;font-size:9px;letter-spacing:.17em}
+.citizen-split{padding:0 9px;color:#fff9}
+.hero h1{font:600 clamp(32px,4.2vw,51px)/1.1 Georgia,serif;letter-spacing:-.035em;margin:13px 0}
+.hero p{max-width:570px;font-size:12px;line-height:1.9;color:#d5e4d9}
+.hero-flag{border-radius:5px;box-shadow:0 10px 25px #0003}
+.card{border-radius:9px;border:1px solid #dce4d8;box-shadow:0 5px 18px #0c38200b;padding:29px;background:#fff}
+.card h2{font:600 23px Georgia,serif;color:#123b2b}
+.card p{font-size:12px;line-height:1.75}
+.pill{border-radius:4px;background:#efe1bf;color:#6b541d;letter-spacing:.09em}
+.citizen-banner{font-size:9px;letter-spacing:.14em;color:#a17b37}
+.notice{border-radius:5px;background:#f7f9f5;border:1px solid #e2e9df;border-left:3px solid #cba867;color:#3c5b48;margin:10px 0;font-size:12px;line-height:1.7}
+.notice b{color:#163f2e}
+.btn{border-radius:6px;font-size:12px;font-weight:700}
+.btn-primary{background:#086748}
+.btn-primary:hover{background:#0b503b}
+.btn-ghost{background:#f7f8f5;border-color:#d3dfd4}
+.field label{color:#335c43}
+.field input{border-radius:6px;background:#fff}
+.exam-progress{background:#f8f9f5;border-radius:7px;border:1px solid #dee5d9}
+.question label{border-radius:6px;background:#fff}
+.question label:has(input:checked){background:#f0f7f0;border-color:#1b7954}
+.file-actions a{border-radius:6px}
+@media(max-width:850px){
+ .bar{background:#082f25;min-height:65px}
+ .brand b{font-size:14px}
+ .wrap{padding:0 12px;margin:14px auto 34px}
+ .hero{border-radius:9px;min-height:unset}
+ .hero h1{font-size:clamp(25px,6vw,35px)}
+ .hero p{line-height:1.6}
+ .card{border-radius:8px;padding:18px}
+ .btn{border-radius:6px}
+ .question label{border-radius:6px}
+ .exam-actions{border-radius:0 0 8px 8px}
+}
+@media(max-width:480px){.card{padding:15px}.hero{padding:19px 17px}}
+
+
+/* ---------- 2026 CIVICOS UI REFRESH ---------- */
+/* RSAGP CivicOS · Citizen Services · self-contained Lucide icon treatment */
+:root{--green:#0a7456;--green-800:#0b5142;--green-900:#102c34;--gold:#ddb354;--gold-deep:#957337;--red:#d94d42;--blue:#254b98;--ink:#19343a;--muted:#698087;--line:#e0e8e5;--paper:#f4f7f6;--serif:Georgia,serif}
+body{font-family:Verdana,Geneva,Arial,sans-serif!important;font-size:12px;background:#f5f7f7;color:#1a353a;line-height:1.72}
+:focus-visible{outline:3px solid #d7b467;outline-offset:2px}
+.flag{height:5px;background:linear-gradient(90deg,#de3831 0 20%,#fff 20% 25%,#007a4d 25% 66%,#ffb81c 66% 79%,#002395 79%)}
+.bar{min-height:78px;position:relative;background:#142e37;box-shadow:0 4px 18px #163c3714;padding:14px max(calc((100vw - 1220px)/2),24px);overflow:visible}
+.bar:after{display:none}
+.brand{gap:12px}.brand-mark{width:46px;height:46px;padding:5px;border-radius:13px;border:1px solid #dec68a;box-shadow:none}
+.brand b{font-size:13px;letter-spacing:.01em;color:#fff;font-weight:800}
+.brand small{letter-spacing:1.2px;color:#afceca;font-size:9px}
+.bar a{display:inline-flex;gap:7px;align-items:center;text-decoration:none;border:1px solid #ffffff3b;padding:9px 12px;border-radius:10px;color:#e7f0ef;font-size:10px;font-weight:700}
+.bar a:hover{background:#ffffff1a;color:#fff}
+.wrap{max-width:1220px;padding:0 24px;margin:30px auto 70px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:30px;align-items:center;border-radius:24px;background:linear-gradient(105deg,#14323e 0%,#15434b 63%,#11775a 100%);padding:42px 48px;min-height:262px;box-shadow:0 20px 46px #15363e20;border:0}
+.hero:before{background:radial-gradient(500px 260px at 87% 12%,#ffca7550,transparent 80%)}
+.hero h1{font:750 clamp(29px,4vw,45px)/1.12 Verdana,Geneva,Arial,sans-serif;letter-spacing:-.055em;color:#fff;margin:13px 0 14px}
+.hero p{color:#d6e6e3;font-size:12px;line-height:1.8;max-width:620px}
+.hero .eyebrow{font-size:10px;color:#e9c879;letter-spacing:.13em}
+.service-mark{display:inline-flex;align-items:center;gap:8px;font-size:9px;color:#d5e9e3;font-weight:800;letter-spacing:.15em;border:1px solid #ffffff3c;background:#ffffff13;border-radius:100px;padding:8px 12px;margin-bottom:8px}
+.hero-flag{width:100%;object-fit:cover;aspect-ratio:3/2;border:4px solid #ffffff48;border-radius:18px;box-shadow:0 14px 35px #0005}
+.service-pills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:19px 0 0}
+.service-pills>span{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e0e8e3;padding:14px 17px;border-radius:12px;font-size:11px;color:#4a6868;font-weight:750;box-shadow:0 4px 12px #0b26290b}
+.service-pills svg{color:#0a8462;flex:none}
+.service-pills span:nth-child(2) svg{color:#bd903a}.service-pills span:nth-child(3) svg{color:#bd5d43}
+.grid{grid-template-columns:minmax(0,1.48fr) minmax(270px,.8fr);gap:18px;margin-top:18px;align-items:start}
+.card{border:1px solid #e0e8e3;background:#fff;border-radius:19px;padding:28px;box-shadow:0 10px 31px #17363d0b;min-width:0;overflow:hidden}
+.card h2{font:750 19px/1.3 Verdana,Geneva,Arial,sans-serif;letter-spacing:-.035em;color:#203940}
+.card p{font-size:12px;color:#6b8188;line-height:1.8}
+.citizen-banner{display:inline-flex;align-items:center;gap:8px;border-radius:100px;background:#f0f7f2;color:#1b6c51;border:1px solid #dbebdf;padding:7px 10px;font-size:9px;letter-spacing:.1em;font-weight:850}
+.journey-card{background:#fff;position:relative;overflow:hidden}
+.journey-card:before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#0a7859,#dbac4f,#d14b3d)}
+.journey-intro{width:52px;height:52px;display:grid;place-items:center;border-radius:15px;background:#eaf4ee;color:#0c7355;margin-bottom:14px}
+.pill{border-radius:6px;padding:7px 10px;background:#fff7e5;color:#a47a3e;letter-spacing:.1em;font-size:9px;border:1px solid #f4e7c9}
+.journey-card h2{font-size:17px!important;line-height:1.45;margin:12px 0 20px}
+.journey-card .notice{border-radius:0;background:#fff!important;border:0!important;border-left:2px solid #e0e8e4!important;margin:0 0 0 8px;padding:0 12px 22px 19px;font-size:11px;line-height:1.8;color:#71868a}
+.journey-card .notice:last-of-type{padding-bottom:10px}
+.journey-card .notice b{display:flex;align-items:center;gap:9px;font-size:11px;color:#244b48;margin-bottom:5px}
+.journey-card .notice b svg{color:#0a8161;flex:none}
+.journey-card .fine{padding:13px;border-radius:9px;background:#f7f8f5;color:#6c7b7b;font-size:10px}
+.btn{border-radius:11px;padding:12px 17px;min-height:44px;font-size:11px;gap:9px;box-shadow:none;transition:background .15s,transform .15s}
+.btn svg{width:17px;height:17px;flex:none}
+.btn-primary{background:#0c7054;color:#fff;border:1px solid #0c7054;box-shadow:0 5px 12px #0c705421}
+.btn-primary:hover{background:#07523e}
+.btn-ghost{background:#eff5f1;border-color:#d6e7da;color:#1b624d}
+.btn-gold{background:#e1b45e;color:#503b19;box-shadow:none}
+.button-row{gap:10px}.field{margin:20px 0}
+.field label{color:#254b49;font-size:11px}
+.field input{min-height:49px;background:#fdfefe;border:1px solid #d8e3dd;border-radius:11px;font-size:13px}
+.field input:focus{border-color:#b99553;box-shadow:0 0 0 3px #ffefc8}
+.citizen-main>.profile{border-radius:12px;background:#f5f9f6;border:1px solid #e3e9e2;padding:13px 16px}
+#notice{border-radius:11px;background:#fffaef;border:1px solid #f0e2c3;color:#725d36;font-size:11px;padding:12px 14px}
+#application>.status{background:#f8faf8;border:1px solid #e0ebe3;border-radius:13px;padding:17px}
+.question{border:0!important;background:transparent!important;padding:0!important;margin:17px 0!important}
+.question b{font-size:17px!important;color:#203b3d!important;line-height:1.55;font-weight:750}
+.question label{display:flex!important;min-height:59px;gap:12px;border:1px solid #dfe8e2;border-radius:13px!important;background:#fff;padding:14px 16px;font-size:12px;color:#3f5b5b;line-height:1.6;transition:border-color .15s,background .15s}
+.question label:hover{border-color:#afcdc0;background:#f7fbf9}
+.question label:has(input:checked){background:#eaf6f0;border-color:#11805f;box-shadow:inset 0 0 0 1px #11805f}
+.question input{accent-color:#08795b;flex:none;width:19px;height:19px}
+.exam-progress{border-radius:12px;background:#f5f8f6;border:1px solid #e1e9e3;padding:16px 18px;margin-top:22px;scroll-margin-top:95px}
+.progress-track{border-radius:100px;background:#dce9e1;height:8px}
+#progressBar{background:linear-gradient(90deg,#0a6c51,#e2b152);border-radius:100px}
+.progress-heading{color:#40605c;font-size:11px;font-weight:750}
+.exam-actions{border-top:1px solid #e7eeea;padding:18px 0 0;margin-top:12px;border-radius:0;background:transparent}
+#feedback.error{background:#fff1ee;border-radius:9px;padding:9px 11px;color:#b64e42}
+.loading-state{padding:16px;background:#f3f8f5;border-radius:12px;border:1px solid #dfebe3}
+@media(max-width:950px){
+ .wrap{padding:0 18px}.hero{grid-template-columns:minmax(0,1fr) 210px;padding:31px 32px}
+ .grid{grid-template-columns:minmax(0,1fr) 285px}.card{padding:22px}
+}
+@media(max-width:700px){
+ .bar{padding:14px 17px;gap:8px}
+ .brand-mark{width:40px;height:40px}.brand b{font-size:11px}.brand small{font-size:8px;letter-spacing:.06em}
+ .bar a{font-size:9px;padding:7px 9px}
+ .wrap{padding:0 13px;margin:17px auto 50px}
+ .hero{display:grid;grid-template-columns:1fr;gap:17px;padding:26px 23px;border-radius:18px;min-height:0}
+ .hero h1{font-size:clamp(25px,6.5vw,36px)}
+ .hero p{font-size:11px}.hero-flag-frame{max-width:340px}.hero-flag{border-radius:12px}
+ .service-pills{grid-template-columns:1fr;gap:7px;margin:12px 0}
+ .service-pills>span{padding:10px 12px;font-size:10px}
+ .grid{grid-template-columns:1fr;gap:12px;margin-top:13px}
+ .card{padding:21px 18px;border-radius:15px}.journey-card{order:2}
+ .question label{font-size:13px!important;min-height:58px}
+ .exam-actions{gap:9px}.exam-actions .btn{flex:1;min-width:0;font-size:10px}
+}
+@media(max-width:360px){.wrap{padding:0 11px}.card{padding:17px 13px}.hero{padding:21px 18px}.hero h1{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+</style></head><body><div class="flag"></div><header class="bar"><div class="brand"><div class="brand-mark"><img src="<?!= coatSrc ?>" alt="South African coat of arms"></div><div><b>REPUBLIC OF SOUTH AFRICA</b><small>ROBLOX NATION · CITIZEN SERVICES</small></div><img class="avatar" src="<?!= flagSrc ?>" alt="South African flag" style="width:58px;height:38px;object-fit:cover"></div><span style="display:flex;gap:14px;flex-wrap:wrap;align-items:center"><a id="careersLink" href="#">Government careers ↗</a><a id="backCabinet" href="#">Cabinet workspace ↗</a></span></header><main class="wrap"><section class="hero"><div class="hero-copy"><div class="service-mark"><svg class="lucide lucide-fingerprint" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a9 9 0 0 0-9 9c0 2-.5 4-.9 5M12 6a5 5 0 0 0-5 5c0 3-.4 6-1.4 8M17 9a5 5 0 0 1 0 4c-.4 1.2-.5 4-.8 7M12 10a1 1 0 0 0-1 1c0 4-.5 7-1.2 10M14 14c0 3-.4 6-.8 8"/></svg> DIGITAL CITIZEN SERVICES</div><div class="eyebrow">CITIZEN SERVICES <span class="citizen-split">/</span> ROBLOX NATION</div><h1>Citizenship Services</h1><p>Apply to the Republic of South Africa within Roblox Nation. Complete the civic knowledge assessment, submit your account details and follow the approval process.</p></div><div class="hero-flag-frame"><img class="hero-flag" src="<?!= flagSrc ?>" alt="South African national flag"></div></section><div class="service-pills"><span><svg class="lucide lucide-shield-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg> Discord-secured</span><span><svg class="lucide lucide-book-open-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14m0-14a8 8 0 0 0-9-2v14a8 8 0 0 1 9 2m0-14a8 8 0 0 1 9-2v14a8 8 0 0 0-9 2m3-10 2 2 3-3"/></svg> Civics assessment</span><span><svg class="lucide lucide-badge-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 2.2 15 4l3.5-.2.3 3.5L21 10l-2 3 .2 3.5-3.5.3L13 19l-3 2-3-2-3.5-.2-.3-3.5L1 13l2-3-.2-3.5L6.3 6 9 3Z"/></svg> Application review</span></div><div class="grid"><div class="card citizen-main"><div id="loadingState" class="loading-state" role="status" aria-live="polite"><span class="loading-spinner" aria-hidden="true"></span><div><strong>Connecting to the Citizen Desk</strong><small>Checking your login securely…</small></div></div><div id="login" hidden><div class="citizen-banner"><svg class="lucide lucide-fingerprint" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a9 9 0 0 0-9 9c0 2-.5 4-.9 5M12 6a5 5 0 0 0-5 5c0 3-.4 6-1.4 8M17 9a5 5 0 0 1 0 4c-.4 1.2-.5 4-.8 7M12 10a1 1 0 0 0-1 1c0 4-.5 7-1.2 10M14 14c0 3-.4 6-.8 8"/></svg> CITIZEN APPLICATION SERVICE</div><h2>Citizen Sign In</h2><p>Use your Discord account to register an application, sit the assessment and receive updates on your submission.</p><a id="discordLogin" href="#" class="btn btn-primary" target="_top"><svg class="lucide lucide-log-in" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4m4-4 5-5-5-5m5 5H9"/></svg> Continue with Discord</a><p id="loginMessage" class="error" role="alert"></p><p class="fine">On a phone, use Safari or Chrome if the Discord in-app browser does not redirect back after login.</p></div><div id="app" hidden><div id="citizenProfile" class="profile"></div><div id="notice" class="notice">Loading citizenship records…</div><div id="application"></div><p id="feedback" class="fine" role="status" aria-live="polite"></p><section id="testSection"><div class="side-flag"></div><h2>Citizenship Knowledge Assessment</h2><p>Complete the civics examination covering constitutional principles, public institutions and civic duties. A passing result is followed by account ownership verification.</p><form id="examForm"><div class="field"><label for="robloxName">Your player username</label><input id="robloxName" name="robloxName" autocomplete="off" maxlength="20" required placeholder="e.g. ExampleCitizen" autocapitalize="none" spellcheck="false"><small>Enter your exact Roblox username. This is not your Discord username.</small></div>
+<div class="button-row player-check"><button type="button" class="btn btn-ghost" id="lookUpRoblox"><svg class="lucide lucide-user-round-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M3 21v-2a7 7 0 0 1 12 0m2-6 2 2 3-3"/></svg> Check player username</button></div>
+<div class="exam-progress" id="examProgress" aria-label="Citizenship examination progress"><div class="progress-heading"><span id="questionCount">Question 1</span><span id="answeredCount">0 answered</span></div><div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack"><span id="progressBar"></span></div></div>
+<div id="questions" aria-live="polite"></div>
+<div class="exam-actions"><button type="button" class="btn btn-ghost" id="prevQuestion"><svg class="lucide lucide-arrow-left" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7 7-7-7 7-7"/></svg> Previous</button><button type="button" class="btn btn-primary" id="nextQuestion">Next question <svg class="lucide lucide-arrow-right" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></button><button id="submitTest" type="submit" class="btn btn-primary" hidden><svg class="lucide lucide-send" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg> Submit assessment</button></div></form></section></div></div><aside class="card journey-card"><div class="journey-intro"><svg class="lucide lucide-clipboard-check" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="4" width="14" height="18" rx="2"/><path d="M7 8H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8m-3-17V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2m3 12 2 2 4-4"/></svg></div><span class="pill">HOW IT WORKS</span><h2 style="margin-top:14px">Four stages of application</h2><div class="notice"><b><svg class="lucide lucide-fingerprint" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a9 9 0 0 0-9 9c0 2-.5 4-.9 5M12 6a5 5 0 0 0-5 5c0 3-.4 6-1.4 8M17 9a5 5 0 0 1 0 4c-.4 1.2-.5 4-.8 7M12 10a1 1 0 0 0-1 1c0 4-.5 7-1.2 10M14 14c0 3-.4 6-.8 8"/></svg> 01 · Sign in</b><br>Authenticate using your Discord account.</div><div class="notice"><b><svg class="lucide lucide-book-open-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14m0-14a8 8 0 0 0-9-2v14a8 8 0 0 1 9 2m0-14a8 8 0 0 1 9-2v14a8 8 0 0 0-9 2m3-10 2 2 3-3"/></svg> 02 · Civic assessment</b><br>Complete the civics questions. The required pass mark is 80%.</div><div class="notice"><b><svg class="lucide lucide-clipboard-list" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4V2h6v2M9 10h6m-6 4h6m-6 4h3"/></svg> 03 · Application review</b><br>Cabinet verifies your player-account ownership and application details.</div><div class="notice"><b><svg class="lucide lucide-badge-check" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 2.2 15 4l3.5-.2.3 3.5L21 10l-2 3 .2 3.5-3.5.3L13 19l-3 2-3-2-3.5-.2-.3-3.5L1 13l2-3-.2-3.5L6.3 6 9 3Z"/></svg> 04 · Citizen record issued</b><br>Once approved, download your Roblox Nation citizenship card, including your character avatar.</div><div class="side-flag"></div><p class="fine">Roblox Nation service records do not constitute real-world citizenship or identity documents.</p><button id="logout" class="btn btn-ghost" hidden>Sign out</button></aside></div></main><script>
+const BOOT = <?!= bootstrapJson ?>;
+const $=id=>document.getElementById(id);
+let SESSION=BOOT.session||'',CURRENT=null,QUESTION_STEP=0,READY_CARD_URL='';
+function sessionRead(){try{return sessionStorage.getItem('rsagpCitizenshipSession')||'';}catch(e){return '';}}
+function sessionSave(s){try{if(s)sessionStorage.setItem('rsagpCitizenshipSession',s);else sessionStorage.removeItem('rsagpCitizenshipSession');}catch(e){}}
+if(!SESSION)SESSION=sessionRead();else sessionSave(SESSION);
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function call(name,...args){if(window.MZ_DEMO)return Promise.resolve(window.MZ_DEMO(name,...args));return new Promise((resolve,reject)=>{
+  if(!window.google||!google.script||!google.script.run)return reject(new Error('Open the deployed Google Apps Script web app.'));
+  google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e?.message||String(e))))[name](...args);
+});}
+function message(text,isError){const n=$('feedback');if(!n)return;n.textContent=text||'';n.classList.toggle('error',!!isError);}
+function busy(on){$('loadingState').hidden=!on;}
+async function ensureLoginUrl_(){
+  if(BOOT.loginUrl){$('discordLogin').href=BOOT.loginUrl;return;}
+  const anchor=$('discordLogin');anchor.textContent='Preparing secure login…';anchor.setAttribute('aria-disabled','true');
+  try{BOOT.loginUrl=await call('beginLogin','citizenship');anchor.href=BOOT.loginUrl||'#';}
+  catch(e){$('loginMessage').textContent=e.message||'Please refresh this page to sign in.';}
+  finally{anchor.textContent='Continue with Discord';anchor.removeAttribute('aria-disabled');}
+}
+function showLogin(error){busy(false);$('login').hidden=false;$('app').hidden=true;$('logout').hidden=true;
+  $('loginMessage').textContent=error||BOOT.error||'';$('discordLogin').href=BOOT.loginUrl||'#';
+  ensureLoginUrl_();
+}
+async function load(){
+  if(!SESSION){showLogin('');return;}
+  busy(true);$('login').hidden=true;$('app').hidden=true;
+  try{
+    CURRENT=await call('citizenContext',SESSION);
+    $('login').hidden=true;$('app').hidden=false;$('logout').hidden=false;
+    render();
+  }catch(e){SESSION='';sessionSave('');BOOT.loginUrl='';showLogin(e.message+' Please sign in again.');}
+  finally{busy(false);}
+}
+function questionAnswered_(index){
+  const q=CURRENT?.questions?.[index];
+  if(!q)return false;
+  return !!document.querySelector('input[name="q_'+CSS.escape(q.id)+'"]:checked');
+}
+function answerCount_(){return (CURRENT?.questions||[]).reduce((sum,_,i)=>sum+(questionAnswered_(i)?1:0),0);}
+function updateExamProgress_(){
+  const qs=CURRENT?.questions||[];if(!qs.length)return;
+  QUESTION_STEP=Math.max(0,Math.min(QUESTION_STEP,qs.length-1));
+  document.querySelectorAll('[data-question-step]').forEach(el=>{el.hidden=Number(el.dataset.questionStep)!==QUESTION_STEP;});
+  $('questionCount').textContent='Question '+(QUESTION_STEP+1)+' of '+qs.length;
+  $('answeredCount').textContent=answerCount_()+' answered';
+  const progress=Math.round(100*answerCount_()/qs.length);
+  $('progressBar').style.width=progress+'%';$('progressTrack').setAttribute('aria-valuenow',String(progress));
+  $('prevQuestion').hidden=QUESTION_STEP===0;
+  $('nextQuestion').hidden=QUESTION_STEP===qs.length-1;
+  $('submitTest').hidden=QUESTION_STEP!==qs.length-1;
+}
+function setQuestion_(step){
+  QUESTION_STEP=step;updateExamProgress_();
+  const card=$('examProgress');if(card)card.scrollIntoView({block:'start',behavior:'smooth'});
+}
+function render(){
+  const d=CURRENT,me=d.latest,identity=d.identity;
+  const avatar=String(identity.avatar||'');
+  $('citizenProfile').innerHTML=(/^https:\/\/cdn\.discordapp\.com\//.test(avatar)?'<img class="avatar" src="'+esc(avatar)+'" alt="Discord avatar">':'')+
+    '<div><b>'+esc(identity.username)+'</b><br><small>Signed in with Discord</small></div>';
+  $('notice').textContent='Pass mark: '+d.passPercent+'%. Each citizenship card also needs an independent account-ownership check.';
+  $('application').innerHTML=me?'<div class="status"><span class="pill '+(me.status==='Approved'?'good':me.status==='Failed'||me.status==='Rejected'?'bad':'')+'">'+esc(me.status)+'</span><h2 style="margin-top:12px">Your latest application</h2><p><b>'+esc(me.robloxUsername)+'</b> · Score '+esc(me.score)+'/'+esc(me.total)+'</p>'+ (me.status==='Approved'?'<button class="btn btn-gold" id="getCard">Prepare my citizenship card</button>':'') +(me.reviewNote?'<p><b>Reviewer:</b> '+esc(me.reviewNote)+'</p>':'')+'</div>':'';
+  const open=!me||['Failed','Rejected'].includes(me.status);
+  $('testSection').hidden=!open;
+  if(open){
+    QUESTION_STEP=0;
+    $('questions').innerHTML=d.questions.map((q,i)=>'<section class="question" data-question-step="'+i+'" '+(i?'hidden':'')+' aria-label="Question '+(i+1)+'"><b>'+(i+1)+'. '+esc(q.question)+'</b>'+
+       q.options.map((option,j)=>'<label><input type="radio" name="q_'+esc(q.id)+'" value="'+['A','B','C','D'][j]+'" autocomplete="off"><span>'+esc(option)+'</span></label>').join('')+'</section>').join('');
+    $('questions').onchange=()=>{message('',false);updateExamProgress_();};
+    updateExamProgress_();
+  }
+  if($('getCard'))$('getCard').onclick=async()=>{
+    const btn=$('getCard');btn.disabled=true;btn.textContent='Preparing HTML card…';message('Generating your approved citizenship card.');
+    try{showDownloadActions_(await call('citizenCardHTML',SESSION,me.id));message('Your card is ready. Choose Open card or Save HTML below.');}
+    catch(e){message(e.message,true);}
+    finally{btn.disabled=false;btn.textContent='Prepare my citizenship card';}
+  };
+}
+function showDownloadActions_(file){
+  if(!file?.html||!file?.filename)throw new Error('Card not available.');
+  if(READY_CARD_URL)URL.revokeObjectURL(READY_CARD_URL);
+  READY_CARD_URL=URL.createObjectURL(new Blob([file.html],{type:'text/html;charset=utf-8'}));
+  const parent=$('application').querySelector('.status')||$('application');
+  parent.querySelector('.file-actions')?.remove();
+  const tools=document.createElement('div');tools.className='file-actions';
+  const open=document.createElement('a');open.className='btn btn-primary';open.href=READY_CARD_URL;open.target='_blank';open.rel='noopener';open.textContent='Open card · PNG / PDF';
+  const save=document.createElement('a');save.className='btn btn-ghost';save.href=READY_CARD_URL;save.download=file.filename;save.textContent='Save HTML';
+  tools.append(open,save);parent.appendChild(tools);
+  const hint=document.createElement('p');hint.className='fine';
+  hint.textContent='Your card is prepared in HTML. Open it to save a PNG image or print to PDF. If the viewer does not open on your phone, save the HTML and open it in your browser.';
+  parent.appendChild(hint);
+  // Mobile Safari may block automatic downloads from Google Apps Script iframes.
+  // Both links remain available for a direct user tap instead of a scripted click.
+}
+$('prevQuestion').onclick=()=>setQuestion_(QUESTION_STEP-1);
+$('nextQuestion').onclick=()=>{
+  if(!questionAnswered_(QUESTION_STEP)){message('Select one answer to continue.',true);return;}
+  message('',false);setQuestion_(QUESTION_STEP+1);
+};
+$('examForm').onsubmit=async e=>{
+  e.preventDefault();if(!CURRENT)return;
+  const qs=CURRENT.questions,answers={};
+  for(let i=0;i<qs.length;i++){
+    const el=document.querySelector('input[name="q_'+CSS.escape(qs[i].id)+'"]:checked');
+    if(!el){setQuestion_(i);message('Answer this question before submitting.',true);return;}
+    answers[qs[i].id]=el.value;
+  }
+  const name=$('robloxName').value.trim();if(!name){$('robloxName').focus();message('Enter your player username first.',true);return;}
+  const btn=$('submitTest');btn.disabled=true;btn.textContent='Submitting…';message('Checking your answers and player account…');
+  try{
+    const result=await call('takeCitizenshipTest',SESSION,{robloxUsername:name,answers});
+    CURRENT=await call('citizenContext',SESSION);render();
+    message(result.message,false);$('application').scrollIntoView({block:'start',behavior:'smooth'});
+  }catch(err){message(err.message,true);}
+  finally{btn.disabled=false;btn.textContent='Submit assessment';}
+};
+$('lookUpRoblox').onclick=async()=>{
+  const btn=$('lookUpRoblox');btn.disabled=true;btn.textContent='Checking…';
+  try{const result=await call('checkRobloxUsername',SESSION,$('robloxName').value.trim());message('Found @'+result.username+' (ID '+result.id+'). This does not prove account ownership.',false);}
+  catch(e){message(e.message,true);}finally{btn.disabled=false;btn.textContent='Check player username';}
+};
+$('logout').onclick=async()=>{
+  const old=SESSION;SESSION='';sessionSave('');CURRENT=null;
+  if(READY_CARD_URL){URL.revokeObjectURL(READY_CARD_URL);READY_CARD_URL='';}
+  try{await call('signOut',old);}catch(e){}
+  BOOT.loginUrl='';showLogin('Signed out.');
+};
+$('backCabinet').href=BOOT.cabinetUrl||'#';
+$('careersLink').href=BOOT.careersUrl||'#';
+load();
+</script></body></html>

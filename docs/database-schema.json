@@ -1,0 +1,301 @@
+{
+  "schemaVersion": 1,
+  "source": "apps-script/RSAGP_Project/Code.gs",
+  "groups": {
+    "core": {
+      "workbook": "RSAGP _ Cabinet Directory & Staff.xlsx",
+      "scriptProperty": "GOV_SHEET_ID",
+      "tabs": {
+        "members": [
+          "Discord ID",
+          "Discord Username",
+          "Name",
+          "Position",
+          "Portfolio",
+          "Roles",
+          "Active",
+          "Appointed At",
+          "Updated At",
+          "Updated By",
+          "Roblox User ID",
+          "Roblox Username"
+        ],
+        "appointments": [
+          "ID",
+          "Category",
+          "Office",
+          "Holder Name",
+          "Discord ID",
+          "Discord Username",
+          "Branch",
+          "Notes",
+          "Active",
+          "Appointed At",
+          "Updated At",
+          "Updated By",
+          "Roblox User ID",
+          "Roblox Username"
+        ],
+        "accessRoles": [
+          "Role Name",
+          "Description",
+          "Permissions JSON",
+          "Active",
+          "Built-in",
+          "Updated At",
+          "Updated By"
+        ],
+        "accessUsers": [
+          "Discord ID",
+          "Display Name",
+          "Roles JSON",
+          "Allow JSON",
+          "Deny JSON",
+          "Active",
+          "Updated At",
+          "Updated By"
+        ]
+      }
+    },
+    "policy": {
+      "workbook": "RSAGP _ Policy & Legislation.xlsx",
+      "scriptProperty": "GOV_MULTI_POLICY_ID",
+      "tabs": {
+        "proposals": [
+          "ID",
+          "Created At",
+          "Author ID",
+          "Author",
+          "Portfolio",
+          "Title",
+          "Category",
+          "Priority",
+          "Background",
+          "Recommendation",
+          "Budget Impact",
+          "Decision Requested",
+          "Status",
+          "Reviewed By",
+          "Review Note",
+          "Reviewed At",
+          "Meeting ID"
+        ],
+        "actDrafts": [
+          "Proposal ID",
+          "Long Title / Purpose",
+          "Preamble",
+          "Clauses JSON",
+          "Explanatory Note",
+          "Commencement",
+          "Updated At",
+          "Updated By"
+        ]
+      }
+    },
+    "meeting": {
+      "workbook": "RSAGP _ Cabinet Meetings & Attendance.xlsx",
+      "scriptProperty": "GOV_MULTI_MEETING_ID",
+      "tabs": {
+        "meetings": [
+          "ID",
+          "Title",
+          "Date",
+          "Time",
+          "Venue",
+          "Chair",
+          "Status",
+          "Created At",
+          "Created By",
+          "Proposal IDs JSON",
+          "Agenda Doc URL",
+          "Chair Notes"
+        ],
+        "meetingAttendees": [
+          "ID",
+          "Meeting ID",
+          "Source Type",
+          "Source ID",
+          "Discord ID",
+          "Display Name",
+          "Office / Position",
+          "Portfolio / Branch",
+          "Attendance Status",
+          "Secretariat Notes",
+          "Updated At",
+          "Updated By",
+          "Recorded Attendance",
+          "Recorded At",
+          "Recorded By",
+          "Attendance Notes"
+        ],
+        "decisions": [
+          "ID",
+          "Meeting ID",
+          "Proposal ID",
+          "Decision",
+          "Rationale",
+          "Recorder ID",
+          "Recorded At"
+        ]
+      }
+    },
+    "actions": {
+      "workbook": "RSAGP _ Executive Actions.xlsx",
+      "scriptProperty": "GOV_MULTI_ACTIONS_ID",
+      "tabs": {
+        "actions": [
+          "ID",
+          "Meeting ID",
+          "Task",
+          "Owner ID",
+          "Owner",
+          "Due Date",
+          "Status",
+          "Created At",
+          "Updated At",
+          "Created By"
+        ]
+      }
+    },
+    "press": {
+      "workbook": "RSAGP _ Press Office.xlsx",
+      "scriptProperty": "GOV_MULTI_PRESS_ID",
+      "tabs": {
+        "press": [
+          "ID",
+          "Created At",
+          "Author ID",
+          "Headline",
+          "Summary",
+          "Body",
+          "Quote",
+          "Spokesperson",
+          "Status",
+          "Approved By",
+          "Review Note",
+          "Doc URL",
+          "Updated At",
+          "Published At",
+          "Release Date"
+        ]
+      }
+    },
+    "documents": {
+      "workbook": "RSAGP _ Documents & Signatures.xlsx",
+      "scriptProperty": "GOV_MULTI_DOCUMENTS_ID",
+      "tabs": {
+        "letters": [
+          "ID",
+          "Created At",
+          "Author ID",
+          "Ministry",
+          "Kind",
+          "Recipient",
+          "Subject",
+          "Body",
+          "Status",
+          "Updated At"
+        ],
+        "signatures": [
+          "Discord ID",
+          "Drive File ID",
+          "Mime Type",
+          "Updated At"
+        ],
+        "documentSignoffs": [
+          "Document Key",
+          "Type",
+          "Document ID",
+          "Content SHA-256",
+          "Signatory Discord ID",
+          "Name",
+          "Position",
+          "Signed At",
+          "Snapshot Drive File ID",
+          "Mime Type"
+        ]
+      }
+    },
+    "citizen": {
+      "workbook": "RSAGP _ Citizenship Services.xlsx",
+      "scriptProperty": "GOV_MULTI_CITIZEN_ID",
+      "tabs": {
+        "citizenshipQuestions": [
+          "Question ID",
+          "Question",
+          "Option A",
+          "Option B",
+          "Option C",
+          "Option D",
+          "Correct",
+          "Active"
+        ],
+        "citizenshipAttempts": [
+          "ID",
+          "Discord ID",
+          "Discord Username",
+          "Player Account ID",
+          "Citizen Username",
+          "Score",
+          "Total",
+          "Status",
+          "Submitted At",
+          "Verified By",
+          "Verified At",
+          "Card Reference",
+          "Review Notes"
+        ]
+      }
+    },
+    "careers": {
+      "workbook": "RSAGP _ Government Careers.xlsx",
+      "scriptProperty": "GOV_MULTI_CAREERS_ID",
+      "tabs": {
+        "careerPositions": [
+          "Position ID",
+          "Title",
+          "Portfolio",
+          "Description",
+          "Icon",
+          "Questions JSON",
+          "Open",
+          "Display Order",
+          "Updated At",
+          "Updated By"
+        ],
+        "jobApplications": [
+          "Application ID",
+          "Discord ID",
+          "Discord Username",
+          "Roblox Username",
+          "Roblox User ID",
+          "Position ID",
+          "Position Title",
+          "Answers JSON",
+          "Reserved",
+          "Status",
+          "Submitted At",
+          "Updated At",
+          "Reviewer Discord ID",
+          "Reviewer Name",
+          "Review Notes"
+        ]
+      }
+    },
+    "audit": {
+      "workbook": "RSAGP _ Security & Audit Trail.xlsx",
+      "scriptProperty": "GOV_MULTI_AUDIT_ID",
+      "tabs": {
+        "audit": [
+          "Timestamp",
+          "Actor ID",
+          "Actor",
+          "Action",
+          "Record Type",
+          "Record ID",
+          "Details"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+import { readFileSync } from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const js=readFileSync(new URL('../site/js/bridge.js',import.meta.url),'utf8');
+const location={href:'https://example.github.io/rsagp/careers/#rsagp_session='+'a'.repeat(64),pathname:'/rsagp/careers/',search:'',hash:'#rsagp_session='+'a'.repeat(64)};
+let newPath='';
+const ctx={window:{RSAGP_CONFIG:{apiUrl:'https://api.example.workers.dev'}},location,history:{replaceState(a,b,path){newPath=path;}},URL,URLSearchParams,setTimeout,clearTimeout};
+vm.createContext(ctx);vm.runInContext(js,ctx);
+const boot=ctx.window.RSAGPBridge.bootstrap('careers');
+assert.equal(boot.session,'a'.repeat(64));
+assert.equal(newPath,'/rsagp/careers/');
+assert.equal(boot.cabinetUrl,'https://example.github.io/rsagp/');
+assert.equal(boot.careersUrl,'https://example.github.io/rsagp/careers/');
+assert.equal(boot.citizenshipUrl,'https://example.github.io/rsagp/citizenship/');
+console.log('Bridge OAuth fragment and URL handling smoke test passed.');
