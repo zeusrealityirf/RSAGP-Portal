@@ -1,4 +1,5 @@
 import {EXPORT_CSS,EXPORT_JS} from './export-tools.js';
+import {escapeDocument as safe, paragraphDocument as docPara, multiParagraphDocument as docMultiline, documentShell as docShell, originalSignature, originalProposedBill, originalCitizenshipCard} from './original-templates.js';
 import {now,uuid,str,bool,json,required,text} from './store.js';
 import {requireRight} from './permissions.js';
 import {proposalDTO,meetingDTO,attendeeDTO,pressDTO,letterDTO,citizenDTO} from './queries.js';
@@ -11,11 +12,6 @@ function output(filename,html){
  const bar=`<aside id="rsagp-export-tools" aria-label="Export document"><div class="rsagp-export-heading"><span>RSAGP · ROBLOX NATION</span><strong>Export document</strong></div><div class="rsagp-export-actions"><select id="rsagp-export-page" aria-label="PNG page" hidden></select><button id="rsagp-export-png" type="button">Save PNG</button><button id="rsagp-export-pdf" type="button">Save PDF</button></div><div class="rsagp-export-status" id="rsagp-export-status" role="status" aria-live="polite">PNG converts HTML into an image. PDF uses the browser print dialog.</div><a id="rsagp-export-image-link" hidden target="_blank" rel="noopener">Open PNG</a></aside>`;
  const script='<script id="rsagp-export-script">window.RSAGP_HTML_EXPORT_NAME='+JSON.stringify(filename)+';'+EXPORT_JS.replace(/<\/script/gi,'<\\/script')+'</script>';
  return {success:true,filename,html:html.replace('</head>','<style>'+EXPORT_CSS+'</style></head>').replace('</body>',bar+script+'</body>'),kind:'html',message:'Open HTML to save PNG or use Print → Save as PDF.'};
-}
-function shell(office,title,reference,date,status,content,signoff=''){
- return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)} · ${esc(reference)}</title><style>
- :root{--flag-bar:#007a4d}body{background:#edf1ec;color:#22342d;font:15px/1.65 Georgia,serif;margin:0}.sheet{max-width:790px;min-height:950px;padding:62px 65px;background:#fff;margin:26px auto;box-shadow:0 6px 28px #003b2518;box-sizing:border-box}.head{border-top:8px solid #007a4d;border-bottom:1px solid #d2ddd2;padding:18px 0 24px;margin-bottom:35px}.label{color:#007a4d;text-transform:uppercase;letter-spacing:.13em;font:700 12px Arial,sans-serif}.sub{font:11px Arial,sans-serif;color:#53685e;margin-top:7px}h1{font-size:27px;line-height:1.35;margin-top:25px}h2{font-size:18px;margin-top:28px}p{white-space:normal}table{width:100%;border-collapse:collapse;font:12px/1.5 Arial,sans-serif;margin:15px 0 25px}th,td{padding:8px 6px;border-bottom:1px solid #dce4de;text-align:left;vertical-align:top}th{background:#edf4ef}.stamp{color:#6f603c;background:#fff7dc;border:1px solid #efdcab;display:inline-block;padding:5px 10px;font:700 11px Arial,sans-serif}.sig{margin-top:42px;border-top:1px solid #d9e2dc;padding-top:18px;font:12px Arial,sans-serif}.sig img{max-width:180px;max-height:75px;display:block}.foot{border-top:1px solid #dce5db;margin-top:60px;padding-top:12px;font:10px Arial,sans-serif;color:#6a7e70}@media print{body{background:#fff}.sheet{box-shadow:none;margin:0;max-width:none;min-height:auto;padding:20mm}@page{size:A4;margin:0}}
- </style></head><body><main class="sheet"><header class="head"><div class="label">${esc(office)}</div><div class="sub">RSAGP · Roblox roleplay government · Not a real government-issued document</div></header><div class="stamp">${esc(status)}</div><h1>${esc(title)}</h1><div class="sub">Reference ${esc(reference)} · ${esc(date)}</div>${content}${signoff}<footer class="foot" data-rsagp-footer="1">Lem's South Africa · RSAGP · Roblox Nation · Roleplay document · ${esc(reference)}</footer></main></body></html>`;
 }
 const signTypeBucket={Agenda:'meetings',Attendance:'meetings',Bill:'proposals',Press:'press',Letter:'letters'};
 async function snapshot(store,kind,id){
@@ -45,9 +41,33 @@ async function signatureData(env,key,mime){
 }
 async function signBlock(store,env,kind,id){
  const status=await docState(store,kind,id);
- if(!status.valid)return '<div class="sig">Unsigned or document changed since signing</div>';
+ if(!status.valid)return originalSignature({pending:true,changed:!!status.row});
  const r=status.row,data=await signatureData(env,str(r[8]),str(r[9]));
- return `<div class="sig">${data?'<img alt="Recorded private signature" src="'+data+'">':''}<b>${esc(r[5])}</b> · ${esc(r[6])}<div class="sub">Digitally recorded sign-off: ${esc(r[7])}</div></div>`;
+ if(!data)return originalSignature({missingImage:true});
+ return originalSignature({name:str(r[5]),title:str(r[6]),date:str(r[7]),version:str(r[3]).slice(0,12),image:data});
+}
+async function robloxAvatarData(robloxId){
+ const id=str(robloxId).trim();
+ if(!/^\d{1,20}$/.test(id))return '';
+ try{
+  const info=await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+encodeURIComponent(id)+'&size=420x420&format=Png&isCircular=false');
+  if(!info.ok)return '';
+  const results=await info.json(),url=str(results?.data?.[0]?.imageUrl);
+  const target=new URL(url);
+  if(target.protocol!=='https:'||!/(^|\.)rbxcdn\.com$/i.test(target.hostname))return '';
+  const image=await fetch(target.toString());
+  if(!image.ok||!['image/png','image/jpeg'].includes(str(image.headers.get('content-type')).split(';')[0]))return '';
+  const bytes=new Uint8Array(await image.arrayBuffer());
+  if(bytes.length<100||bytes.length>500000)return '';
+  let binary='';for(const b of bytes)binary+=String.fromCharCode(b);
+  return 'data:'+str(image.headers.get('content-type')).split(';')[0]+';base64,'+btoa(binary);
+ }catch{return '';}
+}
+function facts(items){
+ return '<div class="meeting-facts">'+items.map(([k,v])=>'<div><b>'+safe(k)+'</b><span>'+safe(v)+'</span></div>').join('')+'</div>';
+}
+function attendeeTable(people,heads,columns){
+ return '<table style="width:100%;border-collapse:collapse;font:11px/1.5 Arial,sans-serif;margin:14px 0 26px"><thead><tr>'+heads.map(h=>'<th style="text-align:left;padding:8px 6px;border-bottom:2px solid #007a4d">'+safe(h)+'</th>').join('')+'</tr></thead><tbody>'+people.map(a=>'<tr>'+columns(a).map(v=>'<td style="padding:8px 6px;border-bottom:1px solid #dce5dc;vertical-align:top">'+safe(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 }
 export async function documentAction(action,store,env,c,args){
  const [a,b]=args;
@@ -94,39 +114,62 @@ export async function documentAction(action,store,env,c,args){
  if(action==='letterHTML'){
   requiredRight(c,'writeLetters');const x=letterDTO(await findDoc(store,'letters',a));
   if(x.authorId!==c.identity.id)throw Error('Only the author may export this letter.');
-  if(x.kind==='Presidential'&&!c.rights.superAdmin)throw Error('Presidential letters require Supreme Administrator.');
-  const signed=x.status==='Issued'?await signBlock(store,env,'Letter',x.id):'<div class="sig">Draft — not issued</div>';
-  return output(x.id+'_Letter.html',shell(x.ministry,x.subject,x.id,x.updated.slice(0,10),x.status,'<p><b>To: '+esc(x.recipient)+'</b></p>'+paragraph(x.body)+'<p>Yours sincerely,</p>',signed));
+  const presidential=x.kind==='Presidential';
+  if(presidential&&!c.rights.superAdmin)throw Error('Presidential letters require Supreme Administrator.');
+  const issued=x.status==='Issued';
+  const content='<div class="release-heading">'+(issued?'ISSUED CABINET CORRESPONDENCE':'WORKING DRAFT — NOT ISSUED')+'</div><h1>'+safe(x.subject)+'</h1><div class="addressee">To: <b>'+safe(x.recipient)+'</b></div>'+docMultiline(x.body)+'<p style="margin-top:36px">Yours sincerely,</p>';
+  const signature=issued?await signBlock(store,env,'Letter',x.id):'<p class="note">Working draft — signature pending issuance.</p>';
+  const html=docShell(x.ministry,presidential?'Presidential Letter':'Ministry Letter',presidential?'president':'ministry',x.id,x.updated.slice(0,10),issued?'Issued letter':'Working draft — not issued',content,signature);
+  return output(x.id+'_'+(presidential?'Presidential':'Ministry')+'_Letter.html',html);
  }
  if(action==='pressDocument'){
   requiredRight(c,'draftPress');const x=pressDTO(await findDoc(store,'press',a));
   if(x.authorId!==c.identity.id&&!c.rights.reviewPress&&!c.rights.publishPress)throw Error('Not authorised to export this press release.');
-  return output('Press_'+x.id+'.html',shell('Government Communications',x.headline,x.id,x.releaseDate,x.status,'<p><b>'+esc(x.summary)+'</b></p>'+paragraph(x.body)+(x.quote?'<blockquote>'+esc(x.quote)+'</blockquote>':'')+'<p>Spokesperson: '+esc(x.spokesperson)+'</p>',x.status==='Published'?await signBlock(store,env,'Press',x.id):''));
+  const released=x.status==='Published';
+  const content='<div class="release-heading">'+(released?'PRESS RELEASE':'PRESS RELEASE • WORKING DRAFT')+'</div>'+docPara(x.summary,'lead')+'<h1>'+safe(x.headline)+'</h1>'+docMultiline(x.body)+(x.quote?'<blockquote>“'+safe(x.quote)+'”</blockquote>':'')+'<div class="ends">— END —</div><p><b>Issued by:</b> '+safe(x.spokesperson)+'</p>';
+  const signature=released?await signBlock(store,env,'Press',x.id):'<p class="note">Working draft — signature not available until publication.</p>';
+  return output('Press_'+x.id+'.html',docShell('Government Communications','Media Statement','ministry',x.id,x.releaseDate,released?'Published release':'NOT APPROVED FOR PUBLICATION',content,signature));
  }
  if(action==='agendaDocument'||action==='meetingAttendanceDocument'){
   requiredRight(c,'exportMeetings');const meeting=meetingDTO(await findDoc(store,'meetings',a));
   const attendees=(await store.all('meetingAttendees')).filter(x=>str(x[1])===str(a)&&str(x[8])!=='Withdrawn').map(attendeeDTO);
   if(action==='agendaDocument'){
-   const proposals=(await store.all('proposals')).filter(r=>meeting.proposalIds.includes(str(r[0]))).map(proposalDTO);
-   const content='<p><b>Time:</b> '+esc(meeting.time)+' SAST · <b>Venue:</b> '+esc(meeting.venue)+' · <b>Chair:</b> '+esc(meeting.chair)+'</p>'+paragraph(meeting.notes)+'<h2>Agenda items</h2>'+(proposals.length?proposals.map((x,i)=>'<h2>'+(i+1)+'. '+esc(x.title)+'</h2><p>'+esc(x.recommendation)+'</p>').join(''):'<p>None</p>')+'<h2>Invited attendees</h2>'+table(['Name','Office','RSVP'],attendees.map(x=>[x.name,x.office,x.status]));
-   return output('Cabinet_Agenda_'+meeting.id+'.html',shell('Cabinet Secretariat',meeting.title,meeting.id,meeting.date,'Draft for deliberation',content,await signBlock(store,env,'Agenda',meeting.id)));
+   if(meeting.status==='Cancelled')throw Error('Cancelled meetings cannot generate agendas.');
+   const lookup=new Map((await store.all('proposals')).map(proposalDTO).map(x=>[x.id,x]));
+   const rows=[docPara('01  Opening and welcome'),docPara('02  Attendance and apologies'),docPara('03  Adoption of previous minutes'),docPara('04  Matters arising')];
+   meeting.proposalIds.forEach((id,i)=>{const p=lookup.get(id);if(!p)return;
+    rows.push('<section class="agenda-item"><span class="agenda-no">'+String(i+5).padStart(2,'0')+'</span><div><h3>'+safe(p.title)+'</h3><small>'+safe(p.portfolio)+' · '+safe(p.priority)+' · '+safe(p.id)+'</small><p>'+safe(p.recommendation)+'</p><p><b>Decision requested:</b> '+safe(p.decision)+'</p>'+(p.budget?'<p><b>Resource impact:</b> '+safe(p.budget)+'</p>':'')+'</div></section>');
+   });
+   const attendeeSection=attendees.length?('<h2>Requested attendees and representation</h2><p style="font-size:11px;color:#617064">The following attendance has been requested or recorded by Cabinet Secretariat. Attendance is not automatically confirmed.</p>'+
+    attendeeTable(attendees,['Attendee','Office / position','Representation','Invitation / RSVP','Recorded attendance'],x=>[x.name,x.office,x.branch||x.sourceType,x.status+(x.notes?' · '+x.notes:''),(x.attendance||'Not yet recorded')+(x.attendanceNotes?' · '+x.attendanceNotes:'')])+
+    (attendees.some(x=>x.attendance)?'<p style="font-size:11px;color:#617064">Attendance recorded by Cabinet Secretariat; entries marked as not recorded remain unverified.</p>':'')):
+    '<p class="note">Requested attendance: to be confirmed by Cabinet Secretariat.</p>';
+   rows.push(docPara('Closing business · Any other matters · Next meeting · Adjournment'));
+   const content='<h1>'+safe(meeting.title)+'</h1>'+facts([['Date',meeting.date],['Time (SAST)',meeting.time],['Venue',meeting.venue],['Chair',meeting.chair]])+
+    (meeting.notes?'<p class="note">Secretariat: '+safe(meeting.notes)+'</p>':'')+attendeeSection+'<h2>Order of Business</h2>'+rows.join('');
+   return output('Cabinet_Agenda_'+meeting.date+'_'+meeting.id+'.html',docShell('Cabinet Secretariat','Cabinet Meeting Agenda','ministry',meeting.id,meeting.date,'Draft for Cabinet deliberation',content,await signBlock(store,env,'Agenda',meeting.id)));
   }
-  if(!attendees.length)throw Error('No attendees are invited.');
-  const content='<p><b>Meeting:</b> '+esc(meeting.title)+' · '+esc(meeting.time)+' SAST · '+esc(meeting.venue)+'</p>'+table(['Name','Office','RSVP','Recorded attendance','Notes'],attendees.map(x=>[x.name,x.office,x.status,x.attendance||'Unrecorded',x.attendanceNotes]));
-  return output('Cabinet_Attendance_'+meeting.id+'.html',shell('Cabinet Secretariat','Attendance Register',meeting.id,meeting.date,'Secretariat record',content,await signBlock(store,env,'Attendance',meeting.id)));
+  if(!attendees.length)throw Error('There are no invited attendees to include in the register.');
+  const count=kind=>attendees.filter(x=>x.attendance===kind).length;
+  const totals='<p style="font:700 12px Arial,sans-serif;color:#164b3a">Invited: '+attendees.length+' · Present: '+count('Present')+' · Absent: '+count('Absent')+' · Excused: '+count('Excused')+' · Unrecorded: '+count('')+'</p>';
+  const table=attendeeTable(attendees,['Participant','Office / Position','RSVP','Attendance','Notes','Recorded by / At'],x=>[x.name,x.office,x.status,x.attendance||'Not recorded',x.attendanceNotes||'',x.recordedAt?(x.recordedBy+' / '+x.recordedAt.slice(0,16).replace('T',' ')+' UTC'):'—']);
+  const content='<h1>Meeting Attendance Register</h1>'+facts([['Meeting',meeting.title],['Date',meeting.date],['Time (SAST)',meeting.time],['Venue',meeting.venue]])+totals+table+'<p class="note">Unrecorded participants have not been verified as present or absent. This register is maintained by Cabinet Secretariat.</p>';
+  return output('Cabinet_Attendance_'+meeting.date+'_'+meeting.id+'.html',docShell('Cabinet Secretariat','Cabinet Meeting Attendance Register','ministry',meeting.id,meeting.date,'Secretariat record',content,await signBlock(store,env,'Attendance',meeting.id)));
  }
  if(action==='proposedActDocument'){
-  requiredRight(c,'viewProposals');const p=proposalDTO(await findDoc(store,'proposals',a));if(p.category!=='Legislation')throw Error('Only Bills can be exported as a proposed Act.');
-  const d=await findDoc(store,'actDrafts',a),clauses=json(d[3],[]);if(!clauses.length)throw Error('No Bill clauses saved.');
-  const content='<p><b>PROPOSED BILL — NOT ENACTED</b></p><h2>'+esc(d[1])+'</h2>'+paragraph(d[2])+clauses.map((x,i)=>'<h2>'+(i+1)+'. '+esc(x.heading)+'</h2>'+paragraph(x.text)).join('')+'<p>Commencement: '+esc(d[5])+'</p>';
-  return output('Proposed_Bill_'+p.id+'.html',shell('Legislative Drafts',p.title,p.id,p.created.slice(0,10),'Cabinet draft — not law',content,await signBlock(store,env,'Bill',p.id)));
+  requiredRight(c,'viewProposals');const p=proposalDTO(await findDoc(store,'proposals',a));
+  if(p.category!=='Legislation')throw Error('Only Bills can be exported as a proposed Act.');
+  const d=await findDoc(store,'actDrafts',a),clauses=json(d[3],[]);
+  if(!clauses.length)throw Error('No Bill clauses saved.');
+  const bill={longTitle:str(d[1]),preamble:str(d[2]),clauses,explanatoryNote:str(d[4]),commencement:str(d[5])};
+  return output('Proposed_Bill_'+p.id+'.html',originalProposedBill(p,bill,await signBlock(store,env,'Bill',p.id)));
  }
  if(action==='citizenCardHTML'){
   const r=citizenDTO(await findDoc(store,'citizenshipAttempts',a));
   if(r.discordId!==c.identity.id&&!c.rights.manageCitizenship)throw Error('Not authorised to export this card.');
   if(r.status!=='Approved')throw Error('Application has not been approved.');
-  const content='<p><b>Roblox username:</b> '+esc(r.robloxUsername)+'</p><p><b>Player account ID:</b> '+esc(r.robloxId)+'</p><p><b>Card reference:</b> '+esc(r.cardNumber)+'</p><p>This card relates only to the RSAGP Roblox roleplay community and does not establish real citizenship.</p>';
-  return output('Citizen_Card_'+r.id+'.html',shell('Citizenship Services','Roleplay Citizenship Card',r.cardNumber,r.verified.slice(0,10),'Approved for roleplay',content));
+  const photo=await robloxAvatarData(r.robloxId);
+  return output((r.cardNumber||'RSAGP')+'_Citizenship_Card.html',originalCitizenshipCard(r,photo));
  }
  throw Error('Document operation not implemented.');
 }
