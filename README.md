@@ -1,86 +1,63 @@
-# RSAGP — Original Portal, GitHub Pages Edition
+# RSAGP Portal — GitHub Pages + Cloudflare (no Apps Script)
 
-**This repository was generated from the provided `RSAGP_Custom_Roles_Permissions_Manager_Upgrade (1).zip`.** It preserves the uploaded source, original layout, Cabinet workspace, Careers desk, Citizenship desk, signatures/documents, Discord sign-in, spreadsheet data model and custom roles/permissions manager.
+This is a migration of the user's **original RSAGP Roblox roleplay government portal**. Its original Cabinet, Careers and Citizenship HTML interfaces and branding are preserved in `site/`. Server-side requests now go to **Cloudflare Workers + D1**, with private uploaded signature files in **Cloudflare R2**. There are **no runtime calls to Google Apps Script or Google Sheets**.
 
-The site's **HTML/CSS/JavaScript and branding images are served from GitHub Pages** instead of being rendered by Google Apps Script. The existing Google Apps Script project remains the **backend**: it verifies Discord logins, reads/writes the current Google Sheets and enforces permissions. A very small Cloudflare Worker forwards browser requests to the Apps Script `doPost` endpoint to work around CORS.
+The original `.gs` sources are retained in `apps-script/RSAGP_Project/` only as a **historical reference and HTML-template source**. Do **not** deploy them. `scripts/build-static.py` can still regenerate the original pages from the archived source without using Apps Script as a service.
 
-> **Not a zero-backend conversion.** GitHub Pages only serves static files; Apps Script is still needed for existing data and workflows. This may reduce initial page-delivery latency, but backend requests still incur Apps Script/Sheets latency. No data has been copied, cleared, or migrated.
->
-> **Status:** Files converted; local source/transport tests available. Live Discord OAuth, Worker, permissions, document generation and Google Sheets flows have **not** been tested against your account and require setup and verification.
+> **Status:** Source code and private offline D1 import are prepared. Local unit/integration tests pass; the code has **not been deployed to your Cloudflare account or your live GitHub repo**, and end-to-end Discord/R2/production validation is still required. Do not cut over until the checklist in `docs/DEPLOY.md` passes.
 
-## Deployment
+## Architecture
 
-Read **[docs/DEPLOY.md](docs/DEPLOY.md)** for the full procedure. The order is:
-
-1. Back up your live Apps Script project and nine Google Sheets workbooks.
-2. Update the Apps Script `Code.gs` and add `GitHubPagesBridge.gs` from `apps-script/RSAGP_Project/`; redeploy as a new Web App version.
-3. Create a GitHub repository, push this repository, and enable GitHub Pages via GitHub Actions.
-4. Set the Apps Script property `GITHUB_PAGES_URL` to your actual Pages site URL.
-5. Deploy the Worker in `worker/`, configure its allowed origin and the Apps Script Web App URL.
-6. Put the resulting Worker URL in `site/config.js` and push again.
-7. Test public listings, Discord login, per-role access and authorized writes (using test records).
-
-### Repository map
-
-```
-site/                         True original pages, statically rendered
-  index.html                  Cabinet Secretariat (Index.html)
-  careers/index.html          CareersPortal.html
-  citizenship/index.html      CitizenPortal.html
-  assets/                     PNGs extracted from the uploaded source
-  js/bridge.js                Worker transport + OAuth session fragment receiver
-  config.js                   PUBLIC config: Worker URL only (no secrets)
-apps-script/RSAGP_Project/     Original .gs/.html project, including two backend patches
-  Code.gs                     Preserves original logic, adds OAuth return hand-off
-  GitHubPagesBridge.gs        New explicit server API allowlist / doPost
-worker/                       CORS proxy; no database access outside Apps Script
-scripts/build-static.py       Rebuild static HTML from the original templates
-.github/workflows/pages.yml   Deploys site/ to GitHub Pages on main
+```text
+GitHub Pages: https://zeusrealityirf.github.io/RSAGP-Portal/
+       |
+       |  POST {action, args} to Worker /api
+       v
+Cloudflare Worker (Discord OAuth + login sessions + server-side permissions)
+       |
+       +-- Cloudflare D1 (19 record collections + OAuth/session tables)
+       +-- Private Cloudflare R2 (uploaded signatures + signed snapshots)
 ```
 
-### Development
+## Files
+
+- `site/` — original public interfaces, CSS, JavaScript and brand images
+- `site/js/bridge.js` — frontend API transport; no Apps Script dependency
+- `site/config.js` — PUBLIC Worker URL configuration only, no credentials
+- `worker/src/` — rewritten backend (51 original API operations), Discord OAuth, D1 storage, access checks, document exports, R2 private signatures
+- `worker/migrations/` — D1 schema and workflow-integrity trigger (safe to commit)
+- `scripts/workbooks_to_d1.py` — **local-only** offline converter for nine Excel exports; outputs **PRIVATE** SQL outside the repository
+- `docs/DEPLOY.md` — setup and deployment checklist
+- `docs/DATA-MIGRATION.md` — workbook import and data validation
+- `tests/cloudflare-worker.test.mjs` — local integration tests (Node 22+)
+- `.github/workflows/pages.yml` — deploys `site/` on pushes to main
+
+## Your first three steps
+
+1. Read **[docs/DEPLOY.md](docs/DEPLOY.md)** and create the D1 database and private R2 bucket on Cloudflare.
+2. Run the D1 migrations and import the separately supplied **PRIVATE** SQL export. Never put that SQL in a Git repository.
+3. Configure Discord credentials in Worker secrets, deploy the Worker, and set its URL in `site/config.js`. Commit/push the updated website files to `zeusrealityirf/RSAGP-Portal`.
+
+## Local checks
 
 ```bash
-python3 scripts/build-static.py
-python3 -m http.server 8080 --directory site
+cd worker
+node --test ../tests/cloudflare-worker.test.mjs
+# after npm install
+npx wrangler d1 migrations apply DB --local
+npx wrangler dev
 ```
 
-Pages show a backend-configuration message until you connect the Worker. The Careers page fetches vacancies from the live backend; it does not claim that the built-in default vacancies are presently open. To inspect the UI in its pre-login state without a backend, open the local server URL.
+The Worker can start locally after binding a local D1 database, but Discord login requires a matching development callback redirect. Tests use synthetic accounts and do not contact Discord.
 
-### Regenerating after a change
+## Data privacy & limitations
 
-Edit the original templates in `apps-script/RSAGP_Project/` (not generated `site/` HTML), then run:
+- Supplied workbook contents were **not included** in this GitHub repository or in `site/`.
+- A separate, private import SQL has been produced from the 23 November 2026 nine-workbook ZIP (150 records). This is a **snapshot** and may not contain newer live records.
+- The snapshot lacks the original `accessRoles` and `accessUsers` sheets. Built-in role defaults are available in code, but missing custom assignments are **not recreated or guessed**.
+- The spreadsheet snapshot contains signature and sign-off **file references**, not their binary images. Previously stored Google Drive signature images must be re-uploaded to R2; old sign-offs may require re-signing.
+- Document export operations generate standalone HTML with PNG/print-to-PDF controls, but some new document layouts are **simpler** than the legacy Apps Script originals. Review each format in the deployed portal.
+- Rate limiting, ongoing backup scheduling, security monitoring and production Discord OAuth are recommended before public launch; local checks do not establish production readiness.
+- This is a **Roblox roleplay government**, not a real public government service. Do not present roleplay documents as official South African government credentials.
 
-```bash
-python3 scripts/build-static.py
-```
-
-Commit both the source and the rebuilt site so deployment stays in sync.
-
-## Existing Google Sheets backups (newly supplied)
-
-The supplied nine-workbook Excel export was compared against the portal's `Code.gs`: **17 existing tabs match the expected schema**. The Cabinet workbook is missing `accessRoles` and `accessUsers`, the two tabs needed to edit custom role and per-user permissions. **No workbook data was embedded in the website or this repository.**
-
-See [docs/WORKBOOKS.md](docs/WORKBOOKS.md) for the workbook-to-Script-Property mapping, the permissions setup path and safe restoration guidance. To check any future backup locally:
-
-```bash
-python3 scripts/audit-sheets.py "/path/to/RSAGP Sheets.zip"
-```
-
-This inspection changes no Google Sheets and does not connect to your live database.
-
-## Security and privacy
-
-The initial ZIP contains application code, **not** live Google Sheets or your Script Properties. Before publishing a *public* repository, personally review the uploaded source for confidential materials and unpublished policies. Never commit `DISCORD_CLIENT_SECRET`, `GOV_SHEET_ID` when sensitive, signed document contents, private exports, API tokens, user sessions, `.dev.vars`, or downloaded application data. The original branding represents a **Roblox roleplay government**, not an official Republic of South Africa service.
-
-- Supreme Administrator access still comes **only** from the original `SUPREME_ADMIN_DISCORD_IDS` Script Property.
-- Rights and role overrides are enforced in the original Apps Script functions. The new HTTP adapter only exposes an explicit approved action list; it does not add grants.
-- The Worker allows browser CORS only for the specified Pages origin. CORS **is not authentication**; your existing unpredictable session tokens and backend permission checks are the security boundary.
-- The Discord OAuth redirect URI remains your **Apps Script `/exec` URL**, and credentials remain only in Script Properties.
-- Never deploy backend secrets to a static GitHub Pages site. Review application handling, rate limits, access logs, privacy, terms and legal obligations before using real applicant records.
-
-## Notes
-
-- No Supabase migration is needed for this conversion; all existing workbooks can remain where they are.
-- App Script HTML service uses a sandbox. After signing in, users click **Continue to portal** in the success screen (the sign-in token is included in the URL fragment and removed by the static app).
-- This project is different from the earlier generic starter: it uses **your uploaded portal source** and keeps its exact feature areas and visual design.
+Never commit any of: `DISCORD_CLIENT_SECRET`, `SUPREME_ADMIN_DISCORD_IDS`, Discord sessions, `.dev.vars`, your private SQL import, or the XLSX workbooks. All permissions are checked in the Worker against current D1 records on each protected request. Browser-side rights controls are presentational only.

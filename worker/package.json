@@ -1,0 +1,13 @@
+{
+  "name": "rsagp-cloudflare-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:local": "wrangler d1 migrations apply DB --local",
+    "db:remote": "wrangler d1 migrations apply DB --remote",
+    "test": "node --test ../tests/cloudflare-*.test.mjs"
+  },
+  "devDependencies": {"wrangler": "^4.0.0"}
+}

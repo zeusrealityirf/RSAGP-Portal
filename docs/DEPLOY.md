@@ -1,94 +1,114 @@
-# RSAGP: Publish on GitHub Pages while retaining Google Sheets
+# Deploy RSAGP without Google Apps Script or Google Sheets
 
-**Before making changes:** Back up the Apps Script project, its Script Properties and all connected workbooks. There are no migrations in this guide, and no need to recreate the nine spreadsheets. Take extra care if your existing live project differs from the uploaded ZIP: apply the **two small backend additions** to your live project rather than replacing newer code with the ZIP.
+This deploys the original public UI on GitHub Pages and the **new backend** on Cloudflare. The Pages address can stay `https://zeusrealityirf.github.io/RSAGP-Portal/`.
 
-## 1 — Choose a GitHub repository
+**You need:** access to your GitHub repo, a Cloudflare account with Workers/D1/R2 enabled, and the Discord Developer Portal application owner account. Keep your existing Google Sheets/Apps Script deployment running until successful verification and backup. The uploaded Excel exports are offline snapshots, not a live sync.
 
-1. Create a new repository on GitHub (private repository if available; GitHub Pages deployment visibility depends on your plan and repository settings).
-2. Upload or push the contents of this repository. Example:
+## 1 — Create Cloudflare resources
 
-   ```bash
-   git init
-   git add .
-   git commit -m "RSAGP: adapt original portal for GitHub Pages"
-   git branch -M main
-   git remote add origin https://github.com/YOURUSERNAME/YOURREPO.git
-   git push -u origin main
-   ```
-3. Under **Settings → Pages**, choose **GitHub Actions** as the build/deploy source.
-4. The provided `.github/workflows/pages.yml` publishes the `site/` directory automatically.
-5. Record the actual Pages URL, e.g. `https://YOURUSERNAME.github.io/YOURREPO/` (or the URL of your custom domain). If you later change the repo or custom domain, update all matching settings below.
+Install Node.js and, in the **repository's `worker/` directory**, run:
 
-## 2 — Update the current Apps Script backend
+```bash
+npm install
+npx wrangler login
+npx wrangler d1 create rsagp-db
+npx wrangler r2 bucket create rsagp-private-files
+```
 
-1. Open the existing Google Apps Script project that already owns RSAGP and is connected to your Google Sheets. **Do not run `setupPortal`, the split-migration functions or create new workbooks merely for this conversion.**
-2. In your live `Code.gs`, add the GitHub Pages OAuth handoff found inside `doGet` in `apps-script/RSAGP_Project/Code.gs`. If your live code exactly matches the uploaded version you may replace its complete `Code.gs`; otherwise merge just the new `pagesUrl` block, keeping all your current logic.
-3. Add a new Apps Script *Script* file named `GitHubPagesBridge` (not an HTML file), and paste `apps-script/RSAGP_Project/GitHubPagesBridge.gs`. This adds `doPost` with a strict function allowlist and preserves all existing permission checks.
-4. Keep all remaining `.gs` files, existing OAuth configuration, `WEB_APP_URL` and workbook IDs unchanged. In **Project Settings → Script Properties**, add:
+Copy the D1 `database_id` (UUID) from Cloudflare's response into `worker/wrangler.toml` under `[[d1_databases]]`. Keep the binding name `DB` and R2 binding `FILES`. Confirm the names match the resources you created. Make sure the Worker `SITE_ORIGIN` and `SITE_URL` are:
 
-   ```text
-   GITHUB_PAGES_URL = https://YOURUSERNAME.github.io/YOURREPO/
-   ```
+```toml
+[vars]
+SITE_ORIGIN = "https://zeusrealityirf.github.io"
+SITE_URL = "https://zeusrealityirf.github.io/RSAGP-Portal/"
+```
 
-   Set exactly the URL where GitHub Pages serves the top-level Cabinet page. Use HTTPS and include the repo path, if any.
-5. Under **Deploy → Manage deployments**, edit the existing Web App deployment and select a **New version**, then redeploy. Confirm the Web App still has suitable public access for Discord login and server requests, and that **Execute as** matches the existing deployment (normally the script owner). Copy the resulting `/exec` Web App URL.
-6. **Discord Developer Portal:** Leave the registered OAuth redirect pointing to your **Apps Script `/exec`** URL, not to GitHub Pages or Cloudflare Worker. If the Apps Script deployment URL changes, update the registered Discord redirect and the `WEB_APP_URL` Script Property accordingly.
+**These two URLs contain no secrets.** `SITE_URL` includes the trailing repository slash; `SITE_ORIGIN` does not include the path.
 
-> Why this works: Discord calls back to Apps Script, which completes its verified OAuth exchange and stores the existing short-lived session in CacheService. Apps Script displays a one-click continuation link to the GitHub Pages view using the session token as a URL fragment. The site saves the session into `sessionStorage` and strips that fragment from browser history.
+## 2 — Create D1 tables, then import workbook data privately
 
-## 3 — Deploy the Cloudflare Worker
+```bash
+cd worker
+npx wrangler d1 migrations apply DB --remote
+```
 
-The browser cannot call Apps Script `google.script.run` from a GitHub-hosted page. Cross-origin `fetch` calls to Apps Script's ContentService aren't reliably CORS-enabled, so the Worker forwards them server-side.
+**Before importing**, follow `docs/DATA-MIGRATION.md` and back up the source. A private SQL export for the previously uploaded nine workbooks has been prepared separately. **Do not add it to this repository or upload it to GitHub.** From the local machine that holds that private SQL file:
 
-1. Create/sign into a Cloudflare account. Install Node.js on your computer if needed.
-2. In the `worker/` folder, open `wrangler.toml`. Replace the placeholder `SITE_ORIGIN` with the actual **origin** of your GitHub Pages URL; for example:
+```bash
+npx wrangler d1 execute DB --remote --file="/ABSOLUTE/PRIVATE/PATH/rsagp-d1-private-import.sql"
+```
 
-   ```toml
-   SITE_ORIGIN = "https://YOURUSERNAME.github.io"
-   ```
+Use the `--remote` flag: the default local database does **not** populate production D1. Import is intentionally not idempotent; repeating it should fail, rather than silently replacing existing production records. Check that the target is empty and back it up first.
 
-   **Do not** include `/YOURREPO/` here; browser Origin headers contain only the scheme and hostname (plus a port if any). For a custom domain, use that origin instead. Remove `LOCAL_DEV_ORIGIN` after testing if not needed.
-3. Run:
+To verify record counts without retrieving personal values:
 
-   ```bash
-   cd worker
-   npx wrangler login
-   npx wrangler deploy
-   npx wrangler secret put GAS_WEB_APP_URL
-   ```
+```bash
+npx wrangler d1 execute DB --remote --command="SELECT bucket, COUNT(*) AS rows FROM records GROUP BY bucket ORDER BY bucket;"
+```
 
-   When prompted for the secret, enter the existing Apps Script Web App URL of the form `https://script.google.com/macros/s/.../exec`. It is deployment configuration, not a Discord credential. Make sure it matches the latest published Apps Script version.
-4. Note the URL Wrangler prints after deployment (normally `https://rsagp-api.ACCOUNT.workers.dev`). Keep the Worker URL for the next step. Cloudflare Workers may have account/usage limits, which you should review for production.
+The supplied export contains 150 records across 14 populated tabs; the missing `accessRoles` and `accessUsers` are empty by design.
 
-The Worker responds only to `POST /api` and browser preflight requests from the allowed site origin, forwards approved JSON to Apps Script, and returns JSON. It never creates a new user/session itself. Users should never be asked to type their Discord token into the site.
+## 3 — Deploy once to establish the Worker URL, then configure Discord OAuth
 
-## 4 — Configure the GitHub Pages front end
+From `worker/`, run `npx wrangler deploy` after setting the D1 UUID and running migrations. Cloudflare will give you the final Worker hostname. The initial deployment can run before Discord secrets are configured; login will not work yet.
 
-Edit `site/config.js`:
+Open your Discord application in the [Discord Developer Portal](https://discord.com/developers/applications).
 
-```js
+Configure the application OAuth2 Redirect URI to:
+
+```
+https://rsagp-api.YOUR-CLOUDFLARE-SUBDOMAIN.workers.dev/auth/callback
+```
+
+Use the **exact** Worker URL that Cloudflare gives you, including the `/auth/callback` suffix. If you change the Worker hostname/custom domain, update the Discord redirect URI. Never set the redirect URI to GitHub Pages: the Worker must exchange Discord OAuth codes on the server.
+
+In `worker/`, set secrets interactively (the CLI requests each value):
+
+```bash
+npx wrangler secret put DISCORD_CLIENT_ID
+npx wrangler secret put DISCORD_CLIENT_SECRET
+npx wrangler secret put SUPREME_ADMIN_DISCORD_IDS
+```
+
+- `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` come from your Discord application.
+- `SUPREME_ADMIN_DISCORD_IDS` is a comma-separated list of **permanent Discord user IDs** for the portal owner(s). These users alone can change the custom permissions manager; the list cannot be changed from the portal.
+- Optional: `npx wrangler secret put PRESIDENT_DISCORD_IDS` for legacy bootstrap President IDs.
+
+**No secrets belong in `site/config.js`, GitHub Actions workflow files or your Git repository.**
+
+## 4 — Verify the Worker after setting secrets
+
+Run `npx wrangler deploy` again after setting secrets if necessary. Cloudflare provides a URL like `https://rsagp-api.YOUR-SUBDOMAIN.workers.dev`. Visit its `/health` endpoint — it should return JSON with `service: RSAGP Worker D1 backend`. This does **not** verify the database, Discord OAuth, or every portal operation; continue the tests below.
+
+## 5 — Connect GitHub Pages to Cloudflare
+
+In the `site/config.js` file in your GitHub repository, set only the **base Worker HTTPS URL**:
+
+```javascript
 window.RSAGP_CONFIG = {
-  apiUrl: 'https://rsagp-api.ACCOUNT.workers.dev'
+  apiUrl: 'https://rsagp-api.YOUR-SUBDOMAIN.workers.dev'
 };
 ```
 
-This is a **public URL**, so it is safe to publish; do not put Google credentials, API secrets or Discord credentials in this file. Save and push to `main`. Wait for the Actions deployment to finish and open the Pages URL.
+Do not append `/api` or `/auth`. Do not add any secrets. Commit the change to `main`; the existing `.github/workflows/pages.yml` deploys the entire `site/` directory via GitHub Actions. Check the deployment run has a green tick before opening `https://zeusrealityirf.github.io/RSAGP-Portal/`.
 
-## 5 — Verify before letting users use it
+## 6 — Cutover checks (do not skip)
 
-- **Public Careers:** load `/careers/` when signed out. Confirm the vacancy count equals the live Careers workbook (including any closed positions).
-- **Discord login:** sign in via the Careers or Cabinet desk. Discord should return to the Apps Script success page; click **Continue to portal** to return to the correct GitHub Pages section.
-- **Permissions:** use a non-admin test account and confirm restricted sections and server-side writes are denied; use a designated Supreme Admin to review custom role/person overrides.
-- **Data:** create a harmless test record and verify it appears in the existing Google Sheets, then delete or close it through the appropriate authorized workflow. Test meeting, press, careers and citizenship workflows.
-- **Exports:** open a generated HTML document, print to PDF and save PNG as before. Test image/signature flows with a small test image. Check the existing browser download restrictions.
-- **Failure modes:** remove `apiUrl` temporarily in a test copy and verify that the page clearly refuses to submit rather than fabricating records.
+1. **Public Careers** — open positions show from D1 (not from the old spreadsheets); closed positions stay hidden.
+2. **Discord login** — test Cabinet, Careers and Citizenship separately. Confirm that the page returns via `#rsagp_session=` and the fragment disappears from the address bar when loaded. Never share that fragment/token with anyone.
+3. **Permissions** — a normal applicant must be denied Cabinet pages and application review; an allowed reviewer can review but not edit roles; the configured Supreme Administrator can edit roles and per-user permissions.
+4. **Application acceptance** — with test records, accept an application and confirm the corresponding position closes.
+5. **Citizenship** — exam loads, scoring completes, review forbids approving your own application, and approved roleplay card exports correctly.
+6. **Documents** — upload a fresh PNG/JPG signature to R2, generate HTML, test PNG and Print → Save as PDF, and verify sign-off changes after document edits.
+7. **Audit** — inspect authorized audit entries. Check requests in Cloudflare Logs for errors without storing private application responses.
+8. **Cross-check data** — see `docs/DATA-MIGRATION.md`; reconcile newer live Sheets changes since the exported snapshot.
 
-If you receive **Origin not allowed**, check `SITE_ORIGIN`; if the browser says **API is not configured**, update `site/config.js`; if you receive **Apps Script did not return JSON**, check the Web App access, `/exec` URL and that you deployed the new version with `GitHubPagesBridge.gs`. If Discord returns to the old Apps Script UI instead of the success link, check the `GITHUB_PAGES_URL` Script Property and redeployment. A session is short-lived; signing in again is expected after it expires.
+Only after successful tests should you retire the old Apps Script deployment. Existing Google Sheets can remain as offline backups. No Apps Script or Google Sheets API is required by this new runtime.
 
-## Important limitations
+## Production safeguards
 
-- **Front-end load can be faster**, but Apps Script and spreadsheet operations may still be the slow part. This conversion is not a performance benchmark and no speedup is guaranteed.
-- GitHub Pages is a static host. It cannot by itself securely operate a nine-workbook database, validate Discord OAuth secrets or enforce individual permission overrides.
-- An Apps Script or Cloudflare outage will make live services unavailable even if the static page still loads.
-- No live database, Discord OAuth, Google Sheets, production Cloudflare Worker or GitHub repository was created or accessed in preparing this artifact.
-- This is a faithful source-based adapter, not an audited production release. Conduct access-control, privacy, scalability and security testing before using it for real applications.
+- Add Worker rate limits and bot-abuse controls at Cloudflare; current app-level submission limits are a baseline, not complete DoS protection.
+- Schedule D1 backups/exports and protect R2 objects. Keep historical application/identity data private and define a retention period.
+- Rotate credentials if they ever appeared in a repository, screenshot or client-side JavaScript.
+- Consider a separate staging Worker/DB/R2 bucket for acceptance testing so you never alter live records to validate a deployment.
+- Users changing their roles are evaluated server-side on every authenticated request; CORS checks do not replace authentication.

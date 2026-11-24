@@ -1,14 +1,21 @@
 name = "rsagp-api"
 main = "src/index.js"
 compatibility_date = "2026-11-01"
+workers_dev = true
 
 [vars]
-# Public GitHub Pages *origin* (scheme + host, without repository path).
-# For example https://YOURUSERNAME.github.io (NOT /YOUR-REPOSITORY).
-SITE_ORIGIN = "https://YOURUSERNAME.github.io"
-# For local testing only, remove or adjust after setup:
-LOCAL_DEV_ORIGIN = "http://localhost:8080"
+SITE_ORIGIN = "https://zeusrealityirf.github.io"
+SITE_URL = "https://zeusrealityirf.github.io/RSAGP-Portal/"
+# OAuth redirect URI must be https://<your Worker>/auth/callback
+# DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, SUPREME_ADMIN_DISCORD_IDS: use wrangler secret put
 
-# Add the GAS_WEB_APP_URL secret via:
-#   npx wrangler secret put GAS_WEB_APP_URL
-# Don't put a secret, Discord client secret or session token in this TOML file.
+[[d1_databases]]
+binding = "DB"
+database_name = "rsagp-db"
+database_id = "efb47ba2-9d54-476f-8609-c5a36d38f366"
+migrations_dir = "migrations"
+
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "rsagp-private-files"

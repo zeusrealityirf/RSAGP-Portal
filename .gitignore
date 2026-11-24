@@ -1,0 +1,25 @@
+# Sensitive and machine-specific files — NEVER put applicant data or secrets in Git
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+!.env.example
+private/
+_private/
+backups/
+exports/
+*private*import*.sql
+*private*export*.sql
+*.xlsx
+*.xls
+*.zip
+*.bundle
+*.sqlite
+*.sqlite3
+*.db
+node_modules/
+.wrangler/
+.DS_Store
+__pycache__/
+*.pyc
+# worker/migrations/*.sql are SAFE SCHEMA and must be included in Git

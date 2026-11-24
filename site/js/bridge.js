@@ -1,5 +1,5 @@
-/* RSAGP GitHub Pages <-> Worker <-> Apps Script transport.
-   The original UI still enforces server-side permissions in the Apps Script API.
+/* RSAGP GitHub Pages <-> Cloudflare Workers/D1 transport.
+   All access control is enforced by the Cloudflare Worker against D1.
    Site and API addresses are public. Never store secrets in this file. */
 (function () {
   'use strict';
@@ -45,7 +45,7 @@
       });
       var data;
       try { data = await response.json(); }
-      catch (_) { throw new Error('The backend returned an unreadable response. Check Worker and Apps Script deployment settings.'); }
+      catch (_) { throw new Error('The backend returned an unreadable response. Check Worker, D1 and Discord deployment settings.'); }
       if (!response.ok || !data || data.ok !== true) {
         throw new Error((data && data.error) || ('Backend request failed (' + response.status + ').'));
       }
