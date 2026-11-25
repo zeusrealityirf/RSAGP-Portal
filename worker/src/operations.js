@@ -1,6 +1,7 @@
 import {now,uuid,str,bool,json,text,required,isDiscordId,isoDate} from './store.js';
 import {requireRight,KEYS,snapshot} from './permissions.js';
 import {careerDTO,applicationDTO,citizenDTO,proposalDTO,meetingDTO,attendeeDTO,actionDTO,pressDTO,letterDTO} from './queries.js';
+import {robloxProfile,robloxAvatarUrls} from './roblox.js';
 const ok=(message='Saved.',extras={})=>({success:true,message,...extras});
 const iso=now;
 const id=(prefix)=>prefix+'-'+uuid();
@@ -119,35 +120,31 @@ add('reviewJobApplication','reviewApplications',async(s,c,[appId,p])=>{
  return ok(status==='Accepted'?'Application accepted and vacancy closed.':'Application marked '+status+'.');
 });
 
-export async function robloxProfile(username){
- const requested=required(username,'Roblox username',20);if(!/^[A-Za-z0-9_]{3,20}$/.test(requested))throw Error('Enter a valid Roblox username.');
- const response=await fetch('https://users.roblox.com/v1/usernames/users',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usernames:[requested],excludeBannedUsers:true})});
- if(!response.ok)throw Error('Roblox lookup temporarily unavailable.');
- const row=(await response.json()).data?.[0];if(!row||!/^[0-9]{1,20}$/.test(str(row.id)))throw Error('Roblox username not found.');
- return {id:str(row.id),username:str(row.name||requested)};
-}
 add('checkRobloxUsername',null,async(s,c,[username])=>robloxProfile(username));
 add('setMyRobloxAvatar',null,async(s,c,[username])=>{
- right(c,'view');const profile=str(username).trim()?await robloxProfile(username):null;
+ right(c,'view');
  const member=await s.get('members',c.identity.id);
  const appointment=(await s.all('appointments')).find(r=>str(r[4])===c.identity.id&&bool(r[8]));
  if(!member&&!appointment)throw Error('No Cabinet or administration profile found.');
+ const profile=str(username).trim()?await robloxProfile(username):null;
  if(member){member[10]=profile?.id||'';member[11]=profile?.username||'';await s.save('members',c.identity.id,member);}
  if(appointment){appointment[12]=profile?.id||'';appointment[13]=profile?.username||'';await s.save('appointments',appointment[0],appointment);}
  await log(s,c,'SET_AVATAR','Profile',c.identity.id,profile?.username||'Removed');return ok('Avatar updated.',{robloxId:profile?.id||'',robloxUsername:profile?.username||''});
 });
 add('getRobloxAvatarMap','view',async(s,c,[ids])=>{
- const wanted=safeList(ids,50).filter(isDiscordId);const members=await s.all('members'),appointments=await s.all('appointments');const out={};
- // Avatar thumbnails are PUBLIC Roblox profile images; no user-edit rights given.
+ const wanted=safeList(ids,50).filter(isDiscordId);
+ const members=await s.all('members'),appointments=await s.all('appointments');
+ const accountIds={};
  for(const account of wanted){
-  const m=members.find(r=>str(r[0])===account&&bool(r[6]));const a=appointments.find(r=>str(r[4])===account&&bool(r[8]));
-  const profile=str(m?.[10]||a?.[12]);
-  if(/^[0-9]{1,20}$/.test(profile)){
-   try{const resp=await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+encodeURIComponent(profile)+'&size=150x150&format=Png&isCircular=false');
-    if(resp.ok){const image=(await resp.json()).data?.[0]?.imageUrl;if(/^https:\/\/[\w.-]*rbxcdn\.com\//i.test(image))out[account]=image;}}
-   catch{} // avatar failure shouldn't break the whole workspace
-  }
+  const m=members.find(r=>str(r[0])===account&&bool(r[6]));
+  const a=appointments.find(r=>str(r[4])===account&&bool(r[8]));
+  const playerId=str(m?.[10]||a?.[12]);
+  if(/^\d{1,20}$/.test(playerId))accountIds[account]=playerId;
  }
+ // Batch all avatar IDs in one call instead of one Roblox network request per person.
+ const thumbnails=await robloxAvatarUrls(Object.values(accountIds));
+ const out={};
+ for(const [account,playerId] of Object.entries(accountIds))if(thumbnails[playerId])out[account]=thumbnails[playerId];
  return out;
 });
 

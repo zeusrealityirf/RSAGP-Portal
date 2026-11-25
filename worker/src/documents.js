@@ -4,6 +4,7 @@ import {now,uuid,str,bool,json,required,text} from './store.js';
 import {requireRight} from './permissions.js';
 import {proposalDTO,meetingDTO,attendeeDTO,pressDTO,letterDTO,citizenDTO} from './queries.js';
 import {sha256} from './auth.js';
+import {robloxAvatarUrls} from './roblox.js';
 const esc=x=>str(x).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const paragraph=x=>esc(x).split(/\n\s*\n/).map(p=>'<p>'+p.replace(/\n/g,'<br>')+'</p>').join('');
 const requiredRight=(c,r)=>requireRight(c,r);
@@ -50,9 +51,9 @@ async function robloxAvatarData(robloxId){
  const id=str(robloxId).trim();
  if(!/^\d{1,20}$/.test(id))return '';
  try{
-  const info=await fetch('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+encodeURIComponent(id)+'&size=420x420&format=Png&isCircular=false');
-  if(!info.ok)return '';
-  const results=await info.json(),url=str(results?.data?.[0]?.imageUrl);
+  const thumbnails=await robloxAvatarUrls([id], '420x420');
+  const url=str(thumbnails[id]);
+  if(!url)return '';
   const target=new URL(url);
   if(target.protocol!=='https:'||!/(^|\.)rbxcdn\.com$/i.test(target.hostname))return '';
   const image=await fetch(target.toString());

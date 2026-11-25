@@ -11,30 +11,33 @@ function docShell_(office,label,kind,reference,date,status,content,signature){
  const presidential=kind==='president';const seal=presidential?GOV_SEAL_SRC_:SA_COAT_SRC_;
  const brand=presidential?'OFFICE OF THE PRESIDENT':String(office||'Government Department').toUpperCase();
  return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+docEsc_(label)+' | '+docEsc_(reference)+'</title><style>'+govDocCSS_()+'</style></head><body>'+
-   '<div class="flagline"><i></i><i></i><i></i><i></i><i></i></div><main class="sheet">'+
+   '<div class="flagline" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><main class="sheet"><div class="sa-topbar" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>'+
    '<header class="letterhead '+(presidential?'presidential':'ministerial')+'"><img src="'+seal+'" alt="'+(presidential?'Supplied presidential seal':'South African coat of arms detail')+'"><div class="masthead"><div class="country-row"><div class="country">REPUBLIC OF SOUTH AFRICA <span>· ROBLOX NATION</span></div></div><div class="office">'+docEsc_(brand)+'</div><div class="dept">'+(presidential?'The Presidency':docEsc_(office))+'</div></div></header>'+
    '<div class="rule"><span></span><span></span><span></span></div>'+
    '<div class="control"><div><small>DOCUMENT REFERENCE</small><b>'+docEsc_(reference)+'</b></div><div><small>ISSUED / PREPARED</small><b>'+docEsc_(date)+'</b></div><div><small>DOCUMENT STATUS</small><b>'+docEsc_(status)+'</b></div></div>'+
    '<article class="doc-content">'+content+'</article>'+signature+
-   '<footer data-rsagp-footer="1"><div class="footer-flag">●</div><div><strong>'+docEsc_(RSAGP_DOCUMENT_BRAND_)+'</strong> · REPUBLIC OF SOUTH AFRICA · ROBLOX NATION</div><small>Fictional government record · Roblox Nation</small></footer></main></body></html>';
+   '<footer data-rsagp-footer="1"><div class="footer-flag" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div><div><strong>'+docEsc_(RSAGP_DOCUMENT_BRAND_)+'</strong> · REPUBLIC OF SOUTH AFRICA · ROBLOX NATION</div><small>Ubuntu · Unity · Service &nbsp;|&nbsp; Fictional government record · Roblox Nation</small></footer></main></body></html>';
 }
 function govDocCSS_(){return `
 @page{size:A4;margin:0}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#e7ece7;color:#183024;font:13px/1.68 "Georgia","Times New Roman",serif}
+html,body{margin:0;padding:0;background:#edf1ed;color:#183024;font:13px/1.68 "Georgia","Times New Roman",serif}
 body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .flagline{height:8px;display:grid;grid-template-columns:2fr 1fr 2fr 1fr 2fr;background:#fff}
 .flagline i:nth-child(1){background:#de3831}.flagline i:nth-child(2){background:#ffb81c}.flagline i:nth-child(3){background:#007a4d}.flagline i:nth-child(4){background:#fff}.flagline i:nth-child(5){background:#002395}
-.sheet{width:210mm;min-height:297mm;margin:22px auto;background:#fff;box-shadow:0 30px 80px rgba(8,36,27,.22);position:relative;padding:20mm 23mm 18mm;display:flex;flex-direction:column;overflow:hidden}
-/* vertical flag spine */
-.sheet:before{content:'';position:absolute;top:0;left:0;height:100%;width:7px;background:linear-gradient(#de3831 0 28%,#ffb81c 28% 34%,#007a4d 34% 68%,#fff 68% 74%,#002395 74% 100%)}
-/* very faint flag-pall watermark, clearly decorative */
-.sheet:after{content:'';position:absolute;right:-70mm;top:50%;transform:translateY(-50%);width:150mm;height:150mm;pointer-events:none;opacity:.05;
-  background:
-    linear-gradient(135deg,#007a4d 0 44%,transparent 44%),
-    linear-gradient(45deg,#002395 0 50%,#de3831 50%);
-  -webkit-mask:radial-gradient(circle at 50% 50%,#000 60%,transparent 72%);mask:radial-gradient(circle at 50% 50%,#000 60%,transparent 72%)}
+.sheet{width:210mm;min-height:297mm;margin:22px auto;background:#fff;box-shadow:0 14px 38px rgba(8,36,27,.14);position:relative;padding:20mm 23mm 18mm;display:flex;flex-direction:column;overflow:hidden}
+/* Intentional, print-safe South African flag accents. No masked pseudo-elements,
+   giant gradients, shadows or overlay blocks are placed over the PDF pages. */
+.sa-topbar{position:absolute!important;top:0;left:0;right:0;height:6px;display:grid;grid-template-columns:1.25fr 1fr 3fr 1fr 1.25fr;z-index:3}
+.sa-topbar span:nth-child(1){background:#de3831}
+.sa-topbar span:nth-child(2){background:#ffb612}
+.sa-topbar span:nth-child(3){background:#007a4d}
+.sa-topbar span:nth-child(4){background:#fff;border-top:1px solid #e1e4e1}
+.sa-topbar span:nth-child(5){background:#002395}
+.sheet:before{content:'';position:absolute;top:6px;bottom:0;left:0;width:4px;background:#007a4d;z-index:0}
+.sheet:after{content:none!important;display:none!important;background:none!important;-webkit-mask:none!important;mask:none!important}
 .sheet>*{position:relative;z-index:1}
+.sheet>.sa-topbar{position:absolute!important;z-index:3}
 
 /* letterhead */
 .letterhead{display:flex;align-items:center;justify-content:center;gap:26px;margin:14px 0 18px;text-align:left}
@@ -56,7 +59,7 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .rule span{display:none}
 
 /* reference / date / status strip */
-.control{display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:14px;padding:14px 16px;background:#f6f9f4;border:1px solid #e0e8de;border-radius:7px}
+.control{display:grid;grid-template-columns:1.3fr 1fr 1.1fr;gap:14px;padding:13px 15px;background:#fff;border:1px solid #dde6dc;border-top:2px solid #007a4d;border-radius:2px}
 .control small{font:700 8.5px/1 "Arial",sans-serif;letter-spacing:1.6px;color:#7c8c83;display:block;margin-bottom:6px;text-transform:uppercase}
 .control b{font:600 11.5px "Arial",sans-serif;overflow-wrap:anywhere;color:#123f2f;letter-spacing:.2px}
 
@@ -66,10 +69,10 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .doc-content h2{font:600 20px "Georgia",serif;color:#17432f;border-left:4px solid #ffb81c;padding-left:11px;margin:30px 0 14px}
 .doc-content p{margin:13px 0;white-space:normal}
 .doc-content p.lead{font-size:15px;color:#3f6453;font-weight:600;line-height:1.6}
-.doc-content blockquote{border-left:4px solid #007a4d;margin:24px 0;padding:14px 22px;background:#f6f9f4;color:#1f5139;font:italic 18px/1.6 "Georgia",serif}
+.doc-content blockquote{border-left:3px solid #ffb612;margin:24px 0;padding:9px 0 9px 18px;background:transparent;color:#124b35;font:italic 18px/1.6 "Georgia",serif;break-inside:avoid}
 .doc-content .addressee{color:#4f6b5c;font-size:14px;padding:0 0 22px;font-family:"Arial",sans-serif}
 .release-heading{font:700 9.5px/1 "Arial",sans-serif;letter-spacing:2.6px;color:#b03a30;margin-bottom:14px;text-transform:uppercase}
-.meeting-facts{background:#f6f9f4;border:1px solid #e0e8de;border-radius:7px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.meeting-facts{background:#fff;border:1px solid #e0e8de;border-left:3px solid #007a4d;border-radius:2px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .meeting-facts div{display:flex;flex-direction:column}
 .meeting-facts b{font:700 9px "Arial",sans-serif;letter-spacing:1px;text-transform:uppercase;color:#6f8e7a;margin-bottom:3px}
 .meeting-facts span{font-weight:700;font-family:"Arial",sans-serif;color:#17402e}
@@ -90,12 +93,34 @@ body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .signature-zone small{display:block;font-size:9.5px;color:#86968b;font-family:"Arial",sans-serif;margin-top:4px}
 
 /* signature-era branded footer, consistent across stationery */
-footer{margin-top:auto;border-top:1px solid #dde7dc;padding-top:14px;color:#5f7e6b;text-align:center;font:600 10px/1.5 "Arial",sans-serif;letter-spacing:.8px}
+footer{margin-top:auto;border-top:1px solid #d6e1da;padding-top:13px;color:#4f6c5b;text-align:center;font:600 10px/1.5 "Arial",sans-serif;letter-spacing:.8px;break-inside:avoid}
 footer small{display:block;color:#93a398;margin-top:5px;letter-spacing:.2px;font-weight:400}footer strong{font-size:11px;color:#0b4a35;letter-spacing:1px}
-.footer-flag{height:9px;color:#c29a2f;line-height:7px;font-size:12px}
+.footer-flag{display:flex;width:94px;height:4px;margin:0 auto 10px;gap:3px}
+.footer-flag span{flex:1;display:block}
+.footer-flag span:nth-child(1){background:#de3831}.footer-flag span:nth-child(2){background:#ffb612}.footer-flag span:nth-child(3){background:#007a4d}.footer-flag span:nth-child(4){background:#141414}.footer-flag span:nth-child(5){background:#002395}
 
 @media screen and (max-width:850px){.sheet{width:auto;margin:0;min-height:100vh;padding:24px 22px 34px}.control{grid-template-columns:1fr 1fr}.letterhead .office{font-size:18px}.letterhead.ministerial>img{width:92px;height:116px}}
-@media print{html,body{background:#fff}.flagline{display:none}.sheet{margin:0;box-shadow:none;page-break-after:auto;min-height:280mm;padding-top:16mm;padding-bottom:12mm}}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  .flagline{display:none!important}
+  .sheet{margin:0!important;width:210mm!important;min-height:280mm!important;box-shadow:none!important;filter:none!important;transform:none!important;overflow:visible!important;display:block!important;padding:13mm 19mm 11mm!important;background:#fff!important;page-break-after:auto!important}
+  .sheet:after{content:none!important;display:none!important}
+  .sa-topbar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .letterhead,.control,.signature-zone,footer{break-inside:avoid;page-break-inside:avoid}
+  .doc-content{overflow:visible;flex:none!important}
+  .letterhead{margin:2px 0 11px!important;gap:20px!important}
+  .letterhead.ministerial>img{width:90px!important;height:108px!important}
+  .letterhead.presidential>img{height:125px!important}
+  .rule{margin-bottom:14px!important}
+  .control{padding:11px 13px!important}
+  .doc-content{padding-top:18px!important}
+  .doc-content h1{font-size:31px!important;margin-bottom:14px!important}
+  .doc-content p{margin:9px 0!important}
+  .signature-zone{padding-top:12px!important;margin:16px 0 9px!important}
+  .signature-zone .sign-line{height:45px!important}
+  footer{margin-top:7mm!important}
+}
 `;}
 function actDraftCSS_(){return `
 @page{size:A4;margin:18mm 17mm 21mm}
