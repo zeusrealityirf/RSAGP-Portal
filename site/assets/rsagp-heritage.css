@@ -1,0 +1,249 @@
+/*
+ * RSAGP — The Heritage Edition
+ * Visual-only public-site layer. Loaded after the original CSS.
+ * No authentication logic, API methods, form IDs or permission checks altered.
+ * Uses the six colours of the South African flag and a civic/editorial design language.
+ */
+:root {
+  --sa-forest:#073a2e;
+  --sa-forest-deep:#031e19;
+  --sa-emerald:#007a4d;
+  --sa-emerald-light:#0b9a67;
+  --sa-gold:#ffb81c;
+  --sa-gold-muted:#c79641;
+  --sa-blue:#002395;
+  --sa-red:#de3831;
+  --sa-cream:#f7f6f0;
+  --sa-white:#ffffff;
+  --sa-ink:#19332c;
+  --sa-muted:#5f736b;
+  --sa-line:#dce5dc;
+  --sa-heading:Georgia,'Times New Roman',serif;
+  --sa-sans:'Aptos','Segoe UI',Inter,system-ui,-apple-system,sans-serif;
+  --sa-shadow:0 26px 75px rgba(4,35,27,.095);
+  --sa-flag-spectrum:linear-gradient(90deg,#de3831 0 20%,#ffffff 20% 23%,#007a4d 23% 68%,#ffb81c 68% 82%,#002395 82% 100%);
+}
+body[class^="rsagp-"] {font-family:var(--sa-sans); background-color:var(--sa-cream);color:var(--sa-ink);}
+body[class^="rsagp-"] :is(button,a,input,textarea,select):focus-visible{outline:3px solid var(--sa-gold);outline-offset:3px}
+body[class^="rsagp-"] :is(button,a){-webkit-tap-highlight-color:transparent}
+body[class^="rsagp-"] ::selection{background:#ffe19a;color:#102d23}
+.rsagp-skip-link{position:fixed;left:14px;top:-88px;z-index:99999;padding:12px 18px;background:#fff;color:#0c4a35;border:2px solid #ffb81c;border-radius:10px;font-weight:750;box-shadow:0 10px 35px #0003;text-decoration:none}
+.rsagp-skip-link:focus{top:12px}
+body[class^="rsagp-"] :where(.btn,.nav button,button,.job,.card,.kpi){transition:box-shadow .2s ease,border-color .2s ease,transform .2s ease,background-color .2s ease}
+
+/* ==================== Cabinet / internal workspace ==================== */
+body.rsagp-cabinet{background:#f7f7f2}
+.rsagp-cabinet .rail{
+  background:
+    radial-gradient(320px 260px at 85% -3%,rgba(255,184,28,.13),transparent 80%),
+    linear-gradient(160deg,#0b4535 0%,#05291f 52%,#021712 100%);
+  border-right:1px solid #173e31;
+  box-shadow:12px 0 42px rgba(2,30,22,.10),inset -1px 0 0 rgba(255,255,255,.06);
+}
+.rsagp-cabinet .rail:before{height:6px;background:var(--sa-flag-spectrum)}
+.rsagp-cabinet .rail:after{width:340px;height:340px;left:-95px;top:43%;opacity:.46;transform:rotate(-8deg);
+  background:conic-gradient(from 220deg at 30% 60%,transparent 0 19deg,rgba(255,184,28,.22) 19deg 25deg,rgba(4,151,102,.26) 25deg 53deg,rgba(255,184,28,.17) 53deg 58deg,transparent 58deg 360deg);
+}
+.rsagp-cabinet .mark{margin-bottom:26px;align-items:center}
+.rsagp-cabinet .logo-shape{width:58px;height:58px;border-radius:18px;background:linear-gradient(160deg,#fff,#edf4e9);border-color:rgba(255,184,28,.7);box-shadow:0 15px 28px #0004,inset 0 0 0 4px rgba(1,88,54,.08)}
+.rsagp-cabinet .logo-copy strong{font-family:var(--sa-heading);font-weight:700;font-size:27px;letter-spacing:-.06em}
+.rsagp-cabinet .logo-copy>span{font-size:8px;color:#bad6c6;letter-spacing:.12em;line-height:1.45}
+.rsagp-cabinet .rail-title{color:#92beab;font-size:10px;letter-spacing:.24em;margin-top:29px}
+.rsagp-cabinet .nav{gap:5px}
+.rsagp-cabinet .nav button{border-radius:12px;color:#c3ddcf;padding:12px 12px;letter-spacing:.005em;font-weight:680}
+.rsagp-cabinet .nav button:hover{background:#ffffff14;border-color:#ffffff19;color:#fff;transform:translateX(3px)}
+.rsagp-cabinet .nav button.active{background:#fffdf7!important;color:#0b4933!important;border-color:#ffd77b;box-shadow:0 9px 23px #0004}
+.rsagp-cabinet .nav button.active:before{background:var(--sa-gold);width:5px;left:-18px;height:27px}
+.rsagp-cabinet .nav button.active .nav-icon{color:#b88426}
+.rsagp-cabinet .bridge-link{color:#ffdf8f;border-color:#ffffff25}
+.rsagp-cabinet .rail-note{border-color:#d6ae5a55;background:linear-gradient(120deg,#ffffff10,#e9a82611);box-shadow:inset 0 1px 0 #ffffff19}
+.rsagp-cabinet .rail-note .smallcaps{color:#ffca63}
+.rsagp-cabinet .topbar{background:rgba(251,251,247,.94);border-bottom-color:#e4e8dd;box-shadow:0 12px 35px rgba(4,38,29,.035)}
+.rsagp-cabinet .topbar:after{background:var(--sa-flag-spectrum);height:4px}
+.rsagp-cabinet .workspace-crumb>small{color:#5f7669;letter-spacing:.16em;font-weight:800}
+.rsagp-cabinet .crumb strong{color:#14513b;font-family:var(--sa-heading);font-size:20px;font-weight:700}
+.rsagp-cabinet .top-label{background:#e4f2e9;padding:9px 12px;border:1px solid #cce7d4;border-radius:99px;color:#286b4a;font-weight:750}
+.rsagp-cabinet .top-actions .btn-primary{background:linear-gradient(115deg,#007a4d,#045f40);box-shadow:0 10px 24px #007a4d2a;border-radius:11px}
+.rsagp-cabinet .top-actions .btn-primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.rsagp-cabinet .content{max-width:1600px}
+.rsagp-cabinet .content-topline{margin:12px 0 22px;color:#6e8575;letter-spacing:.13em}
+.rsagp-office-masthead{display:flex;align-items:center;gap:15px;position:relative;overflow:hidden;
+  padding:15px 21px;background:#fffefb;border:1px solid #e5e7db;border-radius:17px;
+  margin:8px 0 17px;box-shadow:0 8px 27px rgba(11,51,33,.045)}
+.rsagp-office-masthead:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(#de3831 0 26%,#ffb81c 26% 49%,#007a4d 49% 78%,#002395 78%)}
+.rsagp-office-masthead img{width:47px;height:47px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 3px 2px #00000018)}
+.rsagp-office-masthead>div{display:flex;flex-direction:column;gap:2px}
+.rsagp-office-masthead strong{font:600 19px/1.25 var(--sa-heading);color:#164230}
+.rsagp-kicker{color:#b17f2d;font-size:9px;letter-spacing:.21em;font-weight:850}
+.rsagp-masthead-tag{margin-left:auto;white-space:nowrap;border:1px solid #dee7db;background:#f5f8f2;border-radius:99px;padding:9px 13px;color:#5d796c;font-size:9px;letter-spacing:.12em;font-weight:800}
+.rsagp-cabinet .hero{border-radius:25px!important;overflow:hidden;box-shadow:0 30px 66px rgba(2,56,35,.15);border:1px solid #19573f}
+.rsagp-cabinet .hero:after{content:"";position:absolute;pointer-events:none;bottom:0;left:0;right:0;height:6px;background:var(--sa-flag-spectrum);z-index:4}
+.rsagp-cabinet .hero h2{font-family:var(--sa-heading)!important;font-weight:600!important;letter-spacing:-.04em}
+.rsagp-cabinet .page-head h1{font-family:var(--sa-heading);font-weight:650;letter-spacing:-.035em;color:#173f30}
+.rsagp-cabinet .page-head .eyebrow{letter-spacing:.21em;color:#987338}
+.rsagp-cabinet :is(.panel,.item-card,.member,.kpi){background-color:#fff;border-color:#e2e8df;box-shadow:0 14px 34px rgba(14,45,31,.05)}
+.rsagp-cabinet .kpi{border-radius:17px!important;position:relative;overflow:hidden}
+.rsagp-cabinet .kpi:before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e7b34b,#047c52)}
+.rsagp-cabinet .kpi strong{font-family:var(--sa-heading);letter-spacing:-.045em;color:#0c4932}
+.rsagp-cabinet :is(.panel,.item-card,.member):hover{border-color:#bfd5c5;box-shadow:0 18px 42px rgba(4,53,33,.08)}
+.rsagp-cabinet .footer{border-top-color:#dde7db;color:#708279}
+.rsagp-cabinet .footer:before{content:"";display:inline-block;width:9px;height:9px;margin-right:8px;border-radius:50%;background:#007a4d;box-shadow:0 0 0 4px #e0f0e7}
+/* sign-in: stronger poster-like, flag-pall graphic with coat of arms retained */
+.rsagp-cabinet .login-screen{background:#f4f4ee!important}
+.rsagp-cabinet .login-visual{position:relative;background:linear-gradient(132deg,#0c523a 0%,#053426 48%,#041d19 100%)!important;overflow:hidden}
+.rsagp-cabinet .login-visual:before{content:"";position:absolute!important;inset:auto -160px -250px -90px;width:850px;height:740px;pointer-events:none;
+ background:conic-gradient(from 207deg at 29% 51%,transparent 0 20deg,#ffb81c55 20deg 24deg,#00965e80 24deg 58deg,#ffb81c44 58deg 62deg,transparent 62deg 360deg);transform:rotate(-13deg);filter:none!important;opacity:.94}
+.rsagp-cabinet .login-visual:after{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:var(--sa-flag-spectrum)}
+.rsagp-cabinet .login-visual>*{position:relative;z-index:1}
+.rsagp-cabinet .login-visual h1{font-family:var(--sa-heading)!important;font-weight:500;letter-spacing:-.05em;line-height:1.07}
+.rsagp-cabinet .login-visual h1 em{color:#ffda80;font-style:italic}
+.rsagp-cabinet .login-visual p{line-height:1.8;max-width:580px;color:#d6e9db}
+.rsagp-cabinet .login-visual-intro{border:1px solid #ffffff3d;border-radius:99px;padding:9px 13px;width:max-content;background:#ffffff0c;color:#f9e2a8}
+.rsagp-login-values{display:flex;flex-wrap:wrap;align-items:center;gap:13px;margin:12px 0 24px;font-size:10px;font-weight:800;letter-spacing:.21em;color:#f7d995}
+.rsagp-login-values i{width:5px;height:5px;border-radius:50%;background:#ffb81c;opacity:.75}
+.rsagp-cabinet .login-box{background:radial-gradient(700px 600px at 10% 12%,#e5eee1,transparent 60%),#f6f7f1!important}
+.rsagp-cabinet .login-card{border-radius:24px!important;border:1px solid #dce6dc;box-shadow:0 32px 85px rgba(8,42,28,.11)!important;background:#fff;padding:40px!important}
+.rsagp-cabinet .login-card h2{font-family:var(--sa-heading)!important;font-weight:650;font-size:clamp(27px,3vw,36px);color:#113d2c}
+.rsagp-cabinet .login-card-icon{color:#0b6b4a;background:#e8f3e9;box-shadow:inset 0 0 0 1px #cde7d3}
+.rsagp-cabinet .discord-btn{border-radius:12px!important;background:linear-gradient(110deg,#076b49,#004e35);box-shadow:0 14px 30px #076b492a;font-weight:800}
+.rsagp-cabinet .discord-btn:hover{filter:brightness(1.08)}
+.rsagp-cabinet .login-note{border:1px solid #e2e8db;background:#f6f8f4;border-radius:13px;color:#5b7565}
+
+/* ==================== Careers and citizenship: common editorial layout ==================== */
+body.rsagp-careers,body.rsagp-citizenship{background:
+  radial-gradient(800px 520px at 0% 9%,rgba(255,184,28,.075),transparent 72%),
+  radial-gradient(1000px 600px at 100% 32%,rgba(0,122,77,.075),transparent 74%),
+  linear-gradient(#fbfaf6,#f4f7f2 65%);
+  color:var(--sa-ink)}
+body.rsagp-careers:before,body.rsagp-citizenship:before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--sa-flag-spectrum);z-index:100}
+.rsagp-careers header,.rsagp-citizenship .bar{position:relative;background:#082b22!important;border-bottom:1px solid #ffffff20;box-shadow:0 14px 36px #08251b18;min-height:90px}
+.rsagp-careers header:after,.rsagp-citizenship .bar:after{content:"";position:absolute;inset:auto 0 0;height:2px;background:linear-gradient(90deg,transparent,#e2b45b,transparent);opacity:.6}
+.rsagp-careers header .brand img,.rsagp-citizenship .brand-mark{background:#fffaf0;border:1px solid #efd796;border-radius:13px;box-shadow:0 5px 20px #0004}
+.rsagp-careers header .brand strong,.rsagp-citizenship .brand b{font-family:var(--sa-heading);font-weight:700;font-size:clamp(14px,1.35vw,19px);color:#fdfcf7;letter-spacing:-.015em}
+.rsagp-careers header .brand small,.rsagp-citizenship .brand small{font-size:9px;letter-spacing:.19em;color:#edce89;font-weight:800}
+.rsagp-careers .hlinks a,.rsagp-citizenship .bar a{border-radius:11px;background:#ffffff0b;border:1px solid #ffffff32;padding:10px 15px;color:#edf6e9;font-weight:750}
+.rsagp-careers .hlinks a:hover,.rsagp-citizenship .bar a:hover{background:#ffffff22;color:#fff}
+.rsagp-careers .wrap,.rsagp-citizenship .wrap{max-width:1250px;margin:30px auto 88px;padding-left:clamp(16px,3vw,38px);padding-right:clamp(16px,3vw,38px)}
+.rsagp-careers .hero,.rsagp-citizenship .hero{position:relative;isolation:isolate;overflow:hidden;
+ background:linear-gradient(115deg,#062d23 0%,#07503a 67%,#0e6446 115%)!important;
+ border:1px solid rgba(255,255,255,.12);border-radius:29px!important;
+ box-shadow:0 34px 80px rgba(1,45,28,.19);min-height:330px}
+.rsagp-careers .hero:before,.rsagp-citizenship .hero:before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+ background:
+  radial-gradient(660px 410px at 90% 10%,rgba(255,184,28,.22),transparent 62%),
+  linear-gradient(134deg,transparent 0 72%,rgba(255,184,28,.1) 72% 74%,transparent 74% 100%);
+ opacity:1}
+.rsagp-careers .hero:after,.rsagp-citizenship .hero:after{content:"";position:absolute;pointer-events:none;left:0;right:0;bottom:0;height:6px;background:var(--sa-flag-spectrum);z-index:5}
+.rsagp-careers .hero .eyebrow,.rsagp-citizenship .hero .eyebrow{color:#ffcf6f;font-size:11px;letter-spacing:.24em}
+.rsagp-careers .hero h1,.rsagp-citizenship .hero h1{font-family:var(--sa-heading)!important;font-weight:500!important;
+ font-size:clamp(38px,4.7vw,68px)!important;line-height:1.03!important;letter-spacing:-.054em!important;margin:14px 0 21px;color:#fff}
+.rsagp-careers .hero h1{max-width:750px}
+.rsagp-careers .hero p,.rsagp-citizenship .hero p{font-size:clamp(13px,1.25vw,16px)!important;line-height:1.85;color:#d5e9dc;max-width:600px}
+.rsagp-careers .hero img,.rsagp-citizenship .hero-flag{border:5px solid rgba(255,255,255,.12);outline:1px solid rgba(255,255,255,.28);border-radius:20px!important;box-shadow:0 24px 65px rgba(0,0,0,.36);transform:rotate(-3deg);transition:transform .4s ease;max-width:100%}
+.rsagp-careers .hero img:hover,.rsagp-citizenship .hero-flag:hover{transform:rotate(0deg) translateY(-3px)}
+.rsagp-careers .career-crest,.rsagp-citizenship .hero .hero-copy>div:first-child{border:1px solid #ffffff30;background:#ffffff10;border-radius:99px;padding:9px 13px;display:inline-flex;align-items:center;gap:8px;width:max-content;max-width:100%;letter-spacing:.13em;font-size:9px;font-weight:800;color:#ffdf90}
+.rsagp-careers .hero .badge{background:#ffffff12;border:1px solid #ffcc735b;color:#ffdc9d;border-radius:99px;padding:9px 14px;font-size:9px;letter-spacing:.14em;display:inline-flex}
+.rsagp-careers .section-top h2,.rsagp-citizenship .card h2{font-family:var(--sa-heading);font-weight:650;letter-spacing:-.035em;color:#113f2e}
+.rsagp-careers .section-top h2{font-size:clamp(29px,3vw,41px)}
+.rsagp-careers .section-top .subtitle{color:#b78738;letter-spacing:.21em}
+.rsagp-careers .section-top p{color:#6b796d}
+.rsagp-careers .career-filters{border-radius:16px;background:#fff;border:1px solid #dbe7dc;box-shadow:0 10px 33px rgba(2,51,31,.045)}
+.rsagp-careers .career-filters input{background:transparent}
+.rsagp-careers .jobs{gap:19px}
+.rsagp-careers .job{position:relative;overflow:hidden;border-radius:19px;background:#fffefb;border-color:#dce5da;box-shadow:0 15px 38px rgba(7,44,28,.055)}
+.rsagp-careers .job:before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#006c49,#f6b938,#da4039)}
+.rsagp-careers .job:hover{transform:translateY(-4px);border-color:#a9cbb5;box-shadow:0 27px 60px rgba(5,57,33,.12)}
+.rsagp-careers .job h3{font-family:var(--sa-heading);font-size:21px!important;letter-spacing:-.025em}
+.rsagp-careers .panel{background:#fffefb;border:1px solid #dfe8df;border-radius:22px;box-shadow:0 20px 49px rgba(5,45,29,.055)}
+.rsagp-careers .btn-primary,.rsagp-citizenship .btn-primary{background:linear-gradient(110deg,#078259,#005b3c);border-color:#006a47;color:#fff;box-shadow:0 10px 25px rgba(3,99,56,.19);border-radius:12px;font-weight:850}
+.rsagp-careers .btn-primary:hover,.rsagp-citizenship .btn-primary:hover{filter:brightness(1.09);box-shadow:0 13px 30px rgba(3,99,56,.24)}
+.rsagp-careers .btn-light,.rsagp-citizenship .btn-ghost{border-color:#c7dbcd;background:#eef5ef;color:#165238;border-radius:12px}
+.rsagp-careers .form-field :is(input,textarea),.rsagp-citizenship .field input{border:1px solid #d0e1d4;border-radius:12px;background:#fdfefd}
+.rsagp-careers .form-field :is(input,textarea):focus,.rsagp-citizenship .field input:focus{border-color:#007a4d;box-shadow:0 0 0 4px #007a4d1c}
+.rsagp-careers .foot{color:#637a6c;border-top:1px solid #dae4da;padding-top:23px}
+
+/* Small editorial panels beneath Careers hero; no fabricated numerical statistics */
+.rsagp-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:19px 0 37px}
+.rsagp-value{background:#fffefa;border:1px solid #e2e7db;padding:18px 19px;border-radius:16px;display:flex;gap:14px;align-items:center;box-shadow:0 12px 34px #082f2010}
+.rsagp-value-number{font:700 27px/1 var(--sa-heading);color:#b98c3c;letter-spacing:-.055em}
+.rsagp-value>div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.rsagp-value strong{font-size:13px;color:#16402e;font-weight:800}
+.rsagp-value small{font-size:11px;color:#6a7c6f;line-height:1.4}
+
+/* ==================== Citizen desk ==================== */
+.rsagp-citizenship .hero{min-height:300px;grid-template-columns:minmax(0,1fr) minmax(230px,380px);padding:40px 46px;gap:34px}
+.rsagp-citizenship .hero-flag{width:100%;max-width:390px}
+.rsagp-citizenship .hero h1{font-size:clamp(36px,4.4vw,61px)!important}
+.rsagp-citizenship .service-pills{gap:10px;margin:16px 0 25px}
+.rsagp-citizenship .service-pills>span{border:1px solid #dfebdf;background:#fffefa;border-radius:13px;box-shadow:0 9px 26px #082f2010;color:#235640;padding:13px 18px;font-weight:770}
+.rsagp-citizenship .service-pills>span svg{color:#0c845d}
+.rsagp-citizenship .grid{gap:22px}
+.rsagp-citizenship .card{background:#fffefb;border-color:#dfe7dc;border-radius:23px;box-shadow:0 19px 48px rgba(5,47,31,.065);padding:31px}
+.rsagp-citizenship .card h2{font-size:clamp(23px,2.5vw,30px)}
+.rsagp-citizenship .journey-card{border-top:5px solid #c6a459;background:linear-gradient(180deg,#fffdf7,#ffffff)}
+.rsagp-citizenship .journey-card .notice{border-left:3px solid #e4c88e!important}
+.rsagp-citizenship .journey-card .notice b{color:#20513b}
+.rsagp-citizenship .question label{border-color:#dbe7da;border-radius:14px;background:#fffefa;box-shadow:0 5px 13px #0a2f1610}
+.rsagp-citizenship .question label:has(input:checked){background:#eaf6ed;border-color:#007a4d;box-shadow:0 0 0 2px #007a4d24}
+.rsagp-citizenship .exam-progress{border-color:#d5e6d7;background:#f1f7ef;border-radius:15px}
+.rsagp-citizenship #progressBar{background:linear-gradient(90deg,#007a4d,#ffb81c)}
+.rsagp-citizen-message{border:1px solid #e1e8dc;background:#fffdf7;display:flex;gap:17px;align-items:center;position:relative;overflow:hidden;
+  margin:19px 0 10px;padding:15px 22px;border-radius:16px;box-shadow:0 12px 32px #072e1e0d}
+.rsagp-citizen-message:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#de3831,#ffb81c,#007a4d,#002395)}
+.rsagp-citizen-message img{width:48px;height:47px;object-fit:contain;flex-shrink:0}
+.rsagp-citizen-message>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rsagp-citizen-message>div>span{font-size:9px;color:#a8833e;letter-spacing:.19em;font-weight:900}
+.rsagp-citizen-message strong{font:650 clamp(15px,1.7vw,20px)/1.25 var(--sa-heading);color:#174432}
+.rsagp-citizen-motto{white-space:nowrap;margin-left:auto;color:#1f6249;font-size:10px;font-weight:850;letter-spacing:.12em;border:1px solid #dae9db;border-radius:99px;padding:8px 11px}
+
+/* ==================== Screens of all sizes ==================== */
+@media(max-width:1100px){
+  .rsagp-masthead-tag{display:none}
+  .rsagp-careers .hero h1,.rsagp-citizenship .hero h1{font-size:clamp(37px,4.8vw,55px)!important}
+}
+@media(max-width:850px){
+  .rsagp-cabinet .rsagp-office-masthead{margin:6px 0 10px;padding:12px 15px}
+  .rsagp-cabinet .rsagp-office-masthead img{width:36px;height:36px}
+  .rsagp-office-masthead strong{font-size:16px}
+  .rsagp-careers .hero,.rsagp-citizenship .hero{padding:32px 28px;grid-template-columns:1fr;min-height:0}
+  .rsagp-careers .hero img,.rsagp-citizenship .hero-flag{max-width:350px;transform:rotate(-2deg)}
+  .rsagp-values{grid-template-columns:1fr;gap:9px;margin:13px 0 24px}
+  .rsagp-value{padding:13px 16px}
+  .rsagp-value-number{font-size:23px}
+  .rsagp-citizenship .grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .rsagp-careers header,.rsagp-citizenship .bar{min-height:78px}
+  .rsagp-careers .wrap,.rsagp-citizenship .wrap{margin:16px auto 50px;padding:0 14px}
+  .rsagp-careers .hero,.rsagp-citizenship .hero{border-radius:20px!important;padding:28px 21px;gap:19px}
+  .rsagp-careers .hero h1,.rsagp-citizenship .hero h1{font-size:clamp(33px,8vw,46px)!important;line-height:1.1!important}
+  .rsagp-careers .hero p,.rsagp-citizenship .hero p{font-size:13px!important;line-height:1.65}
+  .rsagp-careers .hero img,.rsagp-citizenship .hero-flag{max-width:290px;border-width:3px}
+  .rsagp-careers .section-top h2{font-size:30px}
+  .rsagp-careers .jobs{gap:13px}
+  .rsagp-careers .job{border-radius:16px}
+  .rsagp-citizenship .card{border-radius:18px;padding:21px 17px}
+  .rsagp-citizenship .service-pills{grid-template-columns:1fr;gap:8px}
+  .rsagp-citizen-message{padding:12px 16px;gap:12px}
+  .rsagp-citizen-message img{width:35px;height:35px}
+  .rsagp-citizen-message>div>span{font-size:8px;letter-spacing:.12em}
+  .rsagp-citizen-motto{display:none}
+  .rsagp-cabinet .login-card{padding:25px 22px!important}
+  .rsagp-cabinet .login-visual h1{font-size:clamp(35px,10vw,54px)!important}
+  .rsagp-cabinet .login-visual:before{opacity:.45}
+  .rsagp-cabinet .login-visual-intro{font-size:8px}
+  .rsagp-cabinet .content-topline{font-size:8px}
+  .rsagp-cabinet .top-label{display:none}
+}
+@media(max-width:380px){
+  .rsagp-cabinet .rsagp-office-masthead img{display:none}
+  .rsagp-kicker{font-size:8px}
+  .rsagp-cabinet .login-card{padding:20px 18px!important}
+  .rsagp-careers .hero,.rsagp-citizenship .hero{padding:23px 18px}
+  .rsagp-careers header .brand strong,.rsagp-citizenship .brand b{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){body[class^="rsagp-"] *,body[class^="rsagp-"] *:before,body[class^="rsagp-"] *:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body.rsagp-careers,body.rsagp-citizenship,body.rsagp-cabinet{background:#fff!important}
+ .rsagp-careers .hero,.rsagp-citizenship .hero{box-shadow:none;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .rsagp-office-masthead,.rsagp-citizen-message,.rsagp-values{break-inside:avoid}
+}
