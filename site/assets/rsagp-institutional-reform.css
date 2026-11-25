@@ -1,0 +1,317 @@
+/* RSAGP | Institutional Reform — Version 2.0
+   A full editorial redesign of the existing connected portal.
+   Backend selectors, input names, routes, and event handlers are untouched.
+*/
+:root{
+  --reform-forest:#073c30; --reform-deep:#072b26;--reform-jade:#117452;
+  --reform-gold:#caa04a; --reform-saffron:#e8bd62;--reform-bone:#f5f1e8;
+  --reform-cream:#fcfaf5;--reform-ink:#20382e;--reform-muted:#708078;
+  --reform-border:#dfded3;--reform-serif:Georgia,"Times New Roman",serif;
+  --reform-sans:Inter,"Aptos","Segoe UI",Arial,sans-serif;
+  --reform-shadow:0 19px 55px rgba(15,45,34,.075);
+}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship){font-family:var(--reform-sans)!important;background:var(--reform-bone)!important;color:var(--reform-ink)!important;letter-spacing:normal}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) *{box-sizing:border-box}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) :focus-visible{outline:3px solid #d2a449!important;outline-offset:3px}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) .btn{border-radius:8px!important;box-shadow:none!important;font-family:var(--reform-sans);letter-spacing:.005em}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) .btn-primary{background:#086747!important;border:1px solid #086747!important;color:#fff!important}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) .btn-primary:hover{background:#084b39!important}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) .btn-light, :where(.rsagp-careers,.rsagp-citizenship) .btn-ghost{background:#fff!important;border:1px solid #dddccc!important;color:#174732!important}
+:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) input:focus,:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) textarea:focus,:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) select:focus{border-color:var(--reform-jade)!important;box-shadow:0 0 0 3px rgba(22,125,82,.1)!important}
+/* Quiet national accent: six colours, not a cartoon flag on every card */
+:where(.rsagp-careers,.rsagp-citizenship) .flagline,:where(.rsagp-careers,.rsagp-citizenship) .flag{height:5px!important;background:linear-gradient(90deg,#d33336 0 18%,#fff 18% 22%,#007d4e 22% 60%,#f2bb42 60% 79%,#002d85 79%)!important}
+
+/* CABINET: editorial two-wing authentication */
+.rsagp-cabinet .login-screen{min-height:100svh;display:grid!important;grid-template-columns:minmax(0,1.16fr) minmax(390px,.84fr);background:var(--reform-bone)!important}
+.rsagp-cabinet .login-screen[hidden]{display:none!important}
+.rsagp-cabinet .login-visual{position:relative;min-height:720px;padding:clamp(36px,5.8vw,100px) clamp(36px,6vw,102px) 38px!important;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;overflow:hidden!important;background:radial-gradient(700px 460px at 80% 98%,#266d5025,transparent 70%),linear-gradient(148deg,#093e31 0%,#072c26 67%,#041e1b 100%)!important;color:#fff!important}
+.rsagp-cabinet .login-visual:before{content:"";position:absolute;pointer-events:none;right:-20%;top:15%;height:80%;width:64%;background:linear-gradient(124deg,transparent 31%,rgba(255,255,255,.055) 31.2% 31.9%,transparent 32.2% 44%,rgba(221,174,78,.15) 44.2% 45.3%,transparent 45.5% 59%,rgba(255,255,255,.04) 59.2% 59.7%,transparent 60%);transform:skewX(-10deg);opacity:.9}
+.rsagp-cabinet .login-visual:after{content:"ZA";position:absolute;right:3%;bottom:12%;font:500 clamp(150px,24vw,390px)/1 var(--reform-serif);color:#ffffff08;letter-spacing:-.15em;pointer-events:none}
+.rsagp-cabinet .login-visual>*{position:relative;z-index:1}
+.rsagp-cabinet .reform-institution-mark{display:flex;align-items:center;gap:17px;margin-bottom:auto;padding-bottom:65px}
+.rsagp-cabinet .reform-mark-seal{width:70px;height:76px;display:grid;place-items:center;padding:9px;background:#fffef4;border:1px solid #d7b678;border-radius:3px;box-shadow:0 8px 25px #0003}
+.rsagp-cabinet .reform-mark-seal img{width:100%;height:100%;object-fit:contain}
+.rsagp-cabinet .reform-institution-mark strong{font:600 20px/1.2 var(--reform-serif);color:#fff;display:block}
+.rsagp-cabinet .reform-institution-mark small{display:block;color:#ddc78f;font-size:9px;letter-spacing:.18em;font-weight:850;margin-top:7px}
+.rsagp-cabinet .login-visual-intro{margin-bottom:17px!important;background:transparent!important;border:0!important;color:#efc477!important;font:800 10px/1.3 var(--reform-sans)!important;letter-spacing:.21em!important;padding:0!important}
+.rsagp-cabinet .brandbig{display:none!important}
+.rsagp-cabinet .login-label{font-size:11px!important;font-weight:750!important;color:#e2bb78!important;letter-spacing:.21em!important}
+.rsagp-cabinet .login-separator{color:#fff5!important}
+.rsagp-cabinet .login-visual h1{font:500 clamp(58px,6vw,103px)/.99 var(--reform-serif)!important;letter-spacing:-.065em!important;margin:16px 0 27px!important;max-width:850px}
+.rsagp-cabinet .login-visual h1 em{font-style:italic;color:#eccb8a!important}
+.rsagp-cabinet .login-visual p{font:400 clamp(14px,1.4vw,18px)/1.9 var(--reform-sans)!important;color:#c1d7cc!important;max-width:600px!important}
+.rsagp-cabinet .rsagp-login-values{display:none!important}
+.rsagp-cabinet .reform-login-rail{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin:72px 0 22px;border-top:1px solid #ffffff24;padding-top:18px;width:100%;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:750;color:#f4e3b5}
+.rsagp-cabinet .reform-login-rail span:before{content:'◆';font-size:7px;margin-right:9px;color:#d4a94b}
+.rsagp-cabinet .login-bottom{width:100%;border-top:0!important;display:flex;align-items:center;gap:16px;color:#bcd0bf!important}
+.rsagp-cabinet .login-bottom img{width:44px;height:30px;object-fit:cover;border-radius:2px}
+.rsagp-cabinet .login-box{display:flex;align-items:center;justify-content:center;padding:70px clamp(30px,5vw,100px)!important;background:radial-gradient(420px 340px at 85% 10%,#ece5d3,transparent 80%),#f7f4ec!important}
+.rsagp-cabinet .login-card{background:#fffefa!important;border:1px solid #e3ded0!important;border-radius:5px!important;box-shadow:0 25px 70px #102d2412!important;max-width:480px!important;padding:clamp(30px,3.7vw,57px)!important;position:relative}
+.rsagp-cabinet .login-card:before{content:"";position:absolute;left:0;top:0;width:92px;height:5px;background:linear-gradient(90deg,#c89c45 0 65%,#0d704e 65%)}
+.rsagp-cabinet .login-card-icon{background:#e9f0e8!important;color:#0d694a!important;border:1px solid #d1e2d2!important;border-radius:8px!important;width:57px;height:57px}
+.rsagp-cabinet .login-card .kicker{font:800 10px/1.4 var(--reform-sans)!important;color:#9a7b45!important;letter-spacing:.17em!important;margin-top:25px}
+.rsagp-cabinet .login-card h2{font:500 clamp(29px,3.2vw,42px)/1.12 var(--reform-serif)!important;letter-spacing:-.035em!important;color:#163e2f!important;margin:12px 0 18px!important}
+.rsagp-cabinet .login-card p{font-size:13px!important;line-height:1.9!important;color:#718076!important}
+.rsagp-cabinet .discord-btn{width:100%;min-height:55px;background:#0b6749!important;box-shadow:none!important;border-radius:6px!important;font-weight:800!important;margin-top:23px!important}
+.rsagp-cabinet .login-note{background:#f5f5ed!important;border:1px solid #e1e6db!important;border-radius:6px!important;padding:18px!important;font-size:11px!important;line-height:1.6!important}
+
+/* CABINET: a real administration console, not a card-heavy landing page */
+.rsagp-cabinet .shell{grid-template-columns:258px minmax(0,1fr)!important;background:#f4f2eb!important}
+.rsagp-cabinet .rail{padding:28px 15px 22px!important;background:#102d2a!important;border-right:1px solid #25483d!important;box-shadow:none!important}
+.rsagp-cabinet .rail:before{height:5px!important;background:linear-gradient(90deg,#c9363e 0 17%,#f8f6f0 17% 23%,#08865b 23% 64%,#e6ac42 64% 79%,#153e8a 79%)!important}
+.rsagp-cabinet .rail:after{display:none!important}
+.rsagp-cabinet .mark{margin-bottom:5px!important;padding:5px 8px 20px!important;gap:11px!important;border-bottom:1px solid #ffffff16}
+.rsagp-cabinet .logo-shape{width:49px!important;height:55px!important;background:#fffced!important;border:1px solid #c4a25c!important;border-radius:4px!important;padding:6px!important}
+.rsagp-cabinet .logo-copy strong{font:600 26px/1.05 var(--reform-serif)!important;letter-spacing:-.04em!important}
+.rsagp-cabinet .logo-copy span{font-size:8px!important;letter-spacing:.14em!important;color:#c5d3cd!important}
+.rsagp-cabinet .rail>img[alt="South African flag"]{display:none!important}
+.rsagp-cabinet .rail-title{margin:27px 12px 13px!important;font:800 9px var(--reform-sans)!important;letter-spacing:.18em!important;color:#bda66f!important}
+.rsagp-cabinet .nav{gap:1px!important}
+.rsagp-cabinet .nav button{min-height:43px!important;border-radius:5px!important;color:#c1d3cb!important;padding:10px 11px!important;font-size:12px!important;font-weight:550!important;border:0!important;transition:background .12s!important}
+.rsagp-cabinet .nav button .nav-icon{opacity:.85;color:#bacdc0}
+.rsagp-cabinet .nav button:hover{background:#ffffff12!important}
+.rsagp-cabinet .nav button.active{background:#f1ead7!important;color:#164332!important;box-shadow:none!important;font-weight:750!important}
+.rsagp-cabinet .nav button.active:before{left:0!important;height:100%!important;width:3px!important;background:#be9647!important;border-radius:0!important}
+.rsagp-cabinet .nav button.active .nav-icon{color:#0c6448!important}
+.rsagp-cabinet .reform-nav-subhead{padding:24px 12px 7px;font-size:9px;letter-spacing:.15em;color:#bba16c;font-weight:850}
+.rsagp-cabinet .bridge-link{background:transparent!important;border:1px solid #ffffff20!important;border-radius:5px!important;color:#d2e1d6!important;font-size:11px!important;min-height:42px;margin-top:10px!important}
+.rsagp-cabinet .reform-rail-stamp{margin:27px 5px 0;display:flex;gap:11px;align-items:center;padding:16px 12px;background:#ffffff09;border:1px solid #ffffff15;border-radius:5px}
+.rsagp-cabinet .reform-stamp-icon{width:27px;height:27px;display:grid;place-items:center;border:1px solid #ad904e;border-radius:50%;color:#ddc184;font-size:16px;flex:none}
+.rsagp-cabinet .reform-rail-stamp strong{display:block;font:600 13px var(--reform-serif);color:#fff7df}
+.rsagp-cabinet .reform-rail-stamp small{display:block;font-size:9px;color:#a9bbaf;margin-top:5px}
+.rsagp-cabinet .rail-note{display:none!important}
+.rsagp-cabinet .profile{border-top:1px solid #ffffff20!important;margin-top:16px}
+.rsagp-cabinet .profile img,.rsagp-cabinet .avatar-fallback{border-radius:5px!important}
+.rsagp-cabinet .topbar{height:81px!important;padding:0 clamp(25px,3.2vw,56px)!important;background:#fffefa!important;border-bottom:1px solid #deddd2!important;backdrop-filter:none!important}
+.rsagp-cabinet .topbar:after{height:1px!important;background:#d1b071!important;opacity:1!important}
+.rsagp-cabinet .workspace-crumb small{font:800 9px var(--reform-sans)!important;letter-spacing:.18em!important;color:#899486!important}
+.rsagp-cabinet .crumb strong{font:550 20px var(--reform-serif)!important;color:#1b4233!important}
+.rsagp-cabinet .top-label{color:#35644e!important;font-size:9px!important;letter-spacing:.1em!important}
+.rsagp-cabinet .status-dot{background:#2b925a!important;box-shadow:0 0 0 3px #e6efe3!important}
+.rsagp-cabinet .content{max-width:1550px!important;padding:30px clamp(25px,3.4vw,58px) 70px!important}
+.rsagp-cabinet .rsagp-office-masthead{border:1px solid #e0ddcd!important;border-radius:4px!important;box-shadow:none!important;background:#fffefa!important;min-height:92px;padding:18px 27px!important;margin:0 0 23px!important;position:relative;overflow:hidden}
+.rsagp-cabinet .rsagp-office-masthead:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#ca9a45 0 65%,#0d7652 65%) }
+.rsagp-cabinet .rsagp-office-masthead img{width:57px!important;height:60px!important}
+.rsagp-cabinet .rsagp-office-masthead strong{font:600 23px var(--reform-serif)!important;color:#184833!important}
+.rsagp-cabinet .rsagp-kicker{color:#997d49!important;letter-spacing:.21em!important;font-size:9px!important}
+.rsagp-cabinet .rsagp-masthead-tag{background:transparent!important;border:1px solid #e1dece!important;border-radius:4px!important;color:#6d7d70!important;font-size:9px!important;letter-spacing:.1em!important}
+.rsagp-cabinet .content-topline{border-bottom:1px solid #e2dfd3!important;padding-bottom:14px!important;margin-bottom:19px!important;color:#7d8c80!important}
+.rsagp-cabinet #screen>.hero{display:grid!important;grid-template-columns:minmax(0,1.27fr) minmax(220px,.55fr)!important;gap:0;min-height:330px!important;border:0!important;border-radius:5px!important;background:linear-gradient(135deg,#0b4d3b,#07352d 67%,#052821)!important;box-shadow:0 15px 38px #15382d20!important;margin:0 0 22px!important;padding:0!important;overflow:hidden!important}
+.rsagp-cabinet #screen>.hero .hero-copy{padding:clamp(32px,4vw,62px)!important;position:relative;z-index:2}
+.rsagp-cabinet #screen>.hero .tiny{font-size:10px!important;letter-spacing:.15em!important;color:#dec18e!important}
+.rsagp-cabinet #screen>.hero h2{font:500 clamp(42px,4vw,67px)/1.06 var(--reform-serif)!important;letter-spacing:-.047em!important;margin:12px 0 18px!important}
+.rsagp-cabinet #screen>.hero h2 em{color:#edcc8c!important;font-style:italic}
+.rsagp-cabinet #screen>.hero p{font-size:13px!important;line-height:1.8!important;color:#c9ded1!important;max-width:620px!important}
+.rsagp-cabinet #screen>.hero-art{display:flex!important;align-items:center;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(circle at 40% 40%,#155641,#06362d 67%)!important;border-left:1px solid #ffffff18}
+.rsagp-cabinet #screen>.hero-art:after{content:"";position:absolute;inset:12% -20%;border:1px solid #d7b67433;transform:rotate(-26deg);pointer-events:none}
+.rsagp-cabinet #screen>.hero-art .sa-flag-img{width:min(73%,260px)!important;max-height:174px;object-fit:cover;border:7px solid #ffffffeb!important;border-radius:2px!important;box-shadow:0 18px 40px #0004!important;transform:rotate(-5deg)!important}
+.rsagp-cabinet .kpis{gap:14px!important;margin-bottom:22px!important}
+.rsagp-cabinet .kpi{border:1px solid #dfded3!important;border-radius:5px!important;background:#fffefb!important;box-shadow:0 6px 20px #143a2b0a!important;padding:21px!important;min-height:135px!important;position:relative}
+.rsagp-cabinet .kpi:before{content:"";position:absolute;top:0;left:0;width:55px;height:3px;background:#c9a157}
+.rsagp-cabinet .kpi:nth-child(2):before{background:#be4939}.rsagp-cabinet .kpi:nth-child(3):before{background:#167b5a}.rsagp-cabinet .kpi:nth-child(4):before{background:#345e9c}
+.rsagp-cabinet .kpi strong{font:500 39px/1 var(--reform-serif)!important;color:#163e2e!important;margin-top:14px!important}
+.rsagp-cabinet .kpi small{font-size:11px!important;letter-spacing:.02em!important;color:#758579!important}
+.rsagp-cabinet .k-icon{color:#aa864c!important;background:#f5f2e9!important;border-radius:3px!important}
+.rsagp-cabinet .panel,.rsagp-cabinet .item-card,.rsagp-cabinet .member,.rsagp-cabinet .paper-card,.rsagp-cabinet .board-column{border-radius:5px!important;border:1px solid #e1ded2!important;background:#fffefa!important;box-shadow:0 8px 24px #183e2d0c!important}
+.rsagp-cabinet .panel{padding:23px!important}
+.rsagp-cabinet .panel-head{border-bottom:1px solid #e8e4db;padding-bottom:17px;margin-bottom:14px!important}
+.rsagp-cabinet .panel-head h3{font:600 19px/1.3 var(--reform-serif)!important;color:#234938!important}
+.rsagp-cabinet .page-head h1{font:500 clamp(29px,3.5vw,47px)/1.15 var(--reform-serif)!important;color:#144633!important;letter-spacing:-.03em!important}
+.rsagp-cabinet .page-head p{color:#738076!important;font-size:12px!important}
+.rsagp-cabinet .eyebrow{font-size:10px!important;letter-spacing:.17em!important;color:#9a7b43!important}
+.rsagp-cabinet .item-card h3,.rsagp-cabinet .member h3{font:600 20px/1.3 var(--reform-serif)!important;color:#1b4333!important}
+.rsagp-cabinet .card-row{border-bottom-color:#ece8dd!important}
+.rsagp-cabinet .tag{border-radius:4px!important;letter-spacing:.05em}
+.rsagp-cabinet .footer{color:#79867a!important;border-top:1px solid #dedbcb;padding-top:22px}
+
+/* CAREERS: editorial recruitment site with ceremonial folio */
+.rsagp-careers{background:#f4f1e9!important}
+.rsagp-careers header{min-height:89px!important;background:#fffefa!important;border-bottom:1px solid #dfddd0!important;padding:17px max(32px,calc((100vw - 1350px)/2))!important;box-shadow:none!important;gap:20px;position:relative}
+.rsagp-careers .brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+.rsagp-careers .brand img{width:52px!important;height:57px!important;object-fit:contain!important;background:#f3f2ec;border:1px solid #ddd3b9;border-radius:3px!important;padding:5px}
+.rsagp-careers .brand strong{font:550 19px var(--reform-serif)!important;color:#183e2d!important;letter-spacing:-.02em!important}
+.rsagp-careers .brand small{color:#93815b!important;font-size:9px!important;font-weight:800!important;letter-spacing:.14em!important}
+.rsagp-careers .hlinks a{padding:10px 15px!important;border:1px solid #e5e3d8!important;border-radius:5px!important;background:transparent!important;color:#345445!important;font-size:12px!important;font-weight:750!important;text-decoration:none!important}
+.rsagp-careers .hlinks a:hover{background:#eef3ec!important}
+.rsagp-careers .wrap{max-width:1380px!important;margin:0 auto!important;padding:0 30px 100px!important}
+.rsagp-careers .hero{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(350px,.72fr)!important;min-height:570px!important;margin:0 -30px 0!important;gap:0!important;align-items:stretch!important;border-radius:0!important;padding:0!important;background:#103d31!important;box-shadow:none!important;overflow:hidden!important;position:relative}
+.rsagp-careers .hero:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:#c9a051}
+.rsagp-careers .careers-hero-copy{padding:clamp(45px,5.5vw,100px) 35px clamp(50px,5vw,85px) max(40px,calc((100vw - 1300px)/2));position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.rsagp-careers .career-crest{border:0!important;background:transparent!important;border-radius:0!important;padding:0!important;color:#dfbf82!important;font-size:10px!important;letter-spacing:.19em!important}
+.rsagp-careers .hero .eyebrow{font-size:10px!important;letter-spacing:.17em!important;color:#e4bd73!important;text-transform:uppercase!important;margin-top:30px!important}
+.rsagp-careers .hero h1{font:500 clamp(56px,6.2vw,93px)/1.02 var(--reform-serif)!important;letter-spacing:-.06em!important;color:#fffdf4!important;max-width:790px;margin:17px 0 28px!important}
+.rsagp-careers .hero h1 em{font-weight:400;font-style:italic;color:#e9c681}
+.rsagp-careers .hero p{font:400 15px/1.9 var(--reform-sans)!important;color:#cadccf!important;max-width:570px!important}
+.rsagp-careers .reform-hero-actions{margin-top:37px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.rsagp-careers .reform-action-primary{display:inline-flex;align-items:center;gap:18px;padding:16px 21px;background:#f5eee0;color:#174735!important;text-decoration:none;font-weight:800;font-size:12px;border-radius:4px;box-shadow:0 5px 18px #0001}
+.rsagp-careers .reform-action-primary:hover{background:#fff}
+.rsagp-careers .reform-service-caption{font-size:11px;line-height:1.5;color:#a9c5b4;max-width:220px}
+.rsagp-careers .reform-hero-panel{position:relative;background:linear-gradient(155deg,#e9dfca,#f4f0e5 55%,#ddd0ad)!important;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:35px clamp(25px,3vw,65px)!important;min-height:100%;overflow:hidden;border-left:8px solid #b89b5d}
+.rsagp-careers .reform-hero-panel:before{content:"";position:absolute;width:500px;height:500px;border:1px solid #bba97980;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 58px #ffffff2d,0 0 0 59px #d3c69a60,0 0 0 116px #ffffff2c}
+.rsagp-careers .reform-hero-panel>*{position:relative;z-index:1}
+.rsagp-careers .reform-hero-panel-top{width:100%;display:flex;justify-content:space-between;gap:10px;color:#857447;font-weight:800;letter-spacing:.15em;font-size:9px;border-bottom:1px solid #cabb9b;padding-bottom:19px}
+.rsagp-careers .reform-hero-panel-emblem{width:min(82%,280px);height:260px;display:grid;place-items:center;filter:drop-shadow(0 13px 18px #463d2b24)}
+.rsagp-careers .reform-hero-panel-emblem img{width:100%;height:100%;object-fit:contain!important;max-width:none!important;aspect-ratio:auto!important;border:0!important;box-shadow:none!important;background:none!important;border-radius:0!important}
+.rsagp-careers .reform-hero-panel-word{font:italic 600 clamp(22px,2.5vw,35px) var(--reform-serif);color:#23513a;text-align:center}
+.rsagp-careers .reform-hero-panel-bottom{display:flex;justify-content:space-around;width:100%;gap:10px;border-top:1px solid #cabb9b;padding-top:20px;font-size:9px;color:#8a754c;font-weight:800;letter-spacing:.12em}
+.rsagp-careers .rsagp-values{margin:0 -30px 0!important;background:#f8f5ec;display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #e1dccc;gap:0!important}
+.rsagp-careers .rsagp-value{background:transparent!important;box-shadow:none!important;border:0!important;border-right:1px solid #e1dac7!important;border-radius:0!important;padding:25px 34px!important;margin:0!important}
+.rsagp-careers .rsagp-value:last-child{border-right:0!important}
+.rsagp-careers .rsagp-value-number{font:500 34px var(--reform-serif)!important;color:#b08f56!important}
+.rsagp-careers .rsagp-value strong{font:600 15px var(--reform-serif)!important;color:#1e4534!important}
+.rsagp-careers .rsagp-value small{font-size:11px!important;color:#718177!important}
+.rsagp-careers .section-top{margin:55px 0 23px!important;align-items:end!important}
+.rsagp-careers .section-top h2{font:500 clamp(34px,3.8vw,51px)/1.1 var(--reform-serif)!important;letter-spacing:-.045em!important;color:#173f30!important;margin-top:9px!important}
+.rsagp-careers .section-top .subtitle{color:#a48952!important;letter-spacing:.17em!important}
+.rsagp-careers .section-top p{font-size:13px!important;color:#728075!important}
+.rsagp-careers .vacancies-label{border-radius:4px!important;background:#ece8de!important;color:#536e5a!important;padding:11px 14px!important;border:1px solid #ded8c8!important}
+.rsagp-careers .career-filters{background:#fffefa!important;border:1px solid #dedcd0!important;border-radius:5px!important;padding:13px 19px!important;box-shadow:none!important;margin-bottom:22px!important}
+.rsagp-careers .career-filters input{font-size:13px!important}
+.rsagp-careers .jobs{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:15px!important}
+.rsagp-careers .job{border:1px solid #dfddd1!important;background:#fffefa!important;border-radius:4px!important;padding:29px!important;box-shadow:0 9px 31px #112f260d!important;min-height:280px}
+.rsagp-careers .job:before{height:3px!important;background:#cba04d!important;right:auto!important;width:75px!important}
+.rsagp-careers .job:nth-child(3n+2):before{background:#0c7853!important}.rsagp-careers .job:nth-child(3n):before{background:#b64c43!important}
+.rsagp-careers .job-icon{background:#f0f2e9!important;color:#2b6c50!important;border-radius:5px!important;width:51px!important;height:51px!important}
+.rsagp-careers .job .number{color:#ab8d54!important;font-size:9px!important;letter-spacing:.15em!important}
+.rsagp-careers .job h3{font:600 23px/1.22 var(--reform-serif)!important;color:#1c4233!important;letter-spacing:-.015em!important;margin:15px 0 14px!important}
+.rsagp-careers .job p{font:400 12px/1.8 var(--reform-sans)!important;color:#76857b!important}
+.rsagp-careers .job footer{border-top:1px solid #ebe7dc!important;padding-top:16px!important}
+.rsagp-careers .panel{background:#fffefa!important;border:1px solid #dedcd1!important;border-radius:5px!important;box-shadow:0 9px 26px #1835280a!important;padding:30px!important}
+.rsagp-careers .panel h2{font:500 27px var(--reform-serif)!important;color:#174632!important}
+.rsagp-careers .login-panel{background:transparent!important}
+.rsagp-careers .security-icon{border-radius:4px!important;background:#eef4ea!important;color:#096342!important}
+.rsagp-careers .form-field input,.rsagp-careers .form-field textarea{border-radius:5px!important;background:#fff!important;border:1px solid #d9dccc!important}
+.rsagp-careers .foot{border-top:1px solid #dfdacb!important;font-size:11px!important;color:#788379!important;margin-top:45px!important}
+
+/* CITIZENSHIP: a quieter, highly legible public service */
+.rsagp-citizenship{background:#f5f2eb!important}
+.rsagp-citizenship .bar{min-height:91px!important;background:#fffefa!important;box-shadow:none!important;border-bottom:1px solid #dfddcf!important;padding:15px max(30px,calc((100vw - 1350px)/2))!important}
+.rsagp-citizenship .brand-mark{border:1px solid #ded5bb!important;background:#f3f0e8!important;border-radius:4px!important;width:52px!important;height:58px!important;box-shadow:none!important}
+.rsagp-citizenship .brand b{font:550 18px var(--reform-serif)!important;color:#1c4233!important;letter-spacing:-.02em!important}
+.rsagp-citizenship .brand small{font-size:9px!important;letter-spacing:.15em!important;color:#987f52!important}
+.rsagp-citizenship .bar .brand>.avatar{display:none!important}
+.rsagp-citizenship .bar a{border:1px solid #e1e0d3!important;border-radius:5px!important;color:#315c47!important;font-size:12px!important;font-weight:700!important;background:#fffefa!important;padding:11px 14px!important;max-width:none!important;text-decoration:none!important}
+.rsagp-citizenship .bar a:hover{background:#f4f2e8!important}
+.rsagp-citizenship .wrap{max-width:1380px!important;margin:0 auto!important;padding:0 30px 100px!important}
+.rsagp-citizenship .hero{display:grid!important;grid-template-columns:minmax(0,1.1fr) minmax(360px,.7fr)!important;gap:0!important;align-items:stretch!important;min-height:520px!important;margin:0 -30px!important;padding:0!important;border:0!important;border-radius:0!important;background:#123e32!important;box-shadow:none!important}
+.rsagp-citizenship .hero:before{display:none!important}
+.rsagp-citizenship .hero-copy{padding:clamp(42px,5.5vw,102px) clamp(35px,5vw,78px) clamp(42px,5.5vw,90px) max(40px,calc((100vw - 1300px)/2));display:flex;flex-direction:column;align-items:flex-start;justify-content:center;position:relative;z-index:2}
+.rsagp-citizenship .hero .service-mark{font:800 10px var(--reform-sans)!important;letter-spacing:.16em!important;color:#dfc289!important;background:transparent!important;border:0!important;padding:0!important}
+.rsagp-citizenship .hero .eyebrow{font-size:10px!important;letter-spacing:.17em!important;color:#d5b877!important;margin-top:30px!important}
+.rsagp-citizenship .hero h1{font:500 clamp(58px,6.4vw,96px)/1.04 var(--reform-serif)!important;letter-spacing:-.062em!important;color:#fffdf4!important;margin:16px 0 25px!important}
+.rsagp-citizenship .hero h1 em{font-weight:400;font-style:italic;color:#efce93}
+.rsagp-citizenship .hero p{font:400 15px/1.85 var(--reform-sans)!important;color:#c7dbce!important;max-width:610px!important}
+.rsagp-citizenship .reform-citizen-hero-art{padding:37px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(145deg,#e1d7bd,#f1e9d6)!important;border-left:8px solid #bf9c5d}
+.rsagp-citizenship .reform-citizen-hero-art:after{content:"";position:absolute;inset:25px;border:1px solid #c5b58d;pointer-events:none}
+.rsagp-citizenship .reform-citizen-card{position:relative;z-index:2;text-align:center;width:100%;height:100%;min-height:365px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:15px;gap:15px}
+.rsagp-citizenship .reform-citizen-card-kicker{color:#8c754c;letter-spacing:.19em;font:800 10px var(--reform-sans)!important}
+.rsagp-citizenship .reform-citizen-card-seal{width:min(205px,54%);height:200px;display:grid;place-items:center;filter:drop-shadow(0 10px 16px #554a3225)}
+.rsagp-citizenship .reform-citizen-card-seal img{width:100%;height:100%;object-fit:contain}
+.rsagp-citizenship .reform-citizen-card-title{font:500 clamp(27px,3.4vw,47px)/1.08 var(--reform-serif);letter-spacing:-.04em;color:#254b37}
+.rsagp-citizenship .reform-citizen-card-title em{font-weight:400;color:#a27f43}
+.rsagp-citizenship .reform-citizen-card-line{width:100%;display:flex;justify-content:space-evenly;flex-wrap:wrap;gap:8px;border-top:1px solid #c5b58d;padding-top:13px;color:#947d54;letter-spacing:.13em;font-size:9px;font-weight:850}
+.rsagp-citizenship .rsagp-citizen-message{margin:0 -30px!important;padding:22px 40px!important;border-radius:0!important;border:0!important;border-bottom:1px solid #ddd7c8!important;background:#f9f6ed!important;box-shadow:none!important}
+.rsagp-citizenship .rsagp-citizen-message:before{width:0!important}
+.rsagp-citizenship .rsagp-citizen-message img{width:45px;height:48px}
+.rsagp-citizenship .rsagp-citizen-message strong{font:500 clamp(19px,2vw,27px) var(--reform-serif)!important;color:#204a36!important}
+.rsagp-citizenship .rsagp-citizen-motto{background:transparent!important;border:1px solid #ddd1b4!important;border-radius:4px!important;color:#91784e!important}
+.rsagp-citizenship .service-pills{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:0!important;margin:0 -30px 35px!important;border-bottom:1px solid #e0dacc;background:#fffefa}
+.rsagp-citizenship .service-pills>span{padding:23px 35px!important;border:0!important;border-right:1px solid #e3e0d6!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;color:#365b45!important;font-size:12px!important}
+.rsagp-citizenship .service-pills>span:last-child{border-right:0!important}
+.rsagp-citizenship .service-pills>span svg{color:#967a46!important}
+.rsagp-citizenship .grid{display:grid!important;grid-template-columns:minmax(0,1.4fr) minmax(300px,.75fr)!important;gap:21px!important;align-items:start!important}
+.rsagp-citizenship .card{border:1px solid #e0ddd1!important;border-radius:5px!important;background:#fffefa!important;box-shadow:0 10px 30px #213f2d0a!important;padding:38px!important}
+.rsagp-citizenship .card h2{font:500 clamp(25px,2.8vw,35px)/1.2 var(--reform-serif)!important;color:#18432e!important}
+.rsagp-citizenship .card p{font-size:12px!important;color:#738177!important;line-height:1.85!important}
+.rsagp-citizenship .citizen-banner{border-radius:3px!important;background:#f0f1e7!important;color:#337154!important;border-color:#dae1d3!important;font-size:10px!important}
+.rsagp-citizenship .journey-card{border-top:4px solid #cfa553!important}
+.rsagp-citizenship .journey-intro{border-radius:4px!important;background:#eff2e7!important;color:#0d6747!important}
+.rsagp-citizenship .journey-card .pill{background:#f5f1e5!important;color:#91794d!important;border:1px solid #e6dcc3!important;border-radius:3px!important}
+.rsagp-citizenship .journey-card .notice{background:#fffefa!important;border:0!important;border-left:2px solid #c8a259!important;border-radius:0!important;margin:0 0 0 10px!important;padding:0 10px 23px 20px!important;font-size:12px!important}
+.rsagp-citizenship .journey-card .notice b{font-weight:750!important;color:#295d41!important}
+.rsagp-citizenship .exam-progress{border:1px solid #e0dfd2!important;border-radius:5px!important;background:#f7f6ef!important}
+.rsagp-citizenship .question label{border:1px solid #e1ded2!important;background:#fffefa!important;border-radius:5px!important;box-shadow:none!important}
+.rsagp-citizenship .question label:has(input:checked){background:#e9f2e7!important;border-color:#0d8057!important}
+.rsagp-citizenship .field input{border:1px solid #deddd2!important;border-radius:5px!important;background:#fff!important}
+.rsagp-citizenship #progressBar{background:linear-gradient(90deg,#0b7b54,#cba051)!important}
+
+/* accessibility: reduce motion and maintain readable structure */
+@media(max-width:1170px){
+ .rsagp-cabinet .shell{grid-template-columns:236px minmax(0,1fr)!important}
+ .rsagp-cabinet #screen>.hero{grid-template-columns:minmax(0,1fr) 240px!important}
+ .rsagp-careers .hero,.rsagp-citizenship .hero{grid-template-columns:minmax(0,1fr) 330px!important}
+ .rsagp-careers .reform-hero-panel,.rsagp-citizenship .reform-citizen-hero-art{padding:27px!important}
+ .rsagp-careers .jobs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:900px){
+ .rsagp-cabinet .login-screen{grid-template-columns:1fr!important}
+ .rsagp-cabinet .login-visual{min-height:500px!important;padding:45px 32px!important}
+ .rsagp-cabinet .reform-institution-mark{padding-bottom:30px}
+ .rsagp-cabinet .login-visual h1{font-size:clamp(52px,9vw,78px)!important}
+ .rsagp-cabinet .login-box{padding:35px 18px!important}
+ .rsagp-cabinet .login-card{max-width:610px!important}
+ .rsagp-cabinet .rail{position:fixed;z-index:55;top:0;bottom:0;left:0;width:260px;transform:translateX(-105%);transition:transform .18s}
+ .rsagp-cabinet .rail.open,.rsagp-cabinet .shell.menu-open .rail,.rsagp-cabinet .shell.nav-open .rail{transform:translateX(0)}
+ .rsagp-cabinet .shell{display:block!important}
+ .rsagp-cabinet #screen>.hero{grid-template-columns:1fr 220px!important}
+ .rsagp-careers .hero,.rsagp-citizenship .hero{grid-template-columns:1fr 300px!important}
+ .rsagp-careers .hero h1,.rsagp-citizenship .hero h1{font-size:clamp(48px,6vw,70px)!important}
+ .rsagp-careers .careers-hero-copy,.rsagp-citizenship .hero-copy{padding:47px 35px!important}
+ .rsagp-citizenship .grid{grid-template-columns:1fr!important}
+}
+@media(max-width:680px){
+ .rsagp-cabinet .login-visual{min-height:460px!important;padding:36px 23px!important}
+ .rsagp-cabinet .login-visual h1{font-size:clamp(46px,12vw,68px)!important}
+ .rsagp-cabinet .reform-institution-mark{gap:11px}
+ .rsagp-cabinet .reform-mark-seal{width:55px;height:62px}
+ .rsagp-cabinet .reform-institution-mark strong{font-size:16px}
+ .rsagp-cabinet .reform-login-rail{display:none}
+ .rsagp-cabinet .login-box{padding:22px 14px!important}
+ .rsagp-cabinet .login-card{padding:28px 23px!important}
+ .rsagp-cabinet .topbar{padding:0 17px!important}
+ .rsagp-cabinet .content{padding:19px 15px 70px!important}
+ .rsagp-cabinet .rsagp-office-masthead{padding:11px 14px!important;min-height:75px}
+ .rsagp-cabinet .rsagp-office-masthead img{width:40px!important;height:42px!important}
+ .rsagp-cabinet .rsagp-office-masthead strong{font-size:16px!important}
+ .rsagp-cabinet #screen>.hero{display:block!important;min-height:0!important}
+ .rsagp-cabinet #screen>.hero .hero-copy{padding:30px 23px!important}
+ .rsagp-cabinet #screen>.hero h2{font-size:43px!important}
+ .rsagp-cabinet #screen>.hero-art{display:none!important}
+ .rsagp-cabinet .kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+ .rsagp-cabinet .kpi{min-height:105px!important;padding:16px!important}
+ .rsagp-cabinet .kpi strong{font-size:29px!important}
+ .rsagp-cabinet .panel{padding:16px!important}
+ .rsagp-careers header,.rsagp-citizenship .bar{padding:12px 15px!important;gap:11px;min-height:73px!important}
+ .rsagp-careers .brand strong,.rsagp-citizenship .brand b{font-size:14px!important}
+ .rsagp-careers .brand img,.rsagp-citizenship .brand-mark{width:42px!important;height:45px!important}
+ .rsagp-careers .hlinks,.rsagp-citizenship .bar>span{gap:6px!important}
+ .rsagp-careers .hlinks a,.rsagp-citizenship .bar a{padding:7px 9px!important;font-size:10px!important}
+ .rsagp-careers .wrap,.rsagp-citizenship .wrap{padding:0 14px 60px!important}
+ .rsagp-careers .hero,.rsagp-citizenship .hero{display:block!important;margin:0 -14px!important;min-height:0!important}
+ .rsagp-careers .careers-hero-copy,.rsagp-citizenship .hero-copy{padding:42px 26px 48px!important}
+ .rsagp-careers .hero h1,.rsagp-citizenship .hero h1{font-size:clamp(43px,11vw,68px)!important}
+ .rsagp-careers .hero p,.rsagp-citizenship .hero p{font-size:13px!important;line-height:1.75!important}
+ .rsagp-careers .reform-hero-panel{min-height:335px!important;padding:26px!important}
+ .rsagp-careers .reform-hero-panel-emblem{height:165px;width:190px}
+ .rsagp-careers .reform-hero-panel-word{font-size:28px}
+ .rsagp-citizenship .reform-citizen-hero-art{padding:22px!important}
+ .rsagp-citizenship .reform-citizen-card{min-height:275px;padding:15px!important}
+ .rsagp-citizenship .reform-citizen-card-seal{height:100px}
+ .rsagp-citizenship .reform-citizen-card-title{font-size:31px}
+ .rsagp-careers .rsagp-values{grid-template-columns:1fr!important;margin:0 -14px!important}
+ .rsagp-careers .rsagp-value{padding:15px 24px!important;border-right:0!important;border-bottom:1px solid #e3dfd2!important}
+ .rsagp-careers .section-top{margin:35px 0 16px!important}
+ .rsagp-careers .section-top h2{font-size:34px!important}
+ .rsagp-careers .jobs{grid-template-columns:1fr!important}
+ .rsagp-careers .job{min-height:0!important;padding:22px!important}
+ .rsagp-careers .panel{padding:20px!important}
+ .rsagp-citizenship .rsagp-citizen-message{margin:0 -14px!important;padding:17px 18px!important}
+ .rsagp-citizenship .rsagp-citizen-motto{display:none!important}
+ .rsagp-citizenship .service-pills{grid-template-columns:1fr!important;margin:0 -14px 21px!important}
+ .rsagp-citizenship .service-pills>span{padding:14px 20px!important;border-right:0!important;border-bottom:1px solid #e3e0d5!important}
+ .rsagp-citizenship .card{padding:21px!important}
+}
+@media(prefers-reduced-motion:reduce){:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) *, :where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) *:before,:where(.rsagp-cabinet,.rsagp-careers,.rsagp-citizenship) *:after{transition:none!important;animation:none!important}}
+
+@media(max-width:900px){.rsagp-cabinet.mobile-nav-open .rail{transform:translateX(0)!important}}
+.rsagp-cabinet .shell[hidden],.rsagp-cabinet .login-screen[hidden]{display:none!important}
