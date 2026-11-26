@@ -84,6 +84,18 @@ test('new HTML documents preserve PNG/PDF toolbar',async()=>{
  const doc=await send('letterHTML',[auth(ADMIN),create.result.id]);assert.equal(doc.ok,true,JSON.stringify(doc));
  assert.match(doc.result.html,/rsagp-export-png/);assert.match(doc.result.html,/rsagp-export-pdf/);
 });
+test('Cabinet author can save, issue and export a Government Gazette notice',async()=>{
+ const notice={kind:'Gazette',recipient:'Roleplay appointee',subject:'Appointment notice',body:'The appointment takes effect today.'};
+ const draft=await send('saveGovLetter',[auth(ADMIN),notice]);
+ assert.equal(draft.ok,true,JSON.stringify(draft));
+ const issued=await send('issueGovLetter',[auth(ADMIN),draft.result.id]);
+ assert.equal(issued.ok,true,JSON.stringify(issued));
+ const doc=await send('letterHTML',[auth(ADMIN),draft.result.id]);
+ assert.equal(doc.ok,true,JSON.stringify(doc));
+ assert.match(doc.result.html,/<title>Government Gazette — Appointment notice<\/title>/);
+ assert.ok(doc.result.html.includes(notice.body));
+ assert.ok(doc.result.html.includes(notice.recipient));
+});
 test('signout expires session and prevents further protected calls',async()=>{
  assert.equal((await send('signOut',[auth(OTHER)])).result,true);
  assert.equal((await send('currentUser',[auth(OTHER)])).ok,false);
