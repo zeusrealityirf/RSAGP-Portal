@@ -335,7 +335,7 @@ add('updateActionStatus','view',async(s,c,[actionId,status])=>{
  r[6]=status;r[8]=iso();await s.save('actions',actionId,r);await log(s,c,'ACTION_STATUS','Action',actionId,status);return ok('Action updated.');
 });
 add('saveGovLetter','writeLetters',async(s,c,[p])=>{
- const kind=str(p.kind||'Ministry');if(!['Presidential','Ministry'].includes(kind))throw Error('Invalid letter type.');
+ const kind=str(p.kind||'Ministry');if(!['Presidential','Ministry','Gazette'].includes(kind))throw Error('Invalid letter type.');
  if(kind==='Presidential'&&!c.rights.superAdmin)throw Error('Presidential letters require Supreme Administrator.');
  const recipient=required(p.recipient,'Recipient',130),subject=required(p.subject,'Subject',170),body=required(p.body,'Body',6000);
  const old=p.id?await s.get('letters',p.id):null;if(p.id&&!old)throw Error('Letter not found.');
