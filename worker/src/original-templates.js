@@ -366,3 +366,125 @@ export function originalProposedBill(p,a,signatureHTML){
   const html='<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+safe(p.title)+' — Proposed Bill</title><style>'+actDraftCSS_()+'</style></head><body><main>'+page1+page2+'</main></body></html>';
   return html;
 }
+
+export function originalGazetteNotice(data){
+ const safe=docEsc_;
+ const rawDate=String(data.dateDisplay||'');
+ const dateDisplay=safe(rawDate);
+ const dateSlash=safe(data.dateSlash||'');
+ const noticeNumber=safe(data.noticeNumber||'000/'+String(data.year||new Date().getUTCFullYear()));
+ const issueDigits=(String(data.noticeNumber||'').match(/\d+/)||[])[0]||'000';
+ const year=String(data.year||new Date().getUTCFullYear());
+ const issueRef=safe('RSAGP-'+year+'-'+issueDigits.padStart(3,'0'));
+ const subject=safe(data.subject||'Official Notice');
+ const authority=safe(data.authority||data.office||'Government Department');
+ const officeHeading=safe(String(data.authority||data.office||'Government Department').toUpperCase());
+ const appointee=safe(data.appointee||'');
+ const reference=safe(data.reference||'');
+ const status=safe(data.status||'Working draft');
+ const body=docMultiline_(String(data.body||''));
+ const longNotice=String(data.body||'').length>1600;
+ const signature=String(data.signature||'');
+ const dateDay=(rawDate.match(/\b\d{1,2}\b/)||[])[0]||'—';
+ const dateMonth=(rawDate.match(/January|February|March|April|May|June|July|August|September|October|November|December/i)||[])[0]||'—';
+ return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Government Gazette — ${subject}</title><style>
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#e8eaec;color:#151515;font-family:Arial,Helvetica,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{padding:18px 0}
+.gazette{width:210mm;margin:0 auto;box-shadow:0 12px 36px #10101024;background:#fff}
+.gpage{position:relative;width:210mm;min-height:297mm;background:#fff;overflow:hidden;break-after:page;page-break-after:always}
+.gpage:last-child{break-after:auto;page-break-after:auto}
+/* Cover: monochrome Government Gazette visual grammar, with original RSAGP issue metadata */
+.gcover{height:297mm;background:#cfd2d4}
+.gcover .border{position:absolute;inset:14mm;border:.32mm solid #4a4a4a;z-index:9;pointer-events:none}
+.gcover .emblem{position:absolute;left:50%;top:26mm;transform:translateX(-50%);height:68mm;width:67mm;object-fit:contain;filter:grayscale(1) contrast(2) brightness(.6)}
+.gcover .mast{position:absolute;left:20mm;right:20mm;top:97mm;text-align:center;font:800 15.5mm/.88 Arial,Helvetica,sans-serif;letter-spacing:-.5mm;color:#fff;z-index:4}
+.gcover .mast span{display:block;white-space:nowrap}
+.gcover .strip{position:absolute;top:136mm;left:14mm;right:14mm;height:12mm;background:#a1a6a9;z-index:3}
+.gcover .strip:after{content:'';position:absolute;right:15mm;top:0;width:18mm;height:12mm;border-radius:0 12mm 12mm 0;background:#fff}
+.gcover .country{position:absolute;left:57mm;top:137.7mm;z-index:5;color:#fff;font:700 5.1mm/1.05 Arial,sans-serif;letter-spacing:.5mm}
+.gcover .country span{display:block;white-space:nowrap}
+.gcover .side-paper{position:absolute;left:39mm;top:148mm;bottom:14mm;width:14mm;background:#e2e5e6;border-top-left-radius:9mm;z-index:1}
+.gcover .white-paper{position:absolute;left:53mm;right:29mm;top:148mm;bottom:14mm;background:#fff;border-top-right-radius:10mm;z-index:1}
+.gcover .white-paper:after{content:'';position:absolute;right:0;top:0;width:15mm;height:23mm;border-bottom-left-radius:8mm;background:#cfd2d4}
+.gcover .issue{position:absolute;top:172mm;left:57mm;right:34mm;z-index:6;display:grid;grid-template-columns:1fr 1.55fr 1.3fr;align-items:start;gap:3mm;font:700 4mm/1.25 Arial,sans-serif}
+.gcover .issue span:nth-child(2){display:flex;align-items:start;gap:3mm;justify-content:center;text-align:left}
+.gcover .issue span:last-child{text-align:right;white-space:nowrap}
+.gcover .lower{position:absolute;bottom:28mm;left:55mm;right:39mm;display:grid;grid-template-columns:1.5fr 1fr;gap:8mm;align-items:end;z-index:7}
+.gcover .lower .publisher{border:.55mm solid #282828;background:#fff;text-align:center;padding:2.4mm 3mm;font:700 2.85mm/1.35 Arial,sans-serif}
+.gcover .lower .scan{font:600 2.6mm/1.25 Arial,sans-serif;text-align:center;overflow:hidden;word-break:break-all}
+.gcover .lower .scan .bars{height:13mm;margin:1.4mm 0;background:repeating-linear-gradient(90deg,#111 0,#111 .35mm,transparent .35mm,transparent .83mm,#111 .83mm,#111 1.35mm,transparent 1.35mm,transparent 1.85mm)}
+.gcover .tagline{position:absolute;left:28mm;bottom:17mm;z-index:8;color:#202020;font:700 4.15mm Arial,sans-serif;letter-spacing:.12mm}
+.gcover .tagline:before{content:'';display:inline-block;width:10mm;height:3mm;margin-right:4mm;background:#242424;vertical-align:middle}
+/* Page 2: contents and publication note */
+.grunning{position:relative;margin:19mm 16mm 0;display:flex;align-items:end;justify-content:space-between;border-bottom:.36mm solid #3b3b3b;padding-bottom:2.3mm;font:3mm/1.3 Arial,sans-serif;letter-spacing:.12mm}
+.grunning strong{font-size:3.1mm}
+.gpage .folio{position:absolute;bottom:11mm;left:0;right:0;text-align:center;font:2.8mm Arial,sans-serif;color:#666}
+.gimportant{margin:10mm 19mm 0;border:.6mm solid #333;border-radius:5mm;padding:4.5mm 5mm;text-align:center;font:700 3.2mm/1.5 Arial,sans-serif}
+.gimportant strong{font-size:5mm;display:block;margin-bottom:1.5mm}
+.gcontents{margin:20mm 18mm 0;font:3.2mm/1.5 Arial,sans-serif}
+.gcontents h2{text-align:center;font:700 4mm Arial,sans-serif;margin:0 0 4mm}
+.gcontents .col-head{display:grid;grid-template-columns:14mm 1fr 32mm 15mm;gap:2mm;color:#555;font-style:italic;text-align:right;margin-bottom:5mm}
+.gcontents .col-head span:nth-child(2){text-align:left}
+.gcontents h3{text-align:center;font:4mm Georgia,serif;font-variant:small-caps;margin:8mm 0 6mm;font-weight:400}
+.gcontents .department{font-weight:700;text-transform:uppercase;font-size:3mm;margin-bottom:2mm}
+.gcontents .entry{display:grid;grid-template-columns:14mm 1fr 32mm 15mm;gap:2mm;align-items:start}
+.gcontents .entry .desc{overflow-wrap:anywhere}.gcontents .entry span:nth-child(3){font-size:2.8mm;white-space:nowrap}
+.gcontents .entry .dots{border-bottom:.25mm dotted #aaa;min-height:5mm}
+.gcontents .entry span:nth-child(3),.gcontents .entry span:nth-child(4){text-align:right}
+/* Page 3: notice style based on departmental Gazette notices */
+.gnotice .notice-head{margin:10mm 18mm 0;text-align:center;border-bottom:.3mm solid #424242;padding-bottom:2mm;font:5mm/1.25 Georgia,serif;font-variant:small-caps}
+.gnotice .notice-body{margin:8mm 19mm 18mm;min-height:210mm;font:4mm/1.75 Arial,Helvetica,sans-serif}
+.gnotice .dept{text-align:center;font:700 3.8mm Arial,sans-serif;margin:8mm 0 5mm;text-transform:uppercase}
+.gnotice .idline{display:flex;justify-content:space-between;font:700 3.6mm Arial,sans-serif;margin:0 0 6mm;gap:4mm}
+.gnotice .agency{text-align:center;font:700 4.4mm Arial,sans-serif;margin:0 0 10mm;text-transform:uppercase}
+.gnotice .subject{text-align:center;font:700 4.15mm/1.5 Arial,sans-serif;margin:0 6mm 7mm;text-transform:uppercase}
+.gnotice .text{margin:0 14mm;font-size:4mm;line-height:1.75;text-align:justify}
+.gnotice .text p{margin:0 0 5mm;orphans:3;widows:3}
+.gnotice .text p:first-child{margin-top:3mm}
+.gnotice .auth{margin:10mm 14mm 0;break-inside:avoid;page-break-inside:avoid}
+.gnotice .auth b{display:block;margin:0 0 3mm;font-size:3.6mm}
+.gnotice .auth .signature-zone{padding-top:2mm;margin:0;break-inside:avoid}
+.gnotice .auth .signature-zone .sign-line{height:15mm;max-width:95mm;border-bottom:.35mm solid #222}
+.gnotice .auth .signature-zone img{max-width:85mm;max-height:13mm;object-fit:contain}
+.gnotice .auth .signature-zone b{font-size:3.4mm}
+.gnotice .auth .signature-zone span,.gnotice .auth .signature-zone small{display:block;font-size:3.2mm;line-height:1.6;color:#555}
+.gnotice{overflow:hidden;min-height:297mm}.gnotice.long{overflow:visible;height:auto}.gnotice.long .folio{position:relative;bottom:auto;margin-top:10mm}.gnotice .record{margin:12mm 14mm 0;padding-top:3mm;border-top:.25mm solid #bbb;font:2.8mm/1.5 Arial,sans-serif;color:#4b4b4b}
+@media screen and (max-width:800px){body{padding:0;overflow-x:auto}.gazette{margin:0}.gpage{min-width:210mm}}
+@media print{html,body{padding:0!important;margin:0!important;background:#fff!important}.gazette{margin:0;box-shadow:none}.gpage{break-after:page;page-break-after:always;overflow:hidden}.gnotice{overflow:hidden}.gnotice.long{overflow:visible;min-height:0}.gpage:last-child{break-after:auto;page-break-after:auto}}
+</style></head><body>
+<main class="gazette" role="document">
+<section class="gpage gcover" aria-label="Government Gazette cover">
+<div class="border" aria-hidden="true"></div>
+<img class="emblem" src="${SA_COAT_SRC_}" alt="South African coat of arms">
+<h1 class="mast"><span>Government Gazette</span><span>Staatskoerant</span></h1>
+<div class="strip" aria-hidden="true"></div><div class="country"><span>REPUBLIC OF SOUTH AFRICA</span><span>REPUBLIEK VAN SUID AFRIKA</span></div>
+<div class="side-paper" aria-hidden="true"></div><div class="white-paper" aria-hidden="true"></div>
+<div class="issue"><span>Vol. 1</span><span>${safe(dateDay)} <b>${safe(dateMonth)}<br>${safe(year)}</b></span><span>No. ${issueRef}</span></div>
+<div class="lower"><div class="publisher">RSAGP Secretariat<br>Gazette and Administrative Notices Register<br>Publication reference: ${reference||issueRef}</div><div class="scan"><em>REGISTER ${issueRef}</em><div class="bars" aria-hidden="true"></div>${issueRef}</div></div>
+<div class="tagline">PUBLIC NOTICE REGISTER &nbsp; · &nbsp; ACCOUNTABILITY</div>
+</section>
+<section class="gpage" aria-label="Government Gazette contents">
+<header class="grunning"><strong>2 &nbsp; No. ${issueRef}</strong><span>GOVERNMENT GAZETTE, ${dateDisplay.toUpperCase()}</span></header>
+<div class="gimportant"><strong>IMPORTANT NOTICE</strong>Notices are published from the issuing office's approved record.<br>Entries are indexed using their RSAGP notice reference and date.</div>
+<div class="gcontents"><h2>Contents</h2><div class="col-head"><span>No.</span><span></span><span>Gazette No.</span><span>Page No.</span></div>
+<h3>Government Notices · Goewermentskennisgewings</h3><div class="department">${authority}</div>
+<div class="entry"><span>${safe(issueDigits)}</span><span class="desc">${subject}</span><span>${issueRef}</span><span>3</span></div></div>
+<div class="folio">RSAGP Secretariat · Gazette Register · ${issueRef}</div>
+</section>
+<section class="gpage gnotice${longNotice?' long':''}" aria-label="Government Gazette notice">
+<header class="grunning"><span>STAATSKOERANT, ${dateDisplay.toUpperCase()}</span><strong>No. ${issueRef} &nbsp; 3</strong></header>
+<div class="notice-head">Government Notices &bull; Goewermentskennisgewings</div>
+<article class="notice-body"><div class="dept">${officeHeading}</div>
+<div class="idline"><span>NO. ${noticeNumber}</span><span>${dateDisplay}</span></div>
+<div class="agency">${authority}</div>
+<div class="subject">${subject}</div>
+<div class="text">${appointee?'<p>Notice is hereby given regarding '+appointee+'.</p>':''}${body}</div>
+<div class="auth"><b>AUTHORISED BY:</b>${signature||'<p>Authorised signatory pending issuance.</p>'}</div>
+<div class="record">Publication reference: ${reference} &nbsp;|&nbsp; Status: ${status}<br>Issued through the RSAGP Secretariat notice register.</div></article>
+<div class="folio">RSAGP Secretariat · Gazette Register · ${issueRef}</div>
+</section>
+</main></body></html>`;
+}

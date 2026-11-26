@@ -15,7 +15,6 @@ database_name = "rsagp-db"
 database_id = "efb47ba2-9d54-476f-8609-c5a36d38f366"
 migrations_dir = "migrations"
 
-
 [[r2_buckets]]
 binding = "FILES"
 bucket_name = "rsagp-private-files"

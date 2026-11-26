@@ -4,7 +4,7 @@ This is a migration of the user's **original RSAGP Roblox roleplay government po
 
 The original `.gs` sources are retained in `apps-script/RSAGP_Project/` only as a **historical reference and HTML-template source**. Do **not** deploy them. `scripts/build-static.py` can still regenerate the original pages from the archived source without using Apps Script as a service.
 
-> **Status:** Source code and private offline D1 import are prepared. Local unit/integration tests pass; the code has **not been deployed to your Cloudflare account or your live GitHub repo**, and end-to-end Discord/R2/production validation is still required. Do not cut over until the checklist in `docs/DEPLOY.md` passes.
+> **Status:** This package is a source update for the already deployed Cloudflare Worker. Automated tests pass locally; the restored designs have not been deployed or verified with the live database. The user must redeploy the Worker and confirm production behavior. Do not cut over until the checklist in `docs/DEPLOY.md` passes.
 
 ## Architecture
 
@@ -38,6 +38,10 @@ Cloudflare Worker (Discord OAuth + login sessions + server-side permissions)
 2. Run the D1 migrations and import the separately supplied **PRIVATE** SQL export. Never put that SQL in a Git repository.
 3. Configure Discord credentials in Worker secrets, deploy the Worker, and set its URL in `site/config.js`. Commit/push the updated website files to `zeusrealityirf/RSAGP-Portal`.
 
+## Original document design restored
+
+The `worker/src/original-templates.js` module includes the original supplied typography, letterhead art, document layouts and citizenship card template, with roleplay disclaimers intact. `worker/src/documents.js` uses these designs while continuing to check permissions and load signatures from private R2. See `docs/RESTORED-DOCUMENTS.md` for the two-file update.
+
 ## Local checks
 
 ```bash
@@ -56,8 +60,18 @@ The Worker can start locally after binding a local D1 database, but Discord logi
 - A separate, private import SQL has been produced from the 23 November 2026 nine-workbook ZIP (150 records). This is a **snapshot** and may not contain newer live records.
 - The snapshot lacks the original `accessRoles` and `accessUsers` sheets. Built-in role defaults are available in code, but missing custom assignments are **not recreated or guessed**.
 - The spreadsheet snapshot contains signature and sign-off **file references**, not their binary images. Previously stored Google Drive signature images must be re-uploaded to R2; old sign-offs may require re-signing.
-- Document export operations generate standalone HTML with PNG/print-to-PDF controls, but some new document layouts are **simpler** than the legacy Apps Script originals. Review each format in the deployed portal.
+- Document export layouts now reuse the original source designs for ministerial and presidential letters, press releases, agendas, attendance registers, proposed Bills, and roleplay citizenship cards. The backend remains Cloudflare; verify each format against production data and check print/PDF/PNG outputs on your browser.
 - Rate limiting, ongoing backup scheduling, security monitoring and production Discord OAuth are recommended before public launch; local checks do not establish production readiness.
 - This is a **Roblox roleplay government**, not a real public government service. Do not present roleplay documents as official South African government credentials.
 
 Never commit any of: `DISCORD_CLIENT_SECRET`, `SUPREME_ADMIN_DISCORD_IDS`, Discord sessions, `.dev.vars`, your private SQL import, or the XLSX workbooks. All permissions are checked in the Worker against current D1 records on each protected request. Browser-side rights controls are presentational only.
+
+## Roblox connection update
+
+See [`docs/ROBLOX-CONNECTION.md`](docs/ROBLOX-CONNECTION.md) for the Worker-side
+Roblox profile/thumbnail reliability fix, testing instructions, and limitations.
+
+
+## Institutional redesign + Gazette update
+
+This edition includes the complete redesigned Cabinet, Careers, and Citizenship HTML as well as the reference-matched Gazette cover, contents page, appointment notices and HTML→PDF export. See [docs/GAZETTE-INSTALL.md](docs/GAZETTE-INSTALL.md) for safe deployment instructions.

@@ -1,5 +1,5 @@
 import {EXPORT_CSS,EXPORT_JS} from './export-tools.js';
-import {escapeDocument as safe, paragraphDocument as docPara, multiParagraphDocument as docMultiline, documentShell as docShell, originalSignature, originalProposedBill, originalCitizenshipCard} from './original-templates.js';
+import {escapeDocument as safe, paragraphDocument as docPara, multiParagraphDocument as docMultiline, documentShell as docShell, originalSignature, originalProposedBill, originalCitizenshipCard, originalGazetteNotice} from './original-templates.js';
 import {now,uuid,str,bool,json,required,text} from './store.js';
 import {requireRight} from './permissions.js';
 import {proposalDTO,meetingDTO,attendeeDTO,pressDTO,letterDTO,citizenDTO} from './queries.js';
@@ -10,7 +10,7 @@ const paragraph=x=>esc(x).split(/\n\s*\n/).map(p=>'<p>'+p.replace(/\n/g,'<br>')+
 const requiredRight=(c,r)=>requireRight(c,r);
 function output(filename,html){
  filename=str(filename||'RSAGP_Document.html').replace(/[^\w.\-]/g,'_');
- const bar=`<aside id="rsagp-export-tools" aria-label="Export document"><div class="rsagp-export-heading"><span>RSAGP · ROBLOX NATION</span><strong>Export document</strong></div><div class="rsagp-export-actions"><select id="rsagp-export-page" aria-label="PNG page" hidden></select><button id="rsagp-export-png" type="button">Save PNG</button><button id="rsagp-export-pdf" type="button">Save PDF</button></div><div class="rsagp-export-status" id="rsagp-export-status" role="status" aria-live="polite">PNG converts HTML into an image. PDF uses the browser print dialog.</div><a id="rsagp-export-image-link" hidden target="_blank" rel="noopener">Open PNG</a></aside>`;
+ const bar=`<aside id="rsagp-export-tools" aria-label="Export document"><div class="rsagp-export-heading"><span>RSAGP · DOCUMENT SERVICES</span><strong>Export document</strong></div><div class="rsagp-export-actions"><select id="rsagp-export-page" aria-label="PNG page" hidden></select><button id="rsagp-export-png" type="button">Save PNG</button><button id="rsagp-export-pdf" type="button">Save PDF</button></div><div class="rsagp-export-status" id="rsagp-export-status" role="status" aria-live="polite">PNG converts HTML into an image. PDF uses the browser print dialog.</div><a id="rsagp-export-image-link" hidden target="_blank" rel="noopener">Open PNG</a></aside>`;
  const script='<script id="rsagp-export-script">window.RSAGP_HTML_EXPORT_NAME='+JSON.stringify(filename)+';'+EXPORT_JS.replace(/<\/script/gi,'<\\/script')+'</script>';
  return {success:true,filename,html:html.replace('</head>','<style>'+EXPORT_CSS+'</style></head>').replace('</body>',bar+script+'</body>'),kind:'html',message:'Open HTML to save PNG or use Print → Save as PDF.'};
 }
@@ -70,6 +70,22 @@ function facts(items){
 function attendeeTable(people,heads,columns){
  return '<table style="width:100%;border-collapse:collapse;font:11px/1.5 Arial,sans-serif;margin:14px 0 26px"><thead><tr>'+heads.map(h=>'<th style="text-align:left;padding:8px 6px;border-bottom:2px solid #007a4d">'+safe(h)+'</th>').join('')+'</tr></thead><tbody>'+people.map(a=>'<tr>'+columns(a).map(v=>'<td style="padding:8px 6px;border-bottom:1px solid #dce5dc;vertical-align:top">'+safe(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
 }
+
+function formatDisplayDate(value){
+ const d=new Date(str(value));
+ if(Number.isNaN(d.getTime())) return str(value).slice(0,10)||'—';
+ return String(d.getUTCDate()).padStart(2,'0')+' '+['January','February','March','April','May','June','July','August','September','October','November','December'][d.getUTCMonth()]+' '+d.getUTCFullYear();
+}
+function formatSlashDate(value){
+ const d=new Date(str(value));
+ if(Number.isNaN(d.getTime())) return str(value).slice(0,10)||'—';
+ return String(d.getUTCDate()).padStart(2,'0')+'/'+String(d.getUTCMonth()+1).padStart(2,'0')+'/'+d.getUTCFullYear();
+}
+function gazetteNoticeNumber(id, year){
+ const digits=(str(id).match(/\d+/g)||[]).join('');
+ const sequence=(digits.slice(-3)||'000').padStart(3,'0');
+ return sequence+'/'+String(year||new Date().getUTCFullYear());
+}
 export async function documentAction(action,store,env,c,args){
  const [a,b]=args;
  if(action==='getMySignatureInfo'){
@@ -116,10 +132,30 @@ export async function documentAction(action,store,env,c,args){
   requiredRight(c,'writeLetters');const x=letterDTO(await findDoc(store,'letters',a));
   if(x.authorId!==c.identity.id)throw Error('Only the author may export this letter.');
   const presidential=x.kind==='Presidential';
+  const gazette=x.kind==='Gazette';
   if(presidential&&!c.rights.superAdmin)throw Error('Presidential letters require Supreme Administrator.');
   const issued=x.status==='Issued';
-  const content='<div class="release-heading">'+(issued?'ISSUED CABINET CORRESPONDENCE':'WORKING DRAFT — NOT ISSUED')+'</div><h1>'+safe(x.subject)+'</h1><div class="addressee">To: <b>'+safe(x.recipient)+'</b></div>'+docMultiline(x.body)+'<p style="margin-top:36px">Yours sincerely,</p>';
   const signature=issued?await signBlock(store,env,'Letter',x.id):'<p class="note">Working draft — signature pending issuance.</p>';
+  if(gazette){
+   const year=(new Date(str(x.updated||x.created)).getUTCFullYear())||new Date().getUTCFullYear();
+   const html=originalGazetteNotice({
+    office:x.ministry,
+    reference:x.id,
+    noticeNumber:gazetteNoticeNumber(x.id,year),
+    year,
+    subject:x.subject,
+    authority:x.ministry,
+    dateDisplay:formatDisplayDate(x.updated||x.created),
+    dateSlash:formatSlashDate(x.updated||x.created),
+    appointee:x.recipient,
+    body:x.body,
+    status:issued?'Published notice':'Working draft — not issued',
+    issued,
+    signature
+   });
+   return output(x.id+'_Government_Gazette_Notice.html',html);
+  }
+  const content='<div class="release-heading">'+(issued?'ISSUED CABINET CORRESPONDENCE':'WORKING DRAFT — NOT ISSUED')+'</div><h1>'+safe(x.subject)+'</h1><div class="addressee">To: <b>'+safe(x.recipient)+'</b></div>'+docMultiline(x.body)+'<p style="margin-top:36px">Yours sincerely,</p>';
   const html=docShell(x.ministry,presidential?'Presidential Letter':'Ministry Letter',presidential?'president':'ministry',x.id,x.updated.slice(0,10),issued?'Issued letter':'Working draft — not issued',content,signature);
   return output(x.id+'_'+(presidential?'Presidential':'Ministry')+'_Letter.html',html);
  }
